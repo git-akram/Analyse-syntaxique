@@ -6,7 +6,7 @@ Version=4
 MainFile=Analyse syntaxique.tex
 UseBibTeX=1
 UseMakeIndex=1
-ActiveProfile=LaTeX ⇨ PDF
+ActiveProfile=LaTeX => PDF
 ProjectLanguage=
 ProjectDialect=
 
