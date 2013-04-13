@@ -283,9 +283,13 @@ Token & Commence par majuscule & ID \\
 \subsubsection{Description de langage et ANTLR}
 Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\line Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
 règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};\newline
-Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguements et \textsl{m} valeurs retournées.\newline
-\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}\right];\newline
+Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées.\newline
+%\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}\right];\newline
 Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées\left(\#token ID\right) ou directement référencées\left(\#segment\right). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
+Autre point important, ANTLR optimise le choix du nombre de lookahead en utilisant le moins possible. En effet, ANTLR génère une décision qui utilise un symbole qui distingue entre la première alternative et les autres. Ainsi, le prgrammeur utilise la puissance d'un parseur LL\left(k\right) avec k\succ 1 sans se soucié de l'efficacité ou non du parseur. Par exemple, si une règle requiert trois symboles pour différencier entre deux alternatives, ANTLR s'en occupe et génère un symbole pour faire la différence.
+ANTLR permet aussi à l'utilisateur de définir des actions et de les appelées là où il veut dans une production ANTLR, ces actions sont utilisées pour améliorer les tests sémantiques, générer une représenation intermédiaire ou directement générer la traduction.
+\subsubsection{Prédicats}
+
 
 \subsection{Xtext}
 \subsubsection{Definition}
