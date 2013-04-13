@@ -97,16 +97,16 @@ On appelle analyseur lexical \cite{refAnalyseurLexicale}, lexeur, ou encore scan
 Le scanneur contient toutes les informations sur les séquences de caractères qui peuvent être contenues dans les entités lexicales qu'il génère. Par exemple, une entité lexicale de type « INTEGER » peut contenir n'importe quelle séquence de caractères numériques (chiffres).
 \begin{itemize}
 \item Son rôle consiste à :
-			\item éliminer les « bruits » du texte source : commentaires, espaces, …
-			\item reconnaître les opérateurs et les mots-clés : ==, if, …
-			\item reconnaître les chaînes de caractères, les identificateurs et les constantes numériques
+			\item Eliminer les « bruits » du texte source : commentaires, espaces, …
+			\item Reconnaître les opérateurs et les mots-clés : ==, if, …
+			\item Reconnaître les chaînes de caractères, les identificateurs et les constantes numériques
 \end{itemize}
 Il produit en sortie une entité lexicale qui sera utilisée par l'analyseur syntaxique.
 \begin{itemize}
 \item Un analyseur lexical peut être écrit :
 			\item « à la main » : il faut construire l'automate fini non déterministe à partir d'une expression rationnelle E, puis l'exécuter pour déterminer si une chaîne d'entrée appartient au langage reconnu par E
-			\item par une table décrivant l'automate et un programme exploitant cette table
-			\item par un générateur d'analyseurs : flex, ANTLR, etc.
+			\item Par une table décrivant l'automate et un programme exploitant cette table
+			\item Par un générateur d'analyseurs : flex, ANTLR, etc.
 \end{itemize}    
 
 \subsubsection{Segmentation}
