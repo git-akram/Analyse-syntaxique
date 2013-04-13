@@ -316,24 +316,29 @@ Token & Commence par majuscule & ID \\
 \left(...\right)? & Prédicat syntaxique & \left(\left(list EQ\right)\right)? list EQ list | list \right) \\
 \hline
 \end{tabular}
-
-\subsubsection{Description de langage et ANTLR}
+\subsubsection{Langage et description}
+\subsubsubsection{Description de langage et ANTLR}
 Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\newline Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
 règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};\newline
-<<<<<<< HEAD
-Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées.\newline
-%\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}\right];\newline
-Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées\left(\#token ID\right) ou directement référencées\left(\#segment\right). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
-Autre point important, ANTLR optimise le choix du nombre de lookahead en utilisant le moins possible. En effet, ANTLR génère une décision qui utilise un symbole qui distingue entre la première alternative et les autres. Ainsi, le prgrammeur utilise la puissance d'un parseur LL\left(k\right) avec k\succ 1 sans se soucié de l'efficacité ou non du parseur. Par exemple, si une règle requiert trois symboles pour différencier entre deux alternatives, ANTLR s'en occupe et génère un symbole pour faire la différence.
+Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées:\newline
+\textit{règles}[\textit{args \textsl{1}},...,\textit{args \textsl{n}}] > [\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}]\newline
+Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées (\#token ID) ou directement référencées (\#segment). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
+Autre point important, ANTLR optimise le choix du nombre de lookahead en utilisant le moins possible. En effet, ANTLR génère une décision qui utilise un symbole qui distingue entre la première alternative et les autres. Ainsi, le prgrammeur utilise la puissance d'un parseur LL(k) avec k > 1 sans se soucié de l'efficacité ou non du parseur. Par exemple, si une règle requiert trois symboles pour différencier entre deux alternatives, ANTLR s'en occupe et génère un symbole pour faire la différence.
 ANTLR permet aussi à l'utilisateur de définir des actions et de les appelées là où il veut dans une production ANTLR, ces actions sont utilisées pour améliorer les tests sémantiques, générer une représenation intermédiaire ou directement générer la traduction.
-\subsubsection{Prédicats}
-
-=======
-Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguements et \textsl{m} valeurs retournées.
-\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}\right];\newline 
-Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées \left(\#token ID\right) ou directement référencées \left(\#segment\right). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
->>>>>>> ac6b1bb1812f352158948abc0306641408e9c25f
-
+\subsubsubsection{Prédicats}
+ANTLR supporte l'utilisation de prédicats sémantique et syntaxique qui permet à l'utilisateur d'indiquer la validté sémantique et syntaxique d'une production, permettant ainsi à ANTLR de gérer naturellement des situations d'analyse difficile.
+\subsubsection{Quelques fonctionnalités utile aux programmeurs}
+\subsubsubsection{Intégration de l'analyse syntaxique et lexicale}
+Une description ANTLR contient à la fois une spécification pour l'analyse des unités lexicale et la spécification du parseur lui-même, ce qui élimine le besoin d'avoir deux fichiers différents pour chaque spécification, en effet ANTLR extrait automatiquement une description de l'analyseur lexicale à partir de la description intégrée de ANTLR.
+ANTLR permet ainsi l'utilisation de plusieurs analyseurs lexicaux dans la même description ANTLR, cette pratique permet alors l'analyse de plusieurs langages.
+\subsubsubsection{Gestion d'erreurs}
+ANTLR propose deux mécanismes pour la gestion des erreurs.Dans le premier mécanisme, ANTLR génère un message d'erreur en utilisant une simple heuristique qui est suffisante pour plusieurs applications. par contre, quand une gestion d'erreurs plus complexe est requise, ANTLR fourni un second mécanisme appeler Parseur de gestion d'Exception qui offre une construction de rapport plus flexible dans un framework convenant.
+Le premier mécanisme génère automatiquement des rapports d'erreurs, désigne là où l'erreur à été détecter et qu'est ce qui était attendu.
+Le premier mécanisme, qui génère automatiquement des rapports d'erreurs, désigne là l'erreur à été détecter et qu'est ce qui était attendu.
+Le second mécanisme quant à lui, fournis un framework pour y mettre les rapports d'erreurs sémantiques et syntaxiques, notons que le premier mécanisme ne reconnait pas les erreurs sémantiques.
+\subsubsubsection{Construction de l'arbre syntaxique}
+Le plus souvent, les parseurs construisent une forme intermédiaire qui sera utilisé plus tard dans des phases de compilation par exemple. En utilisant quelques annotations, ANTLR peut automatiquement construire un arbre syntaxique, évitant ainsi à l'utilisateur d'appeler la construction d'un arbre à chaque fois.
+Pour créer un arbre, l'utilisateur des annotations grammaticales qui indiquent le noeud père, les feuilles et aussi qui doit être exclu de l'abre. Les unités lexicales précédés de "!" par exemple, son à exclure de l'arbre.Toutes les autres unités lexicales sont considérées comme des feuilles.
 \subsection{Xtext}
 \subsubsection{Definition}
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
