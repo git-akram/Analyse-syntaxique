@@ -94,7 +94,7 @@ La segmentation est le fait de séparer les différentes sections d’une chaîn
 Une unité lexicale ou un lexème est une chaîne de caractère qui correspond à un symbole. à l’aide du processus de segmentation, on peut extraire à partir d’un flux de caractères entrant une suite d’unités lexicales, ensuite c’est l’analyseur lexicale qui traitent ces lexème et les rangent dans des catégories d’entités lexicales.
 
 \subsection{Analyse syntaxique}
-Le rôle de l’analyse syntaxique est de savoir si une phrase appartient à la syntaxe d’un langage.
+Le rôle de l’analyse syntaxique \cite{refAnalyseSyntaxique} est de savoir si une phrase appartient à la syntaxe d’un langage.
 A partir du flot de lexèmes construits par l’analyse lexicale dans un premier temps, l’analyse syntaxique permet de générer un arbre de syntaxe abstraite.
 Cet arbre est construit à base d’un ensembles de règles définissant une grammaire formelle sur laquelle est basé le langage en question.
 l’analyse syntaxique permet plus particulièrement de détecter les erreurs de syntaxe en continuant tout de même l’analyse pour éviter les cycles de compilation/correction pour les développeurs.
@@ -125,20 +125,35 @@ L'emploi de méthodes tabulaires, mémorisant les calculs intermédiaires, sera 
 
 Ces deux dernières méthodes d'analyse sont aussi appréciées pour l'analyse de langages de programmation dont la syntaxe est ambiguë, comme par exemple C++.
 
-\subsubsubsection{Récupération des erreurs}
+\subsubsection{Récupération des erreurs}
 
-En analyse syntaxique des langages de programmation, il faut être capable de continuer l'analyse même lorsque le code source contient des erreurs, pour éviter des cycles de compilation/correction fastidieux pour le développeur. De même, en analyse syntaxique des langues naturelles, il faut pouvoir analyser des énoncés même s'ils ne sont pas couverts par la grammaire, inévitablement incomplète. La récupération sur erreur, ou rattrapage d'erreur (anglais error recovery), doit être suffisamment efficace pour détecter les problèmes, et "faire avec", moyennant une correction du source ou la faculté de produire des analyses (légèrement) déviantes par rapport à la grammaire. On peut citer quatre approches qui vont dans ce sens.
+En analyse syntaxique des langages de programmation, il faut être capable de continuer l'analyse même lorsque le code source contient des erreurs, pour éviter des cycles de compilation/correction fastidieux pour le développeur. De même, en analyse syntaxique des langues naturelles, il faut pouvoir analyser des énoncés même s'ils ne sont pas couverts par la grammaire, inévitablement incomplète. La récupération sur erreur, ou rattrapage d'erreur (anglais error recovery), doit être suffisamment efficace pour détecter les problèmes, et "faire avec", moyennant une correction du source ou la faculté de produire des analyses (légèrement) déviantes par rapport à la grammaire. On peut citer quelques approches qui vont dans ce sens.
+
+\subsubsubsection{Mode panique}
+
+le mode panique \cite{refModePanique} est un cas particulier de mode dégradé, c’est-à-dire une méthode de récupération sur erreur.
+Par exemple, lorsqu'une erreur survient lors d'une analyse syntaxique, l'analyseur supprime un à un chaque prochain symbole jusqu'à ce qu'il atteigne un symbole permettant de se resynchroniser.
+
+\subsubsubsection{Production erreurs}
+
+L'utilisation de productions erreurs \cite{refProductionErreurs} est une méthode de récupération sur erreur. Elle consiste à ajouter à la grammaire d'un langage des productions contenant la notion d'erreur. Cette technique est notamment utilisée par Yacc.
+
+\subsubsubsection{Correction locale}
+
+La correction locale \cite{refCorrectionLocale} est une technique de récupération sur erreur. Lorsqu'un analyseur constate une erreur lors de la lecture d'un symbole, il remplace le symbole lu par un autre qui lui semble plus juste.
+
 
 \subsection{LL(*)}
 Descente récursive ou prédicative: pour les grammaires simple ou le premier symbole terminal fournie des informations suffisantes pour choisir la règle de production.
 Pas possible si grammaire récursive à gauche.
 Besoin de factorisation à gauche lorsque 2 règles commencent par le même lexème.
-Mais cette méthode à une faiblesse, c’est qu’elle doit toujours prédire qu’elle règle utiliser.
+Mais cette méthode à une faiblesse, c’est qu’elle doit toujours prédire qu’elle règle utiliser \cite{refModernCompiler}.
 
 \subsection{L(AL)R}
 Dérivation à droite permet de rapporter le choix de la règle de production à utiliser.
 Elle commence du bas vers le haut.
-L’algorithme s’arrête quand tous les caractères ont été lus. La chaîne est accépté si la partie analysée se réduit à l’axiome.
+L’algorithme s’arrête quand tous les caractères ont été lus. La chaîne est accépté si la partie analysée se réduit à l’axiome 
+\cite{refModernCompiler}.
 
 \section{Comparaison entre les outils}
 \label{hints}
