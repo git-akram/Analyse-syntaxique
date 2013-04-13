@@ -245,11 +245,11 @@ Token & Commence par majuscule & ID \\
 \end{tabular}
 
 \subsubsection{Description de langage et ANTLR}
-Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\line Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\line
-règle : \textit{alternative \textsl{1}} \| \textit{alternative \textsl{2}} \|... \|\textit{alternative \textsl{n}}\;\line
-Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguements et \textsl{m} valeurs retournées.\line
+Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\line Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
+règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};\newline
+Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguements et \textsl{m} valeurs retournées.\newline
 
-\textit{règles}\left[\textit{args\textsl{1}},...,\textit{args\textsl{n}}\right]\succ\left[\textit{returnVal\textsl{1}},...\textit{returnVal\textsl{m}};\line
+\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...\textit{returnVal \textsl{m}};\newline
 
 \subsection{Xtext}
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
