@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1082
-NormalPos.bottom=671
+NormalPos.right=1008
+NormalPos.bottom=478
 Class=LaTeXView
 Document=Analyse syntaxique.tex
 
 [Frame0_View0,0]
-TopLine=236
-Cursor=11259
+TopLine=432
+Cursor=19617
 
 [SessionInfo]
 FrameCount=1
