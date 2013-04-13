@@ -235,16 +235,37 @@ Token & Commence par majuscule & ID \\
 \end{tabular}
 
 \subsection{Xtext}
+\subsubsection{Definition}
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
-DSL est un langage de programmation dont les spécifications sont à un domaine d’applications précis , la construction des langages dédiés diffère fondamentalement de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique(exp :SQL:destiné à interroger ou manipuler une base de données relationnelle)
 Le framework Xtext s’appuie sur sur une grammaire générée ANTLR ainsi que le framework de modelisation EMF.
+
+Il fonctionne sur une JVM (Machine Virtuelle Java) et est constitué de plusieurs API qui vous permettent de décrire les différents aspects du langage que vous voulez créer et propose une implémentation complète de ce langage. Notons que le langage développé sera alors un langage qui s'appuie et qui surcouche le langage Java. C'est-à-dire que les objets offerts par ce framework sont complètement des objets Java et le développement du compilateur de votre langage sera alors écrit en Java.
+
+Xtext peut servir entre autres à proposer des solutions dans les domaines tels que : les systèmes embarqués, l'automobile, les appareils mobiles, l'automatique, les jeux vidéo, etc.
+
+Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre , son utilisation devient indépendante de la JVM. 
+
 Xtext couvre tous les aspects d’un IDE moderne : parseur, compilateur ,interpreteur et integration complete dans l’environnement de developpement Eclipse.
+
 Xtext fournit un environnement convivial aux utilisateurs d’un DSL.
+
+\subsubsection{Definition DSL}
+DSL:est un langage de programmation dont les spécifications sont à un domaine d’applications précis , la construction des langages dédiés diffère fondamentalement de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique(exp :SQL:destiné à interroger ou manipuler une base de données relationnelle)
+
+\subsubsection{Definition Eclipse}
+Eclipse IDE est un environnement de développement intégré libre (le terme Eclipse désigne également le projet correspondant, lancé par IBM) extensible, universel et polyvalent, permettant potentiellement de créer des projets de développement mettant en œuvre n'importe quel langage de programmation. Eclipse IDE est principalement écrit en Java (à l'aide de la bibliothèque graphique SWT, d'IBM), et ce langage, grâce à des bibliothèques spécifiques, est également utilisé pour écrire des extensions.
+
+La spécificité d'Eclipse IDE vient du fait de son architecture totalement développée autour de la notion de plug-in.
+
+
+\subsubsection{Fonctionnalités Xtext}
 Parmi les fonctionnalités qu’offre Xtext:
-+coloration syntaxique; suivant les éléments de la grammaire , Xtext propose une coloration syntaxique entièrement personnalisable.
-+auto complétion: auto complétion sur les éléments du langage
-+validation: Xtext valide le contenu de l'éditeur à la volée, produisant ainsi un retour direct à l’utilisateur en cas d’erreur de syntaxe.
-+intégration avec d’autres composants Eclipse 
+\begin{itemize}
+			\item -coloration syntaxique: Suivant les éléments de la grammaire , Xtext propose une coloration syntaxique entièrement     personnalisable.
+			\item -auto complétion: auto complétion sur les éléments du langage 
+			\item -validation: Xtext valide le contenu de l'éditeur à la volée, produisant ainsi un retour direct à l’utilisateur en cas d’erreur de syntaxe.
+			\item -intégration avec d’autres composants Eclipse 
+\end{itemize}
 
 \section{Conclusion}
 \label{hints}
