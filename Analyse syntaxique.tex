@@ -284,8 +284,7 @@ Token & Commence par majuscule & ID \\
 Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\line Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
 règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};\newline
 Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguements et \textsl{m} valeurs retournées.\newline
-
-\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...\textit{returnVal \textsl{m}};\newline
+\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}\right];\newline
 Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées\left(\#token ID\right) ou directement référencées\left(\#segment\right). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
 
 \subsection{Xtext}
