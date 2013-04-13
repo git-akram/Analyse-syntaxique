@@ -238,8 +238,54 @@ Ces actions sont des instructions C dans lesquelles on a accès à des variables
 Ainsi les variables \$n font référence à la valeur du n-ième élément de droite et \$\$ fait référence à l’élément de gauche.
 
 \subsection{ANTLR}
-ANTLR est un Générateur de  Parseur public, il permet d’utiliser plusieurs langages et intégre la description Lexical/Syntaxique.
+Pour obtenir une certaines flexibilité et une meilleures gestion d’erreurs, les programmeurs préfèrent écrire leurs parseurs de descente récursive à la main, nous allons donc vous présentez dans ce chapitre un outil, qui combine flexibilité, gestion d’erreurs  et présente tout les avantages d’un générateur de parseur, c’est outil est ANTLR.
+\subsubsection{Défintions}
+ANTLR est un générateur de parseur public, il propose plusieurs fonctionnalités qui rendent sont utilisation simple, il propose  des prédicats qui permettent aux programmeurs de diriger et de contrôler e le parseur grâce à des expressions syntaxique et sémantique.
+ANTLR permet aussi d’intégrer des  descriptions lexicales et syntaxiques  et peut générer automatiquement l’arbre syntaxique.
+\subsubsection{Fonctionnement}
+Comme ce qui a été dit précédemment dans l’introduction, les prédicats permettent de diriger le parseur, ainsi ANTLR peut générer des parseurs pour plusieurs et différents langages.
+Les prédicats sémantiques indiquent la validité sémantique d’une production, les prédicats syntaxiques sont quant à eux des fragments de grammaires qui décrivent un contexte syntaxique qui doit être satisfait avant de reconnaître une production associé.
+\subsubsection{Fonctionnalités}
+Fort d’une stratégie puissante autant que parseur, ANTLR a plusieurs fonctionnalités qui rendent sont utilisation plus agréables que d’autres LR/LALR et LL générateurs de parseurs.
+\begin{itemize}
+\item ANTLR  intègre la spécification entre une analyse lexicale et syntaxique.
+			\item ANTLR facilite la construction de l’arbre syntaxique.
+			\item ANTLR génère des parseurs de descente récursives en C et C++.
+			\item ANTLR   facilite la gestion d’erreurs.
+			\item ...
+\end{itemize}
+\subsubsection{Eléments de langages}
+Le tableau illustre quelques éléments de langage spécifique à ANTLR qui le distinguent des autres générateurs de parseurs.
+\newline
 
+\begin{tabular}{|E|D|X|}
+\hline 
+Elément de langages & Description & Exemple \\ 
+\hline 
+Token & Commence par majuscule & ID \\ 
+\hline
+\prec\prec...\succ\succ & Définie une action sémantique & \prec\prec printf\left("\%S",a\right);\succ\succ \\
+\hline				
+\left(...\right) & Régle & \left("int" \left| ID \right| storage\_class\right) \\
+\hline
+\left(...\right)* & Closure & ID\left("\," ID\right)* \\
+\hline
+\left(...\right)+ & Positive Closure & slist : \left( stat | SEMICOLON \right) \+ \; \\
+\hline
+\left\{...\right\} & Optionnel & \left\{ELSE stat\right\} \\
+\hline
+\prec\prec...\succ\succ? & Prédicat sémantique & type : \prec\prec is\_Type\left(str\right)\succ\succ ? ID \; \\
+\hline
+\left(...\right)? & Prédicat syntaxique & \left(\left(list EQ\right)\right)? list EQ list | list \right) \\
+\hline
+\end{tabular}
+
+\subsubsection{Description de langage et ANTLR}
+Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\line Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
+règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};\newline
+Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguements et \textsl{m} valeurs retournées.\newline
+
+\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...\textit{returnVal \textsl{m}};\newline
 
 \subsection{Xtext}
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
