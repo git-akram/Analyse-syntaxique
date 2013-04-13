@@ -20,6 +20,19 @@
 
 \usepackage{wrapfig}
 \usepackage{epsf}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
 
 \title{Analyse Syntaxique}
 \author{Mohammed Akram Rhafrane - Ismail Senhaji - Nathanael Bertrand - Mehdi Boutchiche\\}
@@ -93,6 +106,29 @@ Le principe de l’analyse ascendante  est de partir de l’axiome en suivant le
 \subsubsection{Analyse descendante}
 L’analyse descendante d’une autre part, procède contrairement à l’analyse syntaxique en retrouvant le cheminement à partir du texte analysé. Ce type d’analyse essaye de regrouper les unité lexicale entre elles pour retrouver l’axiome. L’analyse LR est un exemple d’analyse ascendante.
 
+\subsubsection{Analyse deterministe}
+
+Un analyseur syntaxique, en tant que système de réécriture, est déterministe si une seule règle de réécriture est applicable dans chaque configuration de l'analyseur. Par extension, il ne peut alors y avoir qu'une seule séquence de règles permettant d'analyser le texte dans sa totalité, et donc celui-ci ne peut être syntaxiquement ambigu. Toutefois, il peut être fait usage de techniques telles que la pré-vision (en anglais lookahead) ou le backtracking pour déterminer quelle règle il faut appliquer à un point donné de l'analyse.
+
+Les méthodes d'analyse déterministes sont principalement employées pour l'analyse des langages de programmation. Par exemple, les analyses LR, LL, ou LALR (employée par Yacc) sont toutes déterministes. On ne peut cependant pas construire un analyseur déterministe pour n'importe quelle grammaire non contextuelle. Dans ce cas, et si l'on souhaite n'avoir qu'une seule analyse en sortie, on est contraint de lui adjoindre des mécanismes supplémentaires, comme des règles de désambiguïsation ou des modèles probabilistes permettant de choisir la « meilleure » analyse.
+
+Une méthode d’analyse descendante et déterministe est dite prédictive \cite{refAnalyseSyntaxique}.
+
+\subsubsection{Analyse non deterministe}
+
+La taille et la complexité des langues naturelles, sans oublier leur inévitable ambiguïté, rend leur analyse déterministe totalement impossible. Une analyse non déterministe s'apparente à une résolution dans un système contraint, et s'exprime assez aisément en Prolog.
+
+L'emploi de méthodes tabulaires, mémorisant les calculs intermédiaires, sera plus efficace qu'un simple backtracking. L'analyse CYK est un exemple d'analyse tabulée, à laquelle on préférera des méthodes plus sophistiquées
+
+    d'analyse à chartes comme l'analyse Earley
+    ou d'analyse LR généralisée (GLR).
+
+Ces deux dernières méthodes d'analyse sont aussi appréciées pour l'analyse de langages de programmation dont la syntaxe est ambiguë, comme par exemple C++.
+
+\subsubsubsection{Récupération des erreurs}
+
+En analyse syntaxique des langages de programmation, il faut être capable de continuer l'analyse même lorsque le code source contient des erreurs, pour éviter des cycles de compilation/correction fastidieux pour le développeur. De même, en analyse syntaxique des langues naturelles, il faut pouvoir analyser des énoncés même s'ils ne sont pas couverts par la grammaire, inévitablement incomplète. La récupération sur erreur, ou rattrapage d'erreur (anglais error recovery), doit être suffisamment efficace pour détecter les problèmes, et "faire avec", moyennant une correction du source ou la faculté de produire des analyses (légèrement) déviantes par rapport à la grammaire. On peut citer quatre approches qui vont dans ce sens.
+
 \subsection{LL(*)}
 Descente récursive ou prédicative: pour les grammaires simple ou le premier symbole terminal fournie des informations suffisantes pour choisir la règle de production.
 Pas possible si grammaire récursive à gauche.
@@ -149,14 +185,14 @@ Ici, on utilise Yacc sans Lex afin de comprendre le fonctionnement. Cependant, i
 %token CHIFFRE
 
 %%
-ligne : commande '\n' ligne
-    | '\n' \{ printf("Fin du programme\n"); exit(0); \}
+ligne : commande '\\n' ligne
+    | '\\n' \{ printf("Fin du programme\\n"); exit(0); \}
     ;
 
-commande: expr \{ printf("Resultat: \%d\n", \$1); \};
+commande: expr \{ printf("Resultat: \%d\\n", \$1); \};
 
 
-expr : expr '+' terme \\{ \$\$ = \$1 + \$3; \}
+expr : expr '+' terme \{ \$\$ = \$1 + \$3; \}
     | terme
     ;
    
@@ -164,7 +200,7 @@ terme : terme '*' facteur \{ \$\$ = \$1 * \$3; \}
     | facteur
     ;
    
-facteur : '(' expr ')' \{ \$\$ = \$2; \\}
+facteur : '(' expr ')' \{ \$\$ = \$2; \}
     | CHIFFRE
     ;
 
@@ -174,7 +210,7 @@ int main()\{
 \}
 
 int yyerror(char *s)\{
-    printf("\%s \n", s);
+    printf("\%s \\n", s);
 \}
 
 
@@ -220,4 +256,141 @@ Parmi les fonctionnalités qu’offre Xtext:
 \section{Conclusion}
 \label{hints}
 
+\section{Références}
+\label{hints}
+\section{Some small hints}
+\label{hints}
+\subsection{German Umlauts and other Language Specific Characters}
+\label{umlauts}
+You can type german umlauts like 'ä', 'ö', or 'ü' directly in this file.
+This is also true for other language specific characters like 'é', 'è' etc.
+There are problems with automatic hyphenation when using language
+specific characters and OT1-encoded fonts. In this case, use a
+T1-encoded Type1-font like the Latin Modern font family (\verb#\usepackage{lmodern}#).
+\subsection{References}
+\label{references}
+Using the commands \verb#\label{name}# and \verb#\ref{name}# you are able
+to use references in your document. Advantage: You do not need to think
+about numerations, because \LaTeX\ is doing that for you.
+For example, in section \ref{dividing} on page \pageref{dividing} hints for
+dividing large documents are given.
+Certainly, references do also work for tables, figures, formulas\ldots
+Please notice, that \LaTeX\ usually needs more than one run (mostly 2) to
+resolve those references correctly.
+\subsection{Dividing Large Documents}
+\label{dividing}
+You can divide your \LaTeX-Document into an arbitrary number of \TeX-Files
+to avoid too big and therefore unhandy files (e.g. one file for every chapter).
+For this, you insert in your main file (this one) for every subfile
+the command '\verb#\input{subfile}#'. This leads to the same behavior
+as if the content of the subfile would be at the place of the
+\verb#\input#-Command.
+
+
+\appendix
+%-----------------------------------------------------------
+\section{Introduction}\label{sec:intro}
+
+Prérequis:
+\begin{itemize}
+\item Un fichier \texttt{*.tex}, par exemple \texttt{rapport.tex}, qui
+  contient le texte.
+\item Un fichier \texttt{*.bib}, par exemple \texttt{rapport.bib}, qui
+  contient les références bibliographiques.
+\end{itemize}
+
+Utilisation de Latex:
+\begin{itemize}
+\item Lancer \texttt{pdflatex rapport} pour compilation du fichier
+  \texttt{rapport.tex}
+\item Lancer \texttt{biblatex rapport} pour compilation du fichier
+  \texttt{rapport.bib}
+\item Répéter \texttt{pdflatex rapport} deux fois pour prendre en
+  compte des modifications
+\end{itemize}
+
+Documentation:
+\begin{itemize}
+\item \LaTeX: \url{http://www.latex-project.org/}
+\item \TeX users group: \url{http://www.tug.org/}
+\end{itemize}
+
+
+%-----------------------------------------------------------
+\section{Présentation du projet}
+
+\subsection{But du projet}
+On a utilisé
+\cite{lindholm99_java_virtual_machin_specif,moore89_system_verif} et
+aussi \cite{strecker02_verif_java_compil}.
+
+\subsection{Implantation}
+
+\begin{figure}[htbp]
+  \centering
+% \includegraphics[scale=0.5]{foo}
+  \caption{Une petite image}
+  \label{fig:im}
+\end{figure}
+
+Inclusion d'images en format PDF (création par exemple avec
+XFig\footnote{Page web: \url{http://www.xfig.org/}})
+
+\subsection{Spécialités}
+
+Facile à utiliser: Listes d'éléments numérotés:
+\begin{enumerate}
+\item premier élément
+\item deuxième élément
+\item aussi imbriqués:
+%
+\begin{itemize}
+\item Ici, une liste non numérotée
+\item avec un autre élément
+\end{itemize}
+%
+\end{enumerate}
+
+Mathématiques:
+\begin{itemize}
+\item Sous- et super-scripts: $a_n$ et $b^k$, utiliser des accolades
+  pour des expressions plus complexes: $x^{(y^z)}$
+
+\item Symboles mathématiques, tels que $\sum_{i=0}^{n} f(i)$
+
+\item Caractères de l'alphabet grecque: $\Gamma$ ou calligraphiques: ${\cal D}$
+\end{itemize}
+
+Fontes de caractères spécifiques:
+\begin{itemize}
+\item \emph{Italique}
+\item \textbf{Gras}
+\item \texttt{typewriter}
+\item ou combiné \emph{\textbf{italique-gras}}
+\end{itemize}
+
+%-----------------------------------------------------------
+\section{Gestion du projet}
+
+\begin{tabular}[h]{|l|l|}
+\hline
+Dates & Tâches \\
+\hline
+\hline
+Du 7 mars au 2 mai & 1~ière itération \\
+                   & 2~ième itération \\
+\hline
+\end{tabular}
+
+Je me réfère à la section~\ref{sec:intro} et la figure~\ref{fig:im}.
+
+%-----------------------------------------------------------
+\bibliography{bibliographie}
+\bibliographystyle{abbrv}
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% coding: utf-8
+%%% End:
