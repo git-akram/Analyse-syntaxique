@@ -87,14 +87,33 @@ Les grammaires ambiguë pose un problème lors de la compilation, c’est pour �
 l’analyse lexicale consiste à découper une chaîne de caractère en unités lexicales ou lexèmes à la demande de l’analyseur lexicale.
 Il est définit par un ensembles d’expressions relationnelle qui exigent certaines séquences de caractère pour former les lexèmes.
 
-\subsubsection{Segmentation}
-La segmentation est le fait de séparer les différentes sections d’une chaînes de caractères, par exemple pour une phrase l’ordinateur la considère comme une chaîne de caractère et non pas une suite de mot, le rôle de la segmentation est donc de faire une séparation entre ces mots selon le caractère de séparation dans ce cas le caractère espace.
-
 \subsubsection{Unités lexicales}
 Une unité lexicale ou un lexème est une chaîne de caractère qui correspond à un symbole. à l’aide du processus de segmentation, on peut extraire à partir d’un flux de caractères entrant une suite d’unités lexicales, ensuite c’est l’analyseur lexicale qui traitent ces lexème et les rangent dans des catégories d’entités lexicales.
 
+\subsubsection{Analyseur Lexicale}
+
+On appelle analyseur lexical \cite{refAnalyseurLexicale}, lexeur, ou encore scanneur, tout programme effectuant une analyse lexicale. Il s'agit le plus souvent d'une unique fonction qui sera appelée par l'analyseur syntaxique (voir Analyse syntaxique) ou par une autre fonction.
+
+Le scanneur contient toutes les informations sur les séquences de caractères qui peuvent être contenues dans les entités lexicales qu'il génère. Par exemple, une entité lexicale de type « INTEGER » peut contenir n'importe quelle séquence de caractères numériques (chiffres).
+\begin{itemize}
+\item Son rôle consiste à :
+			\item éliminer les « bruits » du texte source : commentaires, espaces, …
+			\item reconnaître les opérateurs et les mots-clés : ==, if, …
+			\item reconnaître les chaînes de caractères, les identificateurs et les constantes numériques
+\end{itemize}
+Il produit en sortie une entité lexicale qui sera utilisée par l'analyseur syntaxique.
+\begin{itemize}
+\item Un analyseur lexical peut être écrit :
+			\item « à la main » : il faut construire l'automate fini non déterministe à partir d'une expression rationnelle E, puis l'exécuter pour déterminer si une chaîne d'entrée appartient au langage reconnu par E
+			\item par une table décrivant l'automate et un programme exploitant cette table
+			\item par un générateur d'analyseurs : flex, ANTLR, etc.
+\end{itemize}    
+
+\subsubsection{Segmentation}
+La segmentation est le fait de séparer les différentes sections d’une chaînes de caractères, par exemple pour une phrase l’ordinateur la considère comme une chaîne de caractère et non pas une suite de mot, le rôle de la segmentation est donc de faire une séparation entre ces mots selon le caractère de séparation dans ce cas le caractère espace.
+
 \subsection{Analyse syntaxique}
-Le rôle de l’analyse syntaxique est de savoir si une phrase appartient à la syntaxe d’un langage.
+Le rôle de l’analyse syntaxique \cite{refAnalyseSyntaxique} est de savoir si une phrase appartient à la syntaxe d’un langage.
 A partir du flot de lexèmes construits par l’analyse lexicale dans un premier temps, l’analyse syntaxique permet de générer un arbre de syntaxe abstraite.
 Cet arbre est construit à base d’un ensembles de règles définissant une grammaire formelle sur laquelle est basé le langage en question.
 l’analyse syntaxique permet plus particulièrement de détecter les erreurs de syntaxe en continuant tout de même l’analyse pour éviter les cycles de compilation/correction pour les développeurs.
@@ -125,20 +144,35 @@ L'emploi de méthodes tabulaires, mémorisant les calculs intermédiaires, sera 
 
 Ces deux dernières méthodes d'analyse sont aussi appréciées pour l'analyse de langages de programmation dont la syntaxe est ambiguë, comme par exemple C++.
 
-\subsubsubsection{Récupération des erreurs}
+\subsubsection{Récupération des erreurs}
 
-En analyse syntaxique des langages de programmation, il faut être capable de continuer l'analyse même lorsque le code source contient des erreurs, pour éviter des cycles de compilation/correction fastidieux pour le développeur. De même, en analyse syntaxique des langues naturelles, il faut pouvoir analyser des énoncés même s'ils ne sont pas couverts par la grammaire, inévitablement incomplète. La récupération sur erreur, ou rattrapage d'erreur (anglais error recovery), doit être suffisamment efficace pour détecter les problèmes, et "faire avec", moyennant une correction du source ou la faculté de produire des analyses (légèrement) déviantes par rapport à la grammaire. On peut citer quatre approches qui vont dans ce sens.
+En analyse syntaxique des langages de programmation, il faut être capable de continuer l'analyse même lorsque le code source contient des erreurs, pour éviter des cycles de compilation/correction fastidieux pour le développeur. De même, en analyse syntaxique des langues naturelles, il faut pouvoir analyser des énoncés même s'ils ne sont pas couverts par la grammaire, inévitablement incomplète. La récupération sur erreur, ou rattrapage d'erreur (anglais error recovery), doit être suffisamment efficace pour détecter les problèmes, et "faire avec", moyennant une correction du source ou la faculté de produire des analyses (légèrement) déviantes par rapport à la grammaire. On peut citer quelques approches qui vont dans ce sens.
+
+\subsubsubsection{Mode panique}
+
+le mode panique \cite{refModePanique} est un cas particulier de mode dégradé, c’est-à-dire une méthode de récupération sur erreur.
+Par exemple, lorsqu'une erreur survient lors d'une analyse syntaxique, l'analyseur supprime un à un chaque prochain symbole jusqu'à ce qu'il atteigne un symbole permettant de se resynchroniser.
+
+\subsubsubsection{Production erreurs}
+
+L'utilisation de productions erreurs \cite{refProductionErreurs} est une méthode de récupération sur erreur. Elle consiste à ajouter à la grammaire d'un langage des productions contenant la notion d'erreur. Cette technique est notamment utilisée par Yacc.
+
+\subsubsubsection{Correction locale}
+
+La correction locale \cite{refCorrectionLocale} est une technique de récupération sur erreur. Lorsqu'un analyseur constate une erreur lors de la lecture d'un symbole, il remplace le symbole lu par un autre qui lui semble plus juste.
+
 
 \subsection{LL(*)}
 Descente récursive ou prédicative: pour les grammaires simple ou le premier symbole terminal fournie des informations suffisantes pour choisir la règle de production.
 Pas possible si grammaire récursive à gauche.
 Besoin de factorisation à gauche lorsque 2 règles commencent par le même lexème.
-Mais cette méthode à une faiblesse, c’est qu’elle doit toujours prédire qu’elle règle utiliser.
+Mais cette méthode à une faiblesse, c’est qu’elle doit toujours prédire qu’elle règle utiliser \cite{refModernCompiler}.
 
 \subsection{L(AL)R}
 Dérivation à droite permet de rapporter le choix de la règle de production à utiliser.
 Elle commence du bas vers le haut.
-L’algorithme s’arrête quand tous les caractères ont été lus. La chaîne est accépté si la partie analysée se réduit à l’axiome.
+L’algorithme s’arrête quand tous les caractères ont été lus. La chaîne est accépté si la partie analysée se réduit à l’axiome 
+\cite{refModernCompiler}.
 
 \section{Comparaison entre les outils}
 \label{hints}
@@ -240,7 +274,7 @@ Ainsi les variables \$n font référence à la valeur du n-ième élément de dr
 \subsection{ANTLR}
 Pour obtenir une certaines flexibilité et une meilleures gestion d’erreurs, les programmeurs préfèrent écrire leurs parseurs de descente récursive à la main, nous allons donc vous présentez dans ce chapitre un outil, qui combine flexibilité, gestion d’erreurs  et présente tout les avantages d’un générateur de parseur, c’est outil est ANTLR.
 \subsubsection{Défintions}
-ANTLR est un générateur de parseur public, il propose plusieurs fonctionnalités qui rendent sont utilisation simple, il propose  des prédicats qui permettent aux programmeurs de diriger et de contrôler e le parseur grâce à des expressions syntaxique et sémantique.
+ANTLR \cite{refANTLR} est un générateur de parseur public, il propose plusieurs fonctionnalités qui rendent sont utilisation simple, il propose  des prédicats qui permettent aux programmeurs de diriger et de contrôler e le parseur grâce à des expressions syntaxique et sémantique.
 ANTLR permet aussi d’intégrer des  descriptions lexicales et syntaxiques  et peut générer automatiquement l’arbre syntaxique.
 \subsubsection{Fonctionnement}
 Comme ce qui a été dit précédemment dans l’introduction, les prédicats permettent de diriger le parseur, ainsi ANTLR peut générer des parseurs pour plusieurs et différents langages.
@@ -254,6 +288,9 @@ Fort d’une stratégie puissante autant que parseur, ANTLR a plusieurs fonction
 			\item ANTLR   facilite la gestion d’erreurs.
 			\item ...
 \end{itemize}
+\subsubsection{Diagramme de flux}
+
+
 \subsubsection{Eléments de langages}
 Le tableau illustre quelques éléments de langage spécifique à ANTLR qui le distinguent des autres générateurs de parseurs.
 \newline
@@ -281,8 +318,9 @@ Token & Commence par majuscule & ID \\
 \end{tabular}
 
 \subsubsection{Description de langage et ANTLR}
-Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\line Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
+Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\newline Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
 règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};\newline
+<<<<<<< HEAD
 Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées.\newline
 %\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}\right];\newline
 Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées\left(\#token ID\right) ou directement référencées\left(\#segment\right). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
@@ -290,6 +328,11 @@ Autre point important, ANTLR optimise le choix du nombre de lookahead en utilisa
 ANTLR permet aussi à l'utilisateur de définir des actions et de les appelées là où il veut dans une production ANTLR, ces actions sont utilisées pour améliorer les tests sémantiques, générer une représenation intermédiaire ou directement générer la traduction.
 \subsubsection{Prédicats}
 
+=======
+Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguements et \textsl{m} valeurs retournées.
+\textit{règles}\left[\textit{args \textsl{1}},...,\textit{args \textsl{n}}\right]\succ\left[\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}\right];\newline 
+Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées \left(\#token ID\right) ou directement référencées \left(\#segment\right). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
+>>>>>>> ac6b1bb1812f352158948abc0306641408e9c25f
 
 \subsection{Xtext}
 \subsubsection{Definition}
@@ -323,6 +366,28 @@ Parmi les fonctionnalités qu’offre Xtext:
 			\item -validation: Xtext valide le contenu de l'éditeur à la volée, produisant ainsi un retour direct à l’utilisateur en cas d’erreur de syntaxe.
 			\item -intégration avec d’autres composants Eclipse 
 \end{itemize}
+
+\subsubsection{Diagramme de flux}
+
+
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.80\textwidth]{Emftext_process.jpg}
+	\label{fig:Emftext_process}
+\end{figure}
+
+
+
+\newpage
+
+
+
+
+
+
+
+
 
 \section{Conclusion}
 \label{hints}
