@@ -17,8 +17,8 @@ Class=LaTeXView
 Document=Analyse syntaxique.tex
 
 [Frame0_View0,0]
-TopLine=155
-Cursor=825
+TopLine=236
+Cursor=11259
 
 [SessionInfo]
 FrameCount=1
