@@ -17,7 +17,7 @@
 %\usepackage{moreverb}
 %\usepackage{xspace}
 \usepackage[colorlinks,hyperindex,bookmarks,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
-
+\usepackage{placeins}
 \usepackage{wrapfig}
 \usepackage{epsf}
 \setcounter{secnumdepth}{4}
@@ -47,7 +47,7 @@
 		\includegraphics[width=0.60\textwidth]{logo-ups.jpg}
 	\label{fig:logo-ups}
 \end{figure}
-
+\newline
 \maketitle
 
 \newpage
@@ -94,13 +94,13 @@ Prenons la grammaire suivante G=( \textit{\{E\} , \{a,+,x\} , R , E} ) \newline
 Avec \textit{R} donné par : \textit{E := E} x \textit{E | E + E | a}
 
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.90\textwidth]{grammaireAmbigue.png}
 	\label{fig:grammaireAmbigue}
-\end{figure}
+\end{figure}\FloatBarrier
 
-Donc nous remarquons qu'on peut construire deux arbres de dérivation à partir de la chaîne de caractères \textit{"aaa"} 
+Donc nous remarquons qu'on peut construire deux arbres de dérivation à partir de la chaîne de caractères \textit{"a + a x a"} 
 
 
 \subsection{Analyse lexicale}
@@ -108,12 +108,12 @@ l’analyse lexicale consiste à découper une chaîne de caractère en unités 
 Il est définit par un ensembles d’expressions relationnelles qui exigent certaines séquences de caractère pour former les lexèmes.
 \textit{Exemple :}
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.80\textwidth]{AnalyseLexicale.png}
 	\caption{Analyse lexicale}
 	\label{fig:AnalyseLexicale}
-\end{figure}
+\end{figure}\FloatBarrier
 
 
 \subsubsection{Unités lexicales}
@@ -150,12 +150,12 @@ l’analyse syntaxique permet plus particulièrement de détecter les erreurs de
 Reprenant l'exemple de d'analyse lexicale \ref{fig:AnalyseLexicale}. L'analyse lexicale a construit une suites d'unités lexicales a partir d'une chaîne de caractères en entrée.\newline
 Maintenant le rôle de l'analyse syntaxique est de reprendre ce résultat et essayer de construire un arbre de syntaxe suivant la grammaire qui définit le langage afin de s'assurer que la chaîne de caractères appartient au langage.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.80\textwidth]{AnalyseSyntaxique.png}
 	\caption{Analyse syntaxique}
 	\label{fig:AnalyseSyntaxique}
-\end{figure}
+\end{figure}\FloatBarrier
 
 
 \subsubsection{Analyseur syntaxique}
@@ -163,21 +163,106 @@ Maintenant le rôle de l'analyse syntaxique est de reprendre ce résultat et ess
 L'analyseur syntaxique est une programme qui reçoit une suite d'unités lexicales de la part de l'analyseur lexicale et doit vérifier que cette suite est engendrée par la grammaire du langage décrit.
 
 Voici un schema montrant les intéractions entre l'analyseur lexicale et l'analyseur syntaxique:
-\newpage
-\begin{figure}[h]
+
+\begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.70\textwidth]{interactionLexSynt.png}
 	\caption{Interaction entre l'analyseur lexicale et l'analyseur syntaxique}
 	\label{fig:interactionLexSynt}
-\end{figure}
+\end{figure}\FloatBarrier
 \newline
 un analyseur syntaxique doit retracer le cheminement d’application des règles qui ont menées à l’axiome. Pour ça, il existe deux types d’analyse:
 
-\subsubsection{Analyse ascendante}
-Le principe de l’analyse ascendante  est de partir de l’axiome en suivant les règles de production afin de retrouver le texte analysé. Ce type d’analyse procède en découpant le texte petit à petit jusqu'à retrouver les unité lexicale. L’analyse LL est un exemple d’analyse descendante.
+\subsubsection{Analyse descendante}\label{sec:analyseDes}
+Le principe de l’analyse descendante est de partir de l’axiome en suivant les règles de production afin de retrouver le texte analysé. Ce type d’analyse procède en découpant le texte petit à petit jusqu'à retrouver les unité lexicale. L’analyse LL est un exemple d’analyse descendante.\newline
+\textit{Exemple :}\newline
+On a :\newline
+S => aSbT | cT | d\newline
+T => aT | bS | c \newline
+et la chaîne suivante en entrée W=acbbadbc\newline
+On part avec l'arbre contenant le seul sommet S.
+La lecture de la première lettre du mot (a) nous permet d'avancer la construction de l'arbre avec :
 
-\subsubsection{Analyse descendante}
-L’analyse descendante d’une autre part, procède contrairement à l’analyse syntaxique en retrouvant le cheminement à partir du texte analysé. Ce type d’analyse essaye de regrouper les unité lexicale entre elles pour retrouver l’axiome. L’analyse LR est un exemple d’analyse ascendante.
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.70\textwidth]{AnalyseDescendante1.png}
+	\label{fig:AnalyseDescendante1}
+\end{figure}\FloatBarrier
+
+Puis la deuxième lettre nous amène à :
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.70\textwidth]{AnalyseDescendante2.png}
+	\label{fig:AnalyseDescendante2}
+\end{figure}\FloatBarrier
+
+et ainsi de suite jusqu'a la fin du mot.
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.70\textwidth]{AnalyseDescendante3.png}
+	\label{fig:AnalyseDescendante3}
+\end{figure}\FloatBarrier
+
+Donc le mot appartient au langage. Sur cet exemple c'est simple car chaque règle commence par un terminal différent ce qui facilite le choix de la règle à appliquer. Mais c'est pas toujours le cas, dans la plus part des cas on se trouve devant le choix entre plusieur règles par exemple si on considère :\newline
+S => aAb\newline
+A => cd | c \newline
+et on veut lire le mot W=acb\newline
+On se retrouve avec
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.70\textwidth]{AnalyseDescendante4.png}
+	\label{fig:AnalyseDescendante4}
+\end{figure}\FloatBarrier
+
+En lisant le caractère "c", on ne sait pas si il faut choisir la règle A => cd ou bien A => c.
+Pour le savoir il faut lire le caractère suivant "b", ou alors, il faut se donner la possibilité de de faire des retours en arrière :
+On essaye la première règle, on aboutit à un echec, alors on retourneen arrière pour essayer la deuxième règle.
+
+\subsubsection{Analyse ascendante}
+L’analyse ascendante d’une autre part, procède contrairement à l’analyse descendante en retrouvant le cheminement à partir du texte analysé. Ce type d’analyse essaye de regrouper les unité lexicale entre elles pour retrouver l’axiome. L’analyse LR est un exemple d’analyse ascendante.
+Reprenons l'exemple dernier \ref{sec:analyseDes} :
+Cette fois en utilisant une analyse ascendante, on va partir de la chaîne de caractères pour retrouver l'axiome S.
+La chaîne analysé est la même du dernier exemple \newline W=accbbadbc\newline\newline\newline
+\begin{tabular}{|E|D|}
+\hline
+\textbf{a}ccbbadbc & Aucune règle à appliquer\\
+\hline
+a\textbf{c}cbbadbc & Aucune règle à appliquer\\
+\hline
+ac\textbf{c}bbadbc & T => c\\
+\hline
+ac\textbf{T}bbadbc & S => cT\\
+\hline
+a\textbf{S}bbadbc & Aucune règle à appliquer\\
+\hline
+aS\textbf{b}badbc & Aucune règle à appliquer\\
+\hline
+aSb\textbf{b}adbc & Aucune règle à appliquer\\
+\hline
+aSbb\textbf{a}dbc & Aucune règle à appliquer\\
+\hline
+aSbba\textbf{d}bc & S => d\\
+\hline
+aSbba\textbf{S}bc & Aucune règle à appliquer\\
+\hline
+aSbbaS\textbf{b}c & Aucune règle à appliquer\\
+\hline
+aSbbaSb\textbf{c} & T => c\\
+\hline
+aSbbaSb\textbf{T} & S => aSbT\\
+\hline
+aSbb\textbf{S} & T => bS\\
+\hline
+aSb\textbf{T} & S => aSbT\\
+\hline
+S & Axiome retrouvé\\
+\hline
+\end{tabular}
+\newline\newline\newline
+Alors le mot "accbbadbc" est bien dans le langage.
 
 \subsubsection{Analyse deterministe}
 
@@ -234,7 +319,7 @@ L’algorithme s’arrête quand tous les caractères ont été lus. La chaîne 
 \subsection{Yac/Bison/Cup}
 
 
-\subsubsection{Yac - Yet Anather Compiler-Compiler}
+\subsubsection{Yac - Yet Another Compiler-Compiler}
 YACC est un programme qui permet de générer un analyseur syntaxique à partir d’une spécification. La spécification est l’ensemble des règles de grammaire associées au langage à analyser.
 L’analyseur ainsi généré est de type LALR(1).
 
