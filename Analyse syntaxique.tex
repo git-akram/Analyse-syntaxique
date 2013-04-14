@@ -90,7 +90,7 @@ Dans cet écrit, nous nous attarderons sur deux types d’analyseurs: les analys
 On dit qu’une grammaire est ambiguë  lorsqu’on peut trouver deux arbres de dérivation différents pour le même mot.
 Les grammaires ambiguë pose un problème lors de la compilation, c’est pour ça qu’il est préférable de les transformer en grammaire non ambiguë si c’est possible.\newline
 \textit{Exemple : }\newline\newline
-Prenons la grammaire suivante G=( \textit{\{E\} , \{a,+,x\} , R , E} ) \newline
+Prenons la grammaire suivante G=( \textit{\{E\} , \{a,+,}x\textit{\} , R , E} ) \newline
 Avec \textit{R} donné par : \textit{E := E} x \textit{E | E + E | a}
 
 
@@ -435,24 +435,24 @@ Le tableau illustre quelques éléments de langage spécifique à ANTLR qui le d
 \newline
 
 \begin{tabular}{|E|D|X|}
-\hline 
-Elément de langages & Description & Exemple \\ 
-\hline 
-Token & Commence par majuscule & ID \\ 
 \hline
-\prec\prec...\succ\succ & Définie une action sémantique & \prec\prec printf("\%S",a);\succ\succ \\
-\hline				
-\left(...) & Régle & ("int" | ID | storage\_class) \\
+Elément de langages & Description & Exemple \\
 \hline
-\left(...)* & Closure & ID("\," ID)* \\
+Token & Commence par majuscule & ID \\
 \hline
-\left(...)+ & Positive Closure & slist : ( stat | SEMICOLON ) \+ \; \\
+\prec\prec...\succ\succ & Définie une action sémantique & \prec\prec printf\left("\%S",a\right);\succ\succ \\
+\hline	
+\left(...\right) & Régle & \left("int" \left| ID \right| storage\_class\right) \\
 \hline
-\left\{...\} & Optionnel & \{ELSE stat\} \\
+\left(...\right)* & Closure & ID\left("\," ID\right)* \\
 \hline
-\prec\prec...\succ\succ? & Prédicat sémantique & type : \prec\prec is\_Type(str)\succ\succ ? ID; \\
+\left(...\right)+ & Positive Closure & slist : \left( stat | SEMICOLON \right) \+ \; \\
 \hline
-\left(...)? & Prédicat syntaxique & ((list EQ))? list EQ list | list ) \\
+\left\{...\right\} & Optionnel & \left\{ELSE stat\right\} \\
+\hline
+\prec\prec...\succ\succ? & Prédicat sémantique & type : \prec\prec is\_Type\left(str\right)\succ\succ ? ID \; \\
+\hline
+\left(...\right)? & Prédicat syntaxique & \left(\left(list EQ\right)\right)? list EQ list | list \right) \\
 \hline
 \end{tabular}
 \subsubsection{Langage et description}
