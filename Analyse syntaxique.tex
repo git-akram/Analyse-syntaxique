@@ -39,14 +39,16 @@
 \date{\today} 
 \begin{document}
 
-\begin{center}
-\begin{figure}[h]
+
+
+
+\begin{figure}[t]
 	\centering
-		\includegraphics[width=8cm,height=35mm]{logo-ups.jpg} 
-	\label{fig:Emftext_process}
+		\includegraphics[width=0.60\textwidth]{logo-ups.jpg}
+	\label{fig:logo-ups}
 \end{figure}
+
 \maketitle
-\end{center}
 
 \newpage
 \tableofcontents
@@ -77,6 +79,7 @@ De manière générale, une grammaire est définie par un quadruplet:
     P : l’ensemble des règles de production
 
     S : l’axiome, c’est un élément de N
+\newline
 
 Ainsi, la notation: G(L) = <N, X, P, S> décrit la grammaire G associée au langage L.
 Les grammaires sont analysées par des automates. Il existe plusieurs types d’analyses de grammaires qui font appels à plusieurs types d’automates.
@@ -85,11 +88,33 @@ Dans cet écrit, nous nous attarderons sur deux types d’analyseurs: les analys
 
 \subsubsection{Grammaires ambiguë}
 On dit qu’une grammaire est ambiguë  lorsqu’on peut trouver deux arbres de dérivation différents pour le même mot.
-Les grammaires ambiguë pose un problème lors de la compilation, c’est pour ça qu’il est préférable de les transformer en grammaire non ambiguë si c’est possible.
+Les grammaires ambiguë pose un problème lors de la compilation, c’est pour ça qu’il est préférable de les transformer en grammaire non ambiguë si c’est possible.\newline
+\textit{Exemple : }\newline\newline
+Prenons la grammaire suivante G=( \textit{\{E\} , \{a,+,x\} , R , E} ) \newline
+Avec \textit{R} donné par : \textit{E := E} x \textit{E | E + E | a}
+
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.90\textwidth]{grammaireAmbigue.png}
+	\label{fig:grammaireAmbigue}
+\end{figure}
+
+Donc nous remarquons qu'on peut construire deux arbres de dérivation à partir de la chaîne de caractères \textit{"aaa"} 
+
 
 \subsection{Analyse lexicale}
 l’analyse lexicale consiste à découper une chaîne de caractère en unités lexicales ou lexèmes à la demande de l’analyseur lexicale.
-Il est définit par un ensembles d’expressions relationnelle qui exigent certaines séquences de caractère pour former les lexèmes.
+Il est définit par un ensembles d’expressions relationnelles qui exigent certaines séquences de caractère pour former les lexèmes.
+\textit{Exemple :}
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.80\textwidth]{AnalyseLexicale.png}
+	\caption{Analyse lexicale}
+	\label{fig:AnalyseLexicale}
+\end{figure}
+
 
 \subsubsection{Unités lexicales}
 Une unité lexicale ou un lexème est une chaîne de caractère qui correspond à un symbole. à l’aide du processus de segmentation, on peut extraire à partir d’un flux de caractères entrant une suite d’unités lexicales, ensuite c’est l’analyseur lexicale qui traitent ces lexème et les rangent dans des catégories d’entités lexicales.
@@ -110,7 +135,7 @@ Il produit en sortie une entité lexicale qui sera utilisée par l'analyseur syn
 \item Un analyseur lexical peut être écrit :
 			\item « à la main » : il faut construire l'automate fini non déterministe à partir d'une expression rationnelle E, puis l'exécuter pour déterminer si une chaîne d'entrée appartient au langage reconnu par E
 			\item Par une table décrivant l'automate et un programme exploitant cette table
-			\item Par un générateur d'analyseurs : flex, ANTLR, etc.
+			\item Par un générateur d'analyseurs : Flex, ANTLR, Lex, etc.
 \end{itemize}    
 
 \subsubsection{Segmentation}
@@ -120,7 +145,32 @@ La segmentation est le fait de séparer les différentes sections d’une chaîn
 Le rôle de l’analyse syntaxique \cite{refAnalyseSyntaxique} est de savoir si une phrase appartient à la syntaxe d’un langage.
 A partir du flot de lexèmes construits par l’analyse lexicale dans un premier temps, l’analyse syntaxique permet de générer un arbre de syntaxe abstraite.
 Cet arbre est construit à base d’un ensembles de règles définissant une grammaire formelle sur laquelle est basé le langage en question.
-l’analyse syntaxique permet plus particulièrement de détecter les erreurs de syntaxe en continuant tout de même l’analyse pour éviter les cycles de compilation/correction pour les développeurs.
+l’analyse syntaxique permet plus particulièrement de détecter les erreurs de syntaxe en continuant tout de même l’analyse pour éviter les cycles de compilation/correction pour les développeurs.\newline
+\textit{Exemple :}\newline
+Reprenant l'exemple de d'analyse lexicale \ref{fig:AnalyseLexicale}. L'analyse lexicale a construit une suites d'unités lexicales a partir d'une chaîne de caractères en entrée.\newline
+Maintenant le rôle de l'analyse syntaxique est de reprendre ce résultat et essayer de construire un arbre de syntaxe suivant la grammaire qui définit le langage afin de s'assurer que la chaîne de caractères appartient au langage.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.80\textwidth]{AnalyseSyntaxique.png}
+	\caption{Analyse syntaxique}
+	\label{fig:AnalyseSyntaxique}
+\end{figure}
+
+
+\subsubsection{Analyseur syntaxique}
+
+L'analyseur syntaxique est une programme qui reçoit une suite d'unités lexicales de la part de l'analyseur lexicale et doit vérifier que cette suite est engendrée par la grammaire du langage décrit.
+
+Voici un schema montrant les intéractions entre l'analyseur lexicale et l'analyseur syntaxique:
+\newpage
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.70\textwidth]{interactionLexSynt.png}
+	\caption{Interaction entre l'analyseur lexicale et l'analyseur syntaxique}
+	\label{fig:interactionLexSynt}
+\end{figure}
+\newline
 un analyseur syntaxique doit retracer le cheminement d’application des règles qui ont menées à l’axiome. Pour ça, il existe deux types d’analyse:
 
 \subsubsection{Analyse ascendante}
