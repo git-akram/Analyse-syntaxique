@@ -100,8 +100,8 @@ Avec \textit{R} donné par : \textit{E := E} x \textit{E | E + E | a}
 	\label{fig:grammaireAmbigue}
 \end{figure}\FloatBarrier
 
-Donc nous remarquons qu'on peut construire deux arbres de dérivation à partir de la chaîne de caractères \textit{"a + a x a"} 
-
+Donc nous remarquons qu'on peut construire deux arbres de dérivation à partir de la chaîne de caractères 
+\textit{"a + a} x \textit{a"} 
 
 \subsection{Analyse lexicale}
 l’analyse lexicale consiste à découper une chaîne de caractère en unités lexicales ou lexèmes à la demande de l’analyseur lexicale.
@@ -440,19 +440,19 @@ Elément de langages & Description & Exemple \\
 \hline 
 Token & Commence par majuscule & ID \\ 
 \hline
-\prec\prec...\succ\succ & Définie une action sémantique & \prec\prec printf\left("\%S",a\right);\succ\succ \\
+\prec\prec...\succ\succ & Définie une action sémantique & \prec\prec printf("\%S",a);\succ\succ \\
 \hline				
-\left(...\right) & Régle & \left("int" \left| ID \right| storage\_class\right) \\
+\left(...) & Régle & ("int" | ID | storage\_class) \\
 \hline
-\left(...\right)* & Closure & ID\left("\," ID\right)* \\
+\left(...)* & Closure & ID("\," ID)* \\
 \hline
-\left(...\right)+ & Positive Closure & slist : \left( stat | SEMICOLON \right) \+ \; \\
+\left(...)+ & Positive Closure & slist : ( stat | SEMICOLON ) \+ \; \\
 \hline
-\left\{...\right\} & Optionnel & \left\{ELSE stat\right\} \\
+\left\{...\} & Optionnel & \{ELSE stat\} \\
 \hline
-\prec\prec...\succ\succ? & Prédicat sémantique & type : \prec\prec is\_Type\left(str\right)\succ\succ ? ID \; \\
+\prec\prec...\succ\succ? & Prédicat sémantique & type : \prec\prec is\_Type(str)\succ\succ ? ID; \\
 \hline
-\left(...\right)? & Prédicat syntaxique & \left(\left(list EQ\right)\right)? list EQ list | list \right) \\
+\left(...)? & Prédicat syntaxique & ((list EQ))? list EQ list | list ) \\
 \hline
 \end{tabular}
 \subsubsection{Langage et description}
