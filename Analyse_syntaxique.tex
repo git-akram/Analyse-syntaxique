@@ -94,7 +94,7 @@ Prenons la grammaire suivante G=( \textit{\{E\} , \{a,+,}x\textit{\} , R , E} ) 
 Avec \textit{R} donné par : \textit{E := E} x \textit{E | E + E | a}
 
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.90\textwidth]{grammaireAmbigue.png}
 	\label{fig:grammaireAmbigue}
@@ -108,7 +108,7 @@ l’analyse lexicale consiste à découper une chaîne de caractère en unités 
 Il est définit par un ensembles d’expressions relationnelles qui exigent certaines séquences de caractère pour former les lexèmes.
 \textit{Exemple :}
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.80\textwidth]{AnalyseLexicale.png}
 	\caption{Analyse lexicale}
@@ -124,15 +124,17 @@ Une unité lexicale ou un lexème est une chaîne de caractère qui correspond �
 On appelle analyseur lexical \cite{refAnalyseurLexicale}, lexeur, ou encore scanneur, tout programme effectuant une analyse lexicale. Il s'agit le plus souvent d'une unique fonction qui sera appelée par l'analyseur syntaxique (voir Analyse syntaxique) ou par une autre fonction.
 
 Le scanneur contient toutes les informations sur les séquences de caractères qui peuvent être contenues dans les entités lexicales qu'il génère. Par exemple, une entité lexicale de type « INTEGER » peut contenir n'importe quelle séquence de caractères numériques (chiffres).
+
+Son rôle consiste à :
 \begin{itemize}
-\item Son rôle consiste à :
 			\item Eliminer les « bruits » du texte source : commentaires, espaces, …
 			\item Reconnaître les opérateurs et les mots-clés : ==, if, …
 			\item Reconnaître les chaînes de caractères, les identificateurs et les constantes numériques
 \end{itemize}
 Il produit en sortie une entité lexicale qui sera utilisée par l'analyseur syntaxique.
+
+Un analyseur lexical peut être écrit :
 \begin{itemize}
-\item Un analyseur lexical peut être écrit :
 			\item « à la main » : il faut construire l'automate fini non déterministe à partir d'une expression rationnelle E, puis l'exécuter pour déterminer si une chaîne d'entrée appartient au langage reconnu par E
 			\item Par une table décrivant l'automate et un programme exploitant cette table
 			\item Par un générateur d'analyseurs : Flex, ANTLR, Lex, etc.
@@ -150,13 +152,40 @@ l’analyse syntaxique permet plus particulièrement de détecter les erreurs de
 Reprenant l'exemple de d'analyse lexicale \ref{fig:AnalyseLexicale}. L'analyse lexicale a construit une suites d'unités lexicales a partir d'une chaîne de caractères en entrée.\newline
 Maintenant le rôle de l'analyse syntaxique est de reprendre ce résultat et essayer de construire un arbre de syntaxe suivant la grammaire qui définit le langage afin de s'assurer que la chaîne de caractères appartient au langage.
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.80\textwidth]{AnalyseSyntaxique.png}
 	\caption{Analyse syntaxique}
 	\label{fig:AnalyseSyntaxique}
 \end{figure}\FloatBarrier
+\textit{Exemple :}\cite{refModernCompiler}
+\label{ex:ModernCompiler}
+\newline\newline
+S => S ; S\newline
+S => id := E\newline
+S => print(L)\newline
+E => id\newline
+E => num\newline
+E => E + E\newline
+E => (S , E)\newline
+L => E\newline
+L => L , E\newline
 
+Considérons la phrase id := num; id := id + (id := num + num, id)\newline
+Une dérivation à gauche se représenterait de la forme suivante :\newline\newline
+\underline{S}\newline
+S ; \underline{S}\newline
+\underline{S} ; id := E\newline
+id := \underline{E} ; id := E\newline
+id := num ; id := \underline{E}\newline
+id := num ; id := E + \underline{E}\newline
+id := num ; id := \underline{E} + (S , E )\newline
+id := num ; id := id + (\underline{S} , E )\newline
+id := num ; id := id + (id := \underline{E} , E )\newline
+id := num ; id := id + (id := E + E , \underline{E} )\newline
+id := num ; id := id + (id := \underline{E} + E , id )\newline
+id := num ; id := id + (id := num + \underline{E} , id )\newline
+id := num ; id := id + (id := num + num , id )\newline
 
 \subsubsection{Analyseur syntaxique}
 
@@ -164,12 +193,22 @@ L'analyseur syntaxique est une programme qui reçoit une suite d'unités lexical
 
 Voici un schema montrant les intéractions entre l'analyseur lexicale et l'analyseur syntaxique:
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{interactionLexSynt.png}
 	\caption{Interaction entre l'analyseur lexicale et l'analyseur syntaxique}
 	\label{fig:interactionLexSynt}
 \end{figure}\FloatBarrier
+
+En ce qui concerne le fonctionnement interne, l'analyseur syntaxique est une machine à états. 
+
+Elle consiste en :
+\begin{itemize}
+    \item Un tampon d'entrée ;
+    \item Une pile dans laquelle est stockée la liste des états où elle est passée ;
+    \item Une table des branchements qui indique vers quel état elle doit aller ;
+    \item Une table des actions qui donne la règle de grammaire à appliquer en fonction de l'état courant et du terminal courant du flot d'entrée.
+\end{itemize}
 
 un analyseur syntaxique doit retracer le cheminement d’application des règles qui ont menées à l’axiome. Pour ça, il existe deux types d’analyse:
 
@@ -183,7 +222,7 @@ et la chaîne suivante en entrée W=acbbadbc\newline
 On part avec l'arbre contenant le seul sommet S.
 La lecture de la première lettre du mot (a) nous permet d'avancer la construction de l'arbre avec :
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante1.png}
 	\label{fig:AnalyseDescendante1}
@@ -191,7 +230,7 @@ La lecture de la première lettre du mot (a) nous permet d'avancer la constructi
 
 Puis la deuxième lettre nous amène à :
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante2.png}
 	\label{fig:AnalyseDescendante2}
@@ -199,7 +238,7 @@ Puis la deuxième lettre nous amène à :
 
 et ainsi de suite jusqu'a la fin du mot.
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante3.png}
 	\label{fig:AnalyseDescendante3}
@@ -211,7 +250,7 @@ A => cd | c \newline
 et on veut lire le mot W=acb\newline
 On se retrouve avec
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante4.png}
 	\label{fig:AnalyseDescendante4}
@@ -300,25 +339,79 @@ L'utilisation de productions erreurs \cite{refProductionErreurs} est une méthod
 
 La correction locale \cite{refCorrectionLocale} est une technique de récupération sur erreur. Lorsqu'un analyseur constate une erreur lors de la lecture d'un symbole, il remplace le symbole lu par un autre qui lui semble plus juste.
 
+\subsection{LL - Left to right Leftmost derivation}
 
-\subsection{LL(*)}
-Descente récursive ou prédicative: pour les grammaires simple ou le premier symbole terminal fournie des informations suffisantes pour choisir la règle de production.
-Pas possible si grammaire récursive à gauche.
-Besoin de factorisation à gauche lorsque 2 règles commencent par le même lexème.
-Mais cette méthode à une faiblesse, c’est qu’elle doit toujours prédire qu’elle règle utiliser \cite{refModernCompiler}.
+L'analyse LL est une analyse descendante pour un sous-ensemble de grammaire non contextuelle. Son principe est  d'analyser l'entrée de gauche à droite (Left to right) et de construire une dérivation à gauche (Leftmost derivation). Les grammaires analysables de cette façon sont nommées grammaires LL.
+Une analyse LL est appelée analyse LL(k) lorsqu'elle utilise k lexèmes d'avance.\newline
+\textit{Exemple :}
 
-\subsection{L(AL)R}
-Dérivation à droite permet de rapporter le choix de la règle de production à utiliser.
-Elle commence du bas vers le haut.
-L’algorithme s’arrête quand tous les caractères ont été lus. La chaîne est accépté si la partie analysée se réduit à l’axiome 
-\cite{refModernCompiler}.
+Reprenons l'exemple \ref{ex:ModernCompiler} \newline
+Une dérivation à gauche de la phrase id := num ; id := id + (id := num + num, id) se présenterait de la forme suivante :\newline\newline
+\underline{S}\newline
+\underline{S} ; S\newline
+id := \underline{E} ; S\newline
+id := num ; \underline{S}\newline
+id := num ; id := \underline{E}\newline
+id := num ; id := \underline{E} + E\newline
+id := num ; id := id + \underline{E}\newline
+id := num ; id := id + (\underline{S}, E)\newline
+id := num ; id := id + (id := \underline{E} , E)\newline
+id := num ; id := id + (id := \underline{E} + E, E)\newline
+id := num ; id := id + (id := num + \underline{E}, E)\newline
+id := num ; id := id + (id := num + num, \underline{E})\newline
+id := num ; id := id + (id := num + num, id)\newline
+
+Le principe de l'analsye LL est simple, le symbole nom terminal le plsu à gauche est toujours celui à être développé en premier et ainsi de suite jusqu'a ce que la phrase soit reconnu. 
+
+\subsection{LR - Left to right Rightmost derivation}
+
+un analyseur LR (pour Left to right, Rightmost derivation) \cite{LR} est un analyseur pour les grammaires non contextuelles qui lit l'entrée de gauche à droite et produit une dérivation droite. On parle aussi d'analyseur LR(k) où k représente le nombre de symboles « anticipés » et non consommés qui sont utilisés pour prendre des décisions d'analyse syntaxique. D'habitude, k vaut 1 et est souvent omis. Une grammaire non contextuelle est appelée LR(k) s'il existe un analyseur syntaxique LR(k) pour elle.
+On dit qu'un analyseur syntaxique LR réalise une analyse ascendante car il essaye de déduire les productions du niveau du haut de la grammaire en les construisant à partir des feuilles.
+De nombreux langages de programmation sont décrits par des grammaires LR(1), ou du même genre, et, pour cette raison, les analyseurs syntaxiques LR sont souvent utilisés par les compilateurs pour faire l'analyse syntaxique de code source.
+Typiquement, quand on se réfère à un analyseur syntaxique LR, on parle d'un analyseur syntaxique capable de reconnaître un langage particulier spécifié par une grammaire non contextuelle. Cependant, dans l'usage courant, on utilise le terme pour parler d'un programme pilote qui peut être appelé avec une certaine table et qui produit un large éventail d'analyseurs syntaxiques LR différents.
+
+L'analyse syntaxique LR a plusieurs avantages :
+\begin{itemize}
+    \item De nombreux langages de programmation peuvent être analysés en utilisant une variante d'analyseur syntaxique LR. Une exception notable est C++ ;
+    \item Les analyseurs syntaxiques LR peuvent être implémentés très efficacement ;
+    \item De tous les analyseurs syntaxiques qui parcourent leur entrée de gauche à droite, les parseurs LR détectent les erreurs de syntaxe (c'est-à-dire quand les entrées ne sont pas conformes à la grammaire) le plus tôt possible.
+\end{itemize}
+\textit{Exemple :}
+\newline\newline
+Reprenons l'exemple \ref{ex:ModernCompiler} mais cette fois avec une dérivation à droite de la phrase \newline 
+id := num ; id := id + (id := num + num, id) va suivre ce cheminement :\newline\newline
+\underline{S}\newline
+S ; \underline{S}\newline
+S ; id := \underline{E}\newline
+S ; id := E + \underline{E}\newline
+S ; id := E + (S, \underline{E})\newline
+S ; id := E + (\underline{S}, id)\newline
+S ; id := E + (id := \underline{E}, id)\newline
+S ; id := E + (id := E + \underline{E}, id)\newline
+S ; id := E + (id := \underline{E} + num, id)\newline
+S ; id := \underline{E} + (id := num + num, id)\newline
+\underline{S} ; id := id + (id := num + num, id)\newline
+id := \underline{E} ; id := id + (id := num + num, id)\newline
+id := num ; id := id + (id := num + num, id)\newline
+
+Le principe de l'analyse syntaxique LR impose au contraire de l'analyse LL que le symbole non terminal le plus à droite qui soit developpé de manière répétitive jusqu'a ce que la phrase soit accepté si elle appartient au langage.
+
+Les analyseurs syntaxiques LR sont difficiles à produire à la main ; ils sont généralement construits par des générateurs d'analyse syntaxique ou des compilateurs de compilateurs. Suivant la manière dont la table d'analyse syntaxique est générée, ces analyseurs syntaxiques sont appelés : 
+\begin{itemize}
+\item Analyseurs syntaxiques LR simples SLR (Simple LR parser).
+\item Analyseurs syntaxiques LR avec anticipation LALR (Look-Ahead LR parser).
+\item Analyseurs syntaxiques canoniques.
+\end{itemize} 
+
+Ces types d'analyseurs syntaxiques peuvent traiter des ensembles de grammaires de plus en plus grands ; les analyseurs syntaxiques LALR peuvent traiter plus de grammaires que les SLR. tandis que les analyseurs syntaxiques canoniques fonctionnent sur davantage de grammaires que les analyseurs syntaxiques LALR. 
+
+Le plus connu est Yacc \ref{sec:yacc} qui produit des analyseurs syntaxiques LALR.
 
 \section{Comparaison entre les outils}
 \label{hints}
 
-
-
 \subsection{YACC - Yet Another Compiler-Compiler}
+\label{sec:yacc}
 YACC est un programme qui permet de générer un analyseur syntaxique à partir d’une spécification. La spécification est l’ensemble des règles de grammaire associées au langage à analyser.
 L’analyseur ainsi généré est de type LALR(1).
 
@@ -608,7 +701,7 @@ Parmi les fonctionnalités qu’offre Xtext:
 	\centering
 		\includegraphics[width=0.80\textwidth]{Emftext_process.jpg}
 	\label{fig:Emftext_process}
-\end{figure}
+\end{figure}\FloatBarrier
 
 \subsubsection{Exemple}
 On va prendre l'exemple de la grammaire précedente, et on va voir comment generer un editeur sous forme d'un plugin eclipse avec Xtext.
@@ -619,7 +712,7 @@ On va prendre l'exemple de la grammaire précedente, et on va voir comment gener
 	\centering
 		\includegraphics[width=1.10\textwidth,height=13cm]{1.PNG}
 	\label{fig:1}
-\end{figure}
+\end{figure}\FloatBarrier
 
 Tout d'abord on va créer un projet Xtext avec comme nom et extension demo.A la fin de la creation, on remarque que EClipse à generer 3 projets, le premier c'est la ou on va definir notre langage, le deuxieme pour les tests et le troisieme ça concerne l'interface graphique de l'utilisateur.
 
@@ -630,7 +723,7 @@ Tout d'abord on va créer un projet Xtext avec comme nom et extension demo.A la 
 	\centering
 		\includegraphics[width=1.10\textwidth,height=13cm]{2.PNG}
 	\label{fig:2}
-\end{figure}
+\end{figure}\FloatBarrier
 
 
 
