@@ -610,11 +610,81 @@ Dans cette partie, nous allons vous montrez comment utiliser ANTLR dans un IDE t
 	\item Télécharger et installer ANTLR à partir du site officiel : www.antlr.org
 	\item Ouvrir votre IDE, nous utilisons Eclipse.
 	\item Créer un projet Java et y ajouter le support ANTLR ainsi que la nature ANTLR  comme suit :
-\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur (PARSER) et les régles lexicales (LEXER), notez que dans options nous pouvons chosir quel langage utiliser, pour notre exemple nous allons travailler en java, on peux changer et écrire en C\#,C,Phyton...
+	
+	\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.10\textwidth,height=13cm]{AntlrIdeSupport.JPG}
+	\label{fig:AntlrIdeSupport.JPG}
+	\end{figure}\FloatBarrier
+		
+		\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.10\textwidth,height=13cm]{AntlrNature.JPG}
+	\label{fig:AntlrNature.JPG}
+	\end{figure}\FloatBarrier
+
+\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur syntaxique (PARSER) et les régles lexicales (LEXER), notez que dans options nous pouvons chosir quel langage utiliser, pour notre exemple nous allons travailler en java pour l'utiliser sour l'IDE eclipse, on peux changer et écrire en C\#,C,Phyton...
+
+		\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.10\textwidth,height=13cm]{AntlrFile.JPG}
+	\label{fig:AntlrFile.JPG}
+	\end{figure}\FloatBarrier
+
 \end{itemize}
 \subsubsubsection{Exécuter ANTLR sur un exemple simple}
-Exemple simple  :
+Création d'un exemple simple en C et en Java  :
+\begin{itemize}
+	\item Tout d'abord l'exemple écrit en C :
+	
+	\begin{verbatim}
 
+grammar GrammaireSimple;
+
+options {
+  language = Java;
+}
+
+tokens {
+    PLUS    = '+' ;
+    MINUS   = '-' ;
+    MULT    = '*' ;
+    DIV = '/' ;
+}
+ 
+@members {
+    public static void Main(string[] args) {
+        SimpleCalcLexer lex = new SimpleCalcLexer(new ANTLRFileStream(args[0]));
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+ 
+        SimpleCalcParser parser = new SimpleCalcParser(tokens);
+ 
+        try {
+            parser.expr();
+        } catch (RecognitionException e)  {
+            Console.Error.WriteLine(e.StackTrace);
+        }
+    }
+}
+ 
+ % PARSER RULES
+ 
+expr    : term ( ( PLUS | MINUS )  term )* ;
+ 
+term    : factor ( ( MULT | DIV ) factor )* ;
+ 
+factor  : NUMBER ;
+
+ % LEXER RULES
+ 
+NUMBER  : (DIGIT)+ ;
+ 
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = Hidden; } ;
+ 
+fragment DIGIT  : '0'..'9' ;
+
+	\end{verbatim}
+\item Et maintenant le même exemple en Java :
 \begin{verbatim}
 
 grammar GrammaireSimple;
@@ -631,10 +701,10 @@ tokens {
  
 @members {
     public static void Main(string[] args) {
-        SimpleCalcLexer lex = new SimpleCalcLexer(new ANTLRFileStream(args[0]));
+        GrammaireSimpleLexer lex = new GrammaireSimpleLexer(new ANTLRFileStream(args[0]));
         CommonTokenStream tokens = new CommonTokenStream(lex);
  
-        SimpleCalcParser parser = new SimpleCalcParser(tokens);
+        GrammaireSimplecParser parser = new GrammaireSimpleParser(tokens);
  
         try {
             parser.expr();
@@ -659,7 +729,211 @@ NUMBER  : (DIGIT)+ ;
  
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = Hidden; } ; 
 fragment DIGIT  : '0'..'9' ;
+
 \end{verbatim}
+
+\end{itemize}
+\subsubsubsection{Compiler}
+La commande pour compiler notre exemple : 
+
+\begin{verbatim}
+
+java org.antlr.Tool GrammaireSimple.g
+
+\end{verbatim}
+
+ANTLR génère les fichiers sources pour le lexer et le parser ( GrammaireSimpleLexer.java et GrammaireSimpleParser.java ) copiez ces deux fichiers dans le bonne endroit dans notre IDE, ensuite vous pouvez compilez.
+
+\subsubsection{Définir notre propre grammaire}
+Dans la section précédente nous, avons vu comment installer et compiler avec ANTLR, dans cette partie nous allons vous montrez comment on a créer notre propre grammaire pour calculatrice simple.
+\subsubsubsection{La grammaire}
+Commençons par définir une expression arithmétique simple :
+
+\begin{verbatim}
+
+grammar GrammaireSimple;
+ 
+add : NUMBER PLUS NUMBER;
+ 
+NUMBER  : ('0'..'9')+ ;
+ 
+PLUS    : '+';
+
+\end{verbatim}
+Cette exemple contient deux règles lexicales \textsl{NUMBER} et \textsl{PLUS} puis une règles syntaxiques \textsl{add}
+\begin{itemize}
+
+\item \textsl{PLUS} Unité lexicale qui contient une seule caractère : +
+\item \textsl{NUMBER} Unité lexicale qui contient n'importe quel caractère compris entre 0 et 9
+\item \textsl{add} Règle syntaxique qui attend exactement et dans cette ordre \textsl{NUMBER} \textsl{+} \textsl{NUMBER}, toute autre expression affichere une erreur.
+\end{itemize}
+
+\subsubsubsection{Addition répétée}
+Pour écrire une expression avec plusieurs addition : 
+
+\begin{verbatim}
+add: NUMBER (PLUS NUMBER)*
+\end{verbatim}
+
+\textsl{*} : signifie plusieurs fois
+
+\subsubsubsection{Addition et soustraction}
+
+\begin{verbatim}
+
+add: NUMBER ((PLUS | MINUS) NUMBER)*
+ 
+MINUS : '-';
+
+\end{verbatim}
+
+|: signifie \textsl{ou}
+
+\subsubsubsection{Expression récursive}
+Pour analyser compètement  une expression arithmétique :
+
+\begin{verbatim}
+
+expr    : term ( ( PLUS | MINUS )  term )* ;
+term    : factor ( ( MULT | DIV ) factor )* ;
+factor  : NUMBER ;
+ 
+MULT : '*';
+DIV  : '/';
+
+\end{verbatim} 
+
+\subsubsubsection{Les espaces blancs}
+Notre grammaire ne tolère pas les espaces blancs, elle retournera une erreur dans les cas suivant : 
+\begin{itemize}
+
+\item Espaces
+\item Tabulations
+\item Retoure à la ligne 
+\item etc...
+
+\end{itemize}
+
+Pour cela nous devons définir ces espaces blancs,et dire au LEXER tolèrer ces espaces blancs :
+
+\begin{itemize}
+
+\item Une espace : ' '
+\item Une tabulation : '\t'
+\item Un Retour à la ligne : '\n'
+\item etc...
+
+\end{itemize}
+ Mettons ça enssemble et séparons les par un \textsl{ou} : 
+
+\begin{verbatim}
+
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;
+
+\end{verbatim}
+
+Malgré ce que nous venons de faire, notre grmmaire retrourneras toujours une erreur dans le cas suivant par exemple :
+\begin{verbatim}
+
+3 + 4*5
+
+\end{verbatim}
+En effet, ANTLR sauvegarde deux chaines de communications entre le LEXER et le PARSER, une chaine cachée et une chaine par défaut.Généralement le PARSER fait appel à la chaine par défaut, nous pouvons ainsi récupérer cette chaine et la cachée :
+
+\begin{verbatim}
+
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ { $channel = HIDDEN; };
+
+\end{verbatim}
+
+\subsubsubsection{Résultat final}
+
+Nous pouvons utiliser quelques techniques pour rendre le code plus lisible :
+
+\begin{itemize}
+
+\item Commentaire sur une ligne : //
+\item Commentaire sur plusieurs lignes: /*......*/
+\item Réunir toutes les unités lexicales dans section \textsl{tokens} au début du fichier
+\end{itemize}
+
+\begin{verbatim}
+
+grammar GrammaireSimple;
+ 
+tokens {
+    PLUS    = '+' ;
+    MINUS   = '-' ;
+    MULT    = '*' ;
+    DIV = '/' ;
+}
+ 
+/*------------------------------------------------------------------
+ * PARSER RULES
+ *------------------------------------------------------------------*/
+ 
+expr    : term ( ( PLUS | MINUS )  term )* ;
+ 
+term    : factor ( ( MULT | DIV ) factor )* ;
+ 
+factor  : NUMBER ;
+ 
+/*------------------------------------------------------------------
+ * LEXER RULES
+ *------------------------------------------------------------------*/
+ 
+NUMBER  : (DIGIT)+ ;
+ 
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
+ 
+fragment DIGIT  : '0'..'9' ;
+
+\end{verbatim}
+
+\subsubsubsection{Point d'entrer pour Java}
+
+\begin{verbatim}
+
+@members {
+    public static void Main(string[] args) {
+        GrammaireSimpleLexer lex = new GrammaireSimpleLexer(new ANTLRFileStream(args[0]));
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+ 
+        GrammaireSimplecParser parser = new GrammaireSimpleParser(tokens);
+ 
+        try {
+            parser.expr();
+        } catch (RecognitionException e)  {
+            Console.Error.WriteLine(e.StackTrace);
+        }
+    }
+}
+\end{verbatim}
+
+\subsubsubsection{Générer du code dans un autre langage}
+Si vous n'aimez pas Java vous utiliser :  
+
+\begin{itemize}
+\item Ada
+\item C 
+\item C++
+\item C \#
+\item Ryby
+\item Perl
+\item etc...
+\end{itemize}
+
+\begin{verbatim}
+
+grammar GrammaireSimple;
+ 
+options {
+    language=CSharp2;
+}
+
+\end{verbatim}
+
+\subsection{Xtext}
 \subsubsection{Definition}
 
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
