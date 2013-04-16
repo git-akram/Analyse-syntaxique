@@ -590,9 +590,76 @@ Le second mécanisme quant à lui, fournis un framework pour y mettre les rappor
 
 Le plus souvent, les parseurs construisent une forme intermédiaire qui sera utilisé plus tard dans des phases de compilation par exemple. En utilisant quelques annotations, ANTLR peut automatiquement construire un arbre syntaxique, évitant ainsi à l'utilisateur d'appeler la construction d'un arbre à chaque fois.
 Pour créer un arbre, l'utilisateur des annotations grammaticales qui indiquent le noeud père, les feuilles et aussi qui doit être exclu de l'abre. Les unités lexicales précédés de "!" par exemple, son à exclure de l'arbre.Toutes les autres unités lexicales sont considérées comme des feuilles.
+Voici un petit exemple de la constrcuction d'un arbre syntaxique : 
+\begin{verbatim}
+	if 3 + 4 * 5 then return 4;
+\end{verbatim}
 
-\subsection{Xtext}
+L'arbre correspondant :
 
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.80\textwidth]{ast.jpg}
+	\label{fig:ast_process}
+\end{figure}
+
+\subsubsection{Exemple simple avec ANTLR}
+Dans cette partie, nous allons vous montrez comment utiliser ANTLR dans un IDE tel que Eclipse.
+\subsubsubsection{ANTLR}
+\begin{itemize}
+	\item Télécharger et installer ANTLR à partir du site officiel : www.antlr.org
+	\item Ouvrir votre IDE, nous utilisons Eclipse.
+	\item Créer un projet Java et y ajouter le support ANTLR ainsi que la nature ANTLR  comme suit :
+\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur (PARSER) et les régles lexicales (LEXER), notez que dans options nous pouvons chosir quel langage utiliser, pour notre exemple nous allons travailler en java, on peux changer et écrire en C\#,C,Phyton...
+\end{itemize}
+\subsubsubsection{Exécuter ANTLR sur un exemple simple}
+Exemple simple  :
+
+\begin{verbatim}
+
+grammar GrammaireSimple;
+
+options {
+  language = Java;
+}
+tokens {
+    PLUS    = '+' ;
+    MINUS   = '-' ;
+    MULT    = '*' ;
+    DIV = '/' ;
+}
+ 
+@members {
+    public static void Main(string[] args) {
+        SimpleCalcLexer lex = new SimpleCalcLexer(new ANTLRFileStream(args[0]));
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+ 
+        SimpleCalcParser parser = new SimpleCalcParser(tokens);
+ 
+        try {
+            parser.expr();
+        } catch (RecognitionException e)  {
+            Console.Error.WriteLine(e.StackTrace);
+        }
+    }
+}
+ 
+ %PARSER RULES
+ 
+expr    : term ( ( PLUS | MINUS )  term )* ;
+ 
+term    : factor ( ( MULT | DIV ) factor )* ;
+ 
+factor  : NUMBER ;
+ 
+ 
+ %LEXER RULES
+ 
+NUMBER  : (DIGIT)+ ;
+ 
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = Hidden; } ; 
+fragment DIGIT  : '0'..'9' ;
+\end{verbatim}
 \subsubsection{Definition}
 
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
