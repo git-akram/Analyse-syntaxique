@@ -47,7 +47,7 @@
 		\includegraphics[width=0.60\textwidth]{logo-ups.jpg}
 	\label{fig:logo-ups}
 \end{figure}
-\newline
+
 \maketitle
 
 \newpage
@@ -170,7 +170,7 @@ Voici un schema montrant les intéractions entre l'analyseur lexicale et l'analy
 	\caption{Interaction entre l'analyseur lexicale et l'analyseur syntaxique}
 	\label{fig:interactionLexSynt}
 \end{figure}\FloatBarrier
-\newline
+
 un analyseur syntaxique doit retracer le cheminement d’application des règles qui ont menées à l’axiome. Pour ça, il existe deux types d’analyse:
 
 \subsubsection{Analyse descendante}\label{sec:analyseDes}
@@ -226,7 +226,7 @@ L’analyse ascendante d’une autre part, procède contrairement à l’analyse
 Reprenons l'exemple dernier \ref{sec:analyseDes} :
 Cette fois en utilisant une analyse ascendante, on va partir de la chaîne de caractères pour retrouver l'axiome S.
 La chaîne analysé est la même du dernier exemple \newline W=accbbadbc\newline\newline\newline
-\begin{tabular}{|E|D|}
+\begin{tabular}{|l|l|}
 \hline
 \textbf{a}ccbbadbc & Aucune règle à appliquer\\
 \hline
@@ -349,53 +349,57 @@ Ci-dessous un exemple de spécification Yacc qui génère une calculatrice très
 
 Ici, on utilise Yacc sans Lex afin de comprendre le fonctionnement. Cependant, il faut définir à la main la fonction yylex(). Celle-ci renvoie un entier qui indique le type de token qui a été reconnu en entrée.
 
+\begin{verbatim}
+
 %{
-    \#include <ctype.h>
-    \#include <stdio.h>
-    \#include <stdlib.h>
+    #include <ctype.h>
+    #include <stdio.h>
+    #include <stdlib.h>
 %}
 
 %token CHIFFRE
 
 %%
-ligne : commande '\\n' ligne
-    | '\\n' \{ printf("Fin du programme\\n"); exit(0); \}
+ligne : commande '\n' ligne
+    | '\n' { printf("Fin du programme\n"); exit(0); }
     ;
 
-commande: expr \{ printf("Resultat: \%d\\n", \$1); \};
+commande: expr { printf("Resultat: %d\n", $1); };
 
 
-expr : expr '+' terme \{ \$\$ = \$1 + \$3; \}
+expr : expr '+' terme { $$ = $1 + $3; }
     | terme
     ;
    
-terme : terme '*' facteur \{ \$\$ = \$1 * \$3; \}
+terme : terme '*' facteur { $$ = $1 * $3; }
     | facteur
     ;
    
-facteur : '(' expr ')' \{ \$\$ = \$2; \}
+facteur : '(' expr ')' { $$ = $2; }
     | CHIFFRE
     ;
 
 %%
-int main()\{
+int main(){
     yyparse();   
-\}
+}
 
-int yyerror(char *s)\{
-    printf("\%s \\n", s);
-\}
+int yyerror(char *s){
+    printf("%s \n", s);
+}
 
 
-int yylex()\\{
+int yylex(){
     int c;
     c = getchar();
-    if(isdigit(c))\{
+    if(isdigit(c)){
         yylval = c-'0';
         return CHIFFRE;
-    \}
+    }
     return c;
-\}
+}
+
+\end{verbatim}
 
 Pour faire fonctionner cet exemple, il faudra entrer les lignes de commande suivantes:
 
@@ -434,7 +438,7 @@ Fort d’une stratégie puissante autant que parseur, ANTLR a plusieurs fonction
 Le tableau illustre quelques éléments de langage spécifique à ANTLR qui le distinguent des autres générateurs de parseurs.
 \newline
 
-\begin{tabular}{|E|D|X|}
+\begin{tabular}{|l|l|l|}
 \hline
 Elément de langages & Description & Exemple \\
 \hline
@@ -487,7 +491,7 @@ Il fonctionne sur une JVM (Machine Virtuelle Java) et est constitué de plusieur
 
 Xtext peut servir entre autres à proposer des solutions dans les domaines tels que : les systèmes embarqués, l'automobile, les appareils mobiles, l'automatique, les jeux vidéo, etc.
 
-Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre , son utilisation devient indépendante de la JVM. 
+Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C\# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre , son utilisation devient indépendante de la JVM. 
 
 Xtext couvre tous les aspects d’un IDE moderne : parseur, compilateur ,interpreteur et integration complete dans l’environnement de developpement Eclipse.
 
