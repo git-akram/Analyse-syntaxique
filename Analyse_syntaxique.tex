@@ -513,22 +513,22 @@ L'arbre correspondant :
 \subsubsection{Exemple simple avec ANTLR}
 Dans cette partie, nous allons vous montrez comment utiliser ANTLR dans un IDE tel que Eclipse.
 \subsubsubsection{ANTLR}
-\begin{\begin{itemize}
+\begin{itemize}
 	\item Télécharger et installer ANTLR à partir du site officiel : www.antlr.org
 	\item Ouvrir votre IDE, nous utilisons Eclipse.
 	\item Créer un projet Java et y ajouter le support ANTLR ainsi que la nature ANTLR  comme suit :
-\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur (PARSER) et les régles lexicales (Lexer), notez que dans options nous pouvons chosir quel langage utiliser, pour notre exemple nous allons travailler en java, on peux changer et écrire en C,Phyton...
+\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur (PARSER) et les régles lexicales (LEXER), notez que dans options nous pouvons chosir quel langage utiliser, pour notre exemple nous allons travailler en java, on peux changer et écrire en C\#,C,Phyton...
 \end{itemize}
 \subsubsubsection{Exécuter ANTLR sur un exemple simple}
 Exemple simple  :
+
 \begin{verbatim}
-%{
+
 grammar GrammaireSimple;
-%}
+
 options {
   language = Java;
 }
-
 tokens {
     PLUS    = '+' ;
     MINUS   = '-' ;
@@ -564,8 +564,7 @@ factor  : NUMBER ;
  
 NUMBER  : (DIGIT)+ ;
  
-WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = Hidden; } ;
- 
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = Hidden; } ; 
 fragment DIGIT  : '0'..'9' ;
 \end{verbatim}
 \subsubsection{Definition}
