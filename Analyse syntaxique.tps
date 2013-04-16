@@ -11,34 +11,16 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1001
-NormalPos.bottom=467
+NormalPos.right=1008
+NormalPos.bottom=478
 Class=LaTeXView
 Document=Analyse syntaxique.tex
 
 [Frame0_View0,0]
-TopLine=494
-Cursor=22914
-
-[Frame1]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=26
-NormalPos.right=1001
-NormalPos.bottom=467
-Class=BibTeXView
-Document=bibliographie.bib
-
-[Frame1_View0,0]
-TopLine=32
-Cursor=1046
+TopLine=613
+Cursor=31579
 
 [SessionInfo]
-FrameCount=2
+FrameCount=1
 ActiveFrame=0
 

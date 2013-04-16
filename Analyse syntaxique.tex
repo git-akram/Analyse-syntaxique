@@ -528,20 +528,64 @@ On va prendre l'exemple de la grammaire précedente, et on va voir comment gener
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.10\textwidth,height=13cm]{1.PNG}
+		\includegraphics[width=1.0\textwidth,height=10cm]{1.PNG}
 	\label{fig:1}
 \end{figure}
 
-Tout d'abord on va créer un projet Xtext avec comme nom et extension demo.A la fin de la creation, on remarque que EClipse à generer 3 projets, le premier c'est la ou on va definir notre langage, le deuxieme pour les tests et le troisieme ça concerne l'interface graphique de l'utilisateur.
+Tout d'abord on va créer un projet Xtext avec comme nom et extension demo.
+A la fin de la creation, on remarque que 3 projets ont été crées , le premier correspond plus à la partie runtime dans laquel on a notre grammmaire et certains elements qui sont pour l'instant vierge, un deuxieme qui concerne plus lapartie interafce utilisateur(tout ce qui est propre à l'editeur) et puis le troisieme qui est projets test.
 
 \subsubsubsection{Etape 2:Definition du langage}
 
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.10\textwidth,height=13cm]{2.PNG}
+		\includegraphics[width=1.0\textwidth,height=10cm]{2.PNG}
 	\label{fig:2}
 \end{figure}
+
+Ici on va definir notre langage dans le fichier .xtetx avec une grammaire proche de celle de Antlr.
+
+ \subsubsubsection{Etape 3:Generation des artifacts}
+
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.0\textwidth,height=10cm]{3.PNG}
+	\label{fig:3}
+\end{figure}
+
+Pour faire la generation, on fait un click droit sur le fichier .xtext,run as >Generate Xtext Artifacts.
+
+Apres la generation,les projets se sont remplis,et j'ai certain services qui sont proposés :formatteur,generateur, validateur...
+
+ \subsubsubsection{Etape 3:Faire un test}
+
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.0\textwidth,height=10cm]{4.PNG}
+	\label{fig:4}
+\end{figure}
+
+Pour faire un test, il suffit de faire un clic droit sur le projet run as >Eclipse Application, un Eclipse va etre lancé qui a maintenant le plugin.
+
+On crée tout d'abord un projet, et dans ce projet on va créer un fichier .demo.
+
+En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le hoix ou bien d'ecrire ue autre categorie ou commencer une expression.
+
+
+\subsubsubsection{Etape 5:Ajouter une validation}
+
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.0\textwidth,height=10cm]{5.PNG}
+	\label{fig:5}
+\end{figure}
+
+
+
 
 
 
