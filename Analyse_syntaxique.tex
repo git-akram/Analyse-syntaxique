@@ -419,6 +419,13 @@ L’analyseur ainsi généré est de type LALR(1).
 La spécification est l’ensemble des données qui permettront à YACC de générer l’analyseur. Elle décrit le langage qui sera reconnu sous forme de règles de grammaires. De cette façon l’analyseur a les connaissances pour définir si un flux donné en entrée est syntaxiquement correcte par rapport à sa spécification.
 Cependant, un analyseur syntaxique est souvent utilisé dans le contexte de traduction de langage. La spécification permet cette fonctionnalité puisqu’il est possible de spécifier des actions associées aux règles de grammaire.
 
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.70\textwidth]{yaccDiagramme.png}
+	\caption{Description de YACC}
+	\label{fig:yaccDiagramme}
+\end{figure}\FloatBarrier
+
 La spécification suit la structure suivante :
 
 Bloc des déclarations
@@ -1003,14 +1010,6 @@ Tout d'abord on va créer un projet Xtext avec comme nom et extension demo.A la 
 
 
 \newpage
-
-
-
-
-
-
-
-
 
 \section{Conclusion}
 \label{hints}
