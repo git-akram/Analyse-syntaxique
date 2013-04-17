@@ -47,7 +47,7 @@
 		\includegraphics[width=0.60\textwidth]{logo-ups.jpg}
 	\label{fig:logo-ups}
 \end{figure}
-\newline
+
 \maketitle
 
 \newpage
@@ -94,7 +94,7 @@ Prenons la grammaire suivante G=( \textit{\{E\} , \{a,+,}x\textit{\} , R , E} ) 
 Avec \textit{R} donné par : \textit{E := E} x \textit{E | E + E | a}
 
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.90\textwidth]{grammaireAmbigue.png}
 	\label{fig:grammaireAmbigue}
@@ -108,7 +108,7 @@ l’analyse lexicale consiste à découper une chaîne de caractère en unités 
 Il est définit par un ensembles d’expressions relationnelles qui exigent certaines séquences de caractère pour former les lexèmes.
 \textit{Exemple :}
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.80\textwidth]{AnalyseLexicale.png}
 	\caption{Analyse lexicale}
@@ -124,15 +124,17 @@ Une unité lexicale ou un lexème est une chaîne de caractère qui correspond �
 On appelle analyseur lexical \cite{refAnalyseurLexicale}, lexeur, ou encore scanneur, tout programme effectuant une analyse lexicale. Il s'agit le plus souvent d'une unique fonction qui sera appelée par l'analyseur syntaxique (voir Analyse syntaxique) ou par une autre fonction.
 
 Le scanneur contient toutes les informations sur les séquences de caractères qui peuvent être contenues dans les entités lexicales qu'il génère. Par exemple, une entité lexicale de type « INTEGER » peut contenir n'importe quelle séquence de caractères numériques (chiffres).
+
+Son rôle consiste à :
 \begin{itemize}
-\item Son rôle consiste à :
 			\item Eliminer les « bruits » du texte source : commentaires, espaces, …
 			\item Reconnaître les opérateurs et les mots-clés : ==, if, …
 			\item Reconnaître les chaînes de caractères, les identificateurs et les constantes numériques
 \end{itemize}
 Il produit en sortie une entité lexicale qui sera utilisée par l'analyseur syntaxique.
+
+Un analyseur lexical peut être écrit :
 \begin{itemize}
-\item Un analyseur lexical peut être écrit :
 			\item « à la main » : il faut construire l'automate fini non déterministe à partir d'une expression rationnelle E, puis l'exécuter pour déterminer si une chaîne d'entrée appartient au langage reconnu par E
 			\item Par une table décrivant l'automate et un programme exploitant cette table
 			\item Par un générateur d'analyseurs : Flex, ANTLR, Lex, etc.
@@ -150,13 +152,40 @@ l’analyse syntaxique permet plus particulièrement de détecter les erreurs de
 Reprenant l'exemple de d'analyse lexicale \ref{fig:AnalyseLexicale}. L'analyse lexicale a construit une suites d'unités lexicales a partir d'une chaîne de caractères en entrée.\newline
 Maintenant le rôle de l'analyse syntaxique est de reprendre ce résultat et essayer de construire un arbre de syntaxe suivant la grammaire qui définit le langage afin de s'assurer que la chaîne de caractères appartient au langage.
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.80\textwidth]{AnalyseSyntaxique.png}
 	\caption{Analyse syntaxique}
 	\label{fig:AnalyseSyntaxique}
 \end{figure}\FloatBarrier
+\textit{Exemple :}\cite{refModernCompiler}
+\label{ex:ModernCompiler}
+\newline\newline
+S => S ; S\newline
+S => id := E\newline
+S => print(L)\newline
+E => id\newline
+E => num\newline
+E => E + E\newline
+E => (S , E)\newline
+L => E\newline
+L => L , E\newline
 
+Considérons la phrase id := num; id := id + (id := num + num, id)\newline
+Une dérivation à gauche se représenterait de la forme suivante :\newline\newline
+\underline{S}\newline
+S ; \underline{S}\newline
+\underline{S} ; id := E\newline
+id := \underline{E} ; id := E\newline
+id := num ; id := \underline{E}\newline
+id := num ; id := E + \underline{E}\newline
+id := num ; id := \underline{E} + (S , E )\newline
+id := num ; id := id + (\underline{S} , E )\newline
+id := num ; id := id + (id := \underline{E} , E )\newline
+id := num ; id := id + (id := E + E , \underline{E} )\newline
+id := num ; id := id + (id := \underline{E} + E , id )\newline
+id := num ; id := id + (id := num + \underline{E} , id )\newline
+id := num ; id := id + (id := num + num , id )\newline
 
 \subsubsection{Analyseur syntaxique}
 
@@ -164,13 +193,23 @@ L'analyseur syntaxique est une programme qui reçoit une suite d'unités lexical
 
 Voici un schema montrant les intéractions entre l'analyseur lexicale et l'analyseur syntaxique:
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{interactionLexSynt.png}
 	\caption{Interaction entre l'analyseur lexicale et l'analyseur syntaxique}
 	\label{fig:interactionLexSynt}
 \end{figure}\FloatBarrier
-\newline
+
+En ce qui concerne le fonctionnement interne, l'analyseur syntaxique est une machine à états. 
+
+Elle consiste en :
+\begin{itemize}
+    \item Un tampon d'entrée ;
+    \item Une pile dans laquelle est stockée la liste des états où elle est passée ;
+    \item Une table des branchements qui indique vers quel état elle doit aller ;
+    \item Une table des actions qui donne la règle de grammaire à appliquer en fonction de l'état courant et du terminal courant du flot d'entrée.
+\end{itemize}
+
 un analyseur syntaxique doit retracer le cheminement d’application des règles qui ont menées à l’axiome. Pour ça, il existe deux types d’analyse:
 
 \subsubsection{Analyse descendante}\label{sec:analyseDes}
@@ -183,7 +222,7 @@ et la chaîne suivante en entrée W=acbbadbc\newline
 On part avec l'arbre contenant le seul sommet S.
 La lecture de la première lettre du mot (a) nous permet d'avancer la construction de l'arbre avec :
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante1.png}
 	\label{fig:AnalyseDescendante1}
@@ -191,7 +230,7 @@ La lecture de la première lettre du mot (a) nous permet d'avancer la constructi
 
 Puis la deuxième lettre nous amène à :
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante2.png}
 	\label{fig:AnalyseDescendante2}
@@ -199,7 +238,7 @@ Puis la deuxième lettre nous amène à :
 
 et ainsi de suite jusqu'a la fin du mot.
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante3.png}
 	\label{fig:AnalyseDescendante3}
@@ -211,7 +250,7 @@ A => cd | c \newline
 et on veut lire le mot W=acb\newline
 On se retrouve avec
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 		\includegraphics[width=0.70\textwidth]{AnalyseDescendante4.png}
 	\label{fig:AnalyseDescendante4}
@@ -226,7 +265,7 @@ L’analyse ascendante d’une autre part, procède contrairement à l’analyse
 Reprenons l'exemple dernier \ref{sec:analyseDes} :
 Cette fois en utilisant une analyse ascendante, on va partir de la chaîne de caractères pour retrouver l'axiome S.
 La chaîne analysé est la même du dernier exemple \newline W=accbbadbc\newline\newline\newline
-\begin{tabular}{|E|D|}
+\begin{tabular}{|l|l|}
 \hline
 \textbf{a}ccbbadbc & Aucune règle à appliquer\\
 \hline
@@ -300,32 +339,92 @@ L'utilisation de productions erreurs \cite{refProductionErreurs} est une méthod
 
 La correction locale \cite{refCorrectionLocale} est une technique de récupération sur erreur. Lorsqu'un analyseur constate une erreur lors de la lecture d'un symbole, il remplace le symbole lu par un autre qui lui semble plus juste.
 
+\subsection{LL - Left to right Leftmost derivation}
 
-\subsection{LL(*)}
-Descente récursive ou prédicative: pour les grammaires simple ou le premier symbole terminal fournie des informations suffisantes pour choisir la règle de production.
-Pas possible si grammaire récursive à gauche.
-Besoin de factorisation à gauche lorsque 2 règles commencent par le même lexème.
-Mais cette méthode à une faiblesse, c’est qu’elle doit toujours prédire qu’elle règle utiliser \cite{refModernCompiler}.
+L'analyse LL est une analyse descendante pour un sous-ensemble de grammaire non contextuelle. Son principe est  d'analyser l'entrée de gauche à droite (Left to right) et de construire une dérivation à gauche (Leftmost derivation). Les grammaires analysables de cette façon sont nommées grammaires LL.
+Une analyse LL est appelée analyse LL(k) lorsqu'elle utilise k lexèmes d'avance.\newline
+\textit{Exemple :}
 
-\subsection{L(AL)R}
-Dérivation à droite permet de rapporter le choix de la règle de production à utiliser.
-Elle commence du bas vers le haut.
-L’algorithme s’arrête quand tous les caractères ont été lus. La chaîne est accépté si la partie analysée se réduit à l’axiome 
-\cite{refModernCompiler}.
+Reprenons l'exemple \ref{ex:ModernCompiler} \newline
+Une dérivation à gauche de la phrase id := num ; id := id + (id := num + num, id) se présenterait de la forme suivante :\newline\newline
+\underline{S}\newline
+\underline{S} ; S\newline
+id := \underline{E} ; S\newline
+id := num ; \underline{S}\newline
+id := num ; id := \underline{E}\newline
+id := num ; id := \underline{E} + E\newline
+id := num ; id := id + \underline{E}\newline
+id := num ; id := id + (\underline{S}, E)\newline
+id := num ; id := id + (id := \underline{E} , E)\newline
+id := num ; id := id + (id := \underline{E} + E, E)\newline
+id := num ; id := id + (id := num + \underline{E}, E)\newline
+id := num ; id := id + (id := num + num, \underline{E})\newline
+id := num ; id := id + (id := num + num, id)\newline
+
+Le principe de l'analsye LL est simple, le symbole nom terminal le plsu à gauche est toujours celui à être développé en premier et ainsi de suite jusqu'a ce que la phrase soit reconnu. 
+
+\subsection{LR - Left to right Rightmost derivation}
+
+un analyseur LR (pour Left to right, Rightmost derivation) \cite{LR} est un analyseur pour les grammaires non contextuelles qui lit l'entrée de gauche à droite et produit une dérivation droite. On parle aussi d'analyseur LR(k) où k représente le nombre de symboles « anticipés » et non consommés qui sont utilisés pour prendre des décisions d'analyse syntaxique. D'habitude, k vaut 1 et est souvent omis. Une grammaire non contextuelle est appelée LR(k) s'il existe un analyseur syntaxique LR(k) pour elle.
+On dit qu'un analyseur syntaxique LR réalise une analyse ascendante car il essaye de déduire les productions du niveau du haut de la grammaire en les construisant à partir des feuilles.
+De nombreux langages de programmation sont décrits par des grammaires LR(1), ou du même genre, et, pour cette raison, les analyseurs syntaxiques LR sont souvent utilisés par les compilateurs pour faire l'analyse syntaxique de code source.
+Typiquement, quand on se réfère à un analyseur syntaxique LR, on parle d'un analyseur syntaxique capable de reconnaître un langage particulier spécifié par une grammaire non contextuelle. Cependant, dans l'usage courant, on utilise le terme pour parler d'un programme pilote qui peut être appelé avec une certaine table et qui produit un large éventail d'analyseurs syntaxiques LR différents.
+
+L'analyse syntaxique LR a plusieurs avantages :
+\begin{itemize}
+    \item De nombreux langages de programmation peuvent être analysés en utilisant une variante d'analyseur syntaxique LR. Une exception notable est C++ ;
+    \item Les analyseurs syntaxiques LR peuvent être implémentés très efficacement ;
+    \item De tous les analyseurs syntaxiques qui parcourent leur entrée de gauche à droite, les parseurs LR détectent les erreurs de syntaxe (c'est-à-dire quand les entrées ne sont pas conformes à la grammaire) le plus tôt possible.
+\end{itemize}
+\textit{Exemple :}
+\newline\newline
+Reprenons l'exemple \ref{ex:ModernCompiler} mais cette fois avec une dérivation à droite de la phrase \newline 
+id := num ; id := id + (id := num + num, id) va suivre ce cheminement :\newline\newline
+\underline{S}\newline
+S ; \underline{S}\newline
+S ; id := \underline{E}\newline
+S ; id := E + \underline{E}\newline
+S ; id := E + (S, \underline{E})\newline
+S ; id := E + (\underline{S}, id)\newline
+S ; id := E + (id := \underline{E}, id)\newline
+S ; id := E + (id := E + \underline{E}, id)\newline
+S ; id := E + (id := \underline{E} + num, id)\newline
+S ; id := \underline{E} + (id := num + num, id)\newline
+\underline{S} ; id := id + (id := num + num, id)\newline
+id := \underline{E} ; id := id + (id := num + num, id)\newline
+id := num ; id := id + (id := num + num, id)\newline
+
+Le principe de l'analyse syntaxique LR impose au contraire de l'analyse LL que le symbole non terminal le plus à droite qui soit developpé de manière répétitive jusqu'a ce que la phrase soit accepté si elle appartient au langage.
+
+Les analyseurs syntaxiques LR sont difficiles à produire à la main ; ils sont généralement construits par des générateurs d'analyse syntaxique ou des compilateurs de compilateurs. Suivant la manière dont la table d'analyse syntaxique est générée, ces analyseurs syntaxiques sont appelés : 
+\begin{itemize}
+\item Analyseurs syntaxiques LR simples SLR (Simple LR parser).
+\item Analyseurs syntaxiques LR avec anticipation LALR (Look-Ahead LR parser).
+\item Analyseurs syntaxiques canoniques.
+\end{itemize} 
+
+Ces types d'analyseurs syntaxiques peuvent traiter des ensembles de grammaires de plus en plus grands ; les analyseurs syntaxiques LALR peuvent traiter plus de grammaires que les SLR. tandis que les analyseurs syntaxiques canoniques fonctionnent sur davantage de grammaires que les analyseurs syntaxiques LALR. 
+
+Le plus connu est Yacc \ref{sec:yacc} qui produit des analyseurs syntaxiques LALR.
 
 \section{Comparaison entre les outils}
 \label{hints}
 
-\subsection{Yac/Bison/Cup}
-
-
-\subsubsection{Yac - Yet Another Compiler-Compiler}
+\subsection{YACC - Yet Another Compiler-Compiler}
+\label{sec:yacc}
 YACC est un programme qui permet de générer un analyseur syntaxique à partir d’une spécification. La spécification est l’ensemble des règles de grammaire associées au langage à analyser.
 L’analyseur ainsi généré est de type LALR(1).
 
 \subsubsection{Specification}
 La spécification est l’ensemble des données qui permettront à YACC de générer l’analyseur. Elle décrit le langage qui sera reconnu sous forme de règles de grammaires. De cette façon l’analyseur a les connaissances pour définir si un flux donné en entrée est syntaxiquement correcte par rapport à sa spécification.
 Cependant, un analyseur syntaxique est souvent utilisé dans le contexte de traduction de langage. La spécification permet cette fonctionnalité puisqu’il est possible de spécifier des actions associées aux règles de grammaire.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.70\textwidth]{yaccDiagramme.png}
+	\caption{Description de YACC}
+	\label{fig:yaccDiagramme}
+\end{figure}\FloatBarrier
 
 La spécification suit la structure suivante :
 
@@ -349,53 +448,57 @@ Ci-dessous un exemple de spécification Yacc qui génère une calculatrice très
 
 Ici, on utilise Yacc sans Lex afin de comprendre le fonctionnement. Cependant, il faut définir à la main la fonction yylex(). Celle-ci renvoie un entier qui indique le type de token qui a été reconnu en entrée.
 
+\begin{verbatim}
+
 %{
-    \#include <ctype.h>
-    \#include <stdio.h>
-    \#include <stdlib.h>
+    #include <ctype.h>
+    #include <stdio.h>
+    #include <stdlib.h>
 %}
 
 %token CHIFFRE
 
 %%
-ligne : commande '\\n' ligne
-    | '\\n' \{ printf("Fin du programme\\n"); exit(0); \}
+ligne : commande '\n' ligne
+    | '\n' { printf("Fin du programme\n"); exit(0); }
     ;
 
-commande: expr \{ printf("Resultat: \%d\\n", \$1); \};
+commande: expr { printf("Resultat: %d\n", $1); };
 
 
-expr : expr '+' terme \{ \$\$ = \$1 + \$3; \}
+expr : expr '+' terme { $$ = $1 + $3; }
     | terme
     ;
    
-terme : terme '*' facteur \{ \$\$ = \$1 * \$3; \}
+terme : terme '*' facteur { $$ = $1 * $3; }
     | facteur
     ;
    
-facteur : '(' expr ')' \{ \$\$ = \$2; \}
+facteur : '(' expr ')' { $$ = $2; }
     | CHIFFRE
     ;
 
 %%
-int main()\{
+int main(){
     yyparse();   
-\}
+}
 
-int yyerror(char *s)\{
-    printf("\%s \\n", s);
-\}
+int yyerror(char *s){
+    printf("%s \n", s);
+}
 
 
-int yylex()\\{
+int yylex(){
     int c;
     c = getchar();
-    if(isdigit(c))\{
+    if(isdigit(c)){
         yylval = c-'0';
         return CHIFFRE;
-    \}
+    }
     return c;
-\}
+}
+
+\end{verbatim}
 
 Pour faire fonctionner cet exemple, il faudra entrer les lignes de commande suivantes:
 
@@ -410,16 +513,16 @@ Dans cet exemple, on a défini 5 règles. À quelques unes de ces règles on a a
 Ces actions sont des instructions C dans lesquelles on a accès à des variables spéciables.
 Ainsi les variables \$n font référence à la valeur du n-ième élément de droite et \$\$ fait référence à l’élément de gauche.
 
-\subsection{ANTLR}
-Pour obtenir une certaines flexibilité et une meilleures gestion d’erreurs, les programmeurs préfèrent écrire leurs parseurs de descente récursive à la main, nous allons donc vous présentez dans ce chapitre un outil, qui combine flexibilité, gestion d’erreurs  et présente tout les avantages d’un générateur de parseur, c’est outil est ANTLR.
+\subsection{ANTLR - ANother Tool for Language Recognition}
+Pour obtenir une certaines flexibilité et une meilleures gestion d’erreurs, les programmeurs préfèrent écrire leurs parseurs de descente récursive à la main, nous allons donc vous présentez dans ce chapitre un outil, qui combine flexibilité, gestion d’erreurs  et présente tout les avantages d’un générateur de parseur, cet outil est ANTLR.
 \subsubsection{Défintions}
-ANTLR \cite{refANTLR} est un générateur de parseur public, il propose plusieurs fonctionnalités qui rendent sont utilisation simple, il propose  des prédicats qui permettent aux programmeurs de diriger et de contrôler e le parseur grâce à des expressions syntaxique et sémantique.
-ANTLR permet aussi d’intégrer des  descriptions lexicales et syntaxiques  et peut générer automatiquement l’arbre syntaxique.
+ANTLR \cite{refANTLR} est un générateur de parseur public, il propose plusieurs fonctionnalités qui rendent son utilisation simple, il propose  des prédicats qui permettent aux programmeurs de diriger et de contrôler le parseur grâce à des expressions syntaxiques et sémantique.
+ANTLR permet aussi d’intégrer des  descriptions lexicales et syntaxiques et peut générer automatiquement l’arbre syntaxique.
 \subsubsection{Fonctionnement}
 Comme ce qui a été dit précédemment dans l’introduction, les prédicats permettent de diriger le parseur, ainsi ANTLR peut générer des parseurs pour plusieurs et différents langages.
-Les prédicats sémantiques indiquent la validité sémantique d’une production, les prédicats syntaxiques sont quant à eux des fragments de grammaires qui décrivent un contexte syntaxique qui doit être satisfait avant de reconnaître une production associé.
+Les prédicats sémantiques indiquent la validité sémantique d’une production, les prédicats syntaxiques sont quant à eux des fragments de grammaires qui décrivent un contexte syntaxique qui doit être satisfait avant de reconnaître une production associée.
 \subsubsection{Fonctionnalités}
-Fort d’une stratégie puissante autant que parseur, ANTLR a plusieurs fonctionnalités qui rendent sont utilisation plus agréables que d’autres LR/LALR et LL générateurs de parseurs.
+Fort d’une stratégie puissante autant que parseur, ANTLR a plusieurs fonctionnalités qui rendent sont utilisation plus agréable que d’autres LR/LALR et LL générateurs de parseurs.
 \begin{itemize}
 \item ANTLR  intègre la spécification entre une analyse lexicale et syntaxique.
 			\item ANTLR facilite la construction de l’arbre syntaxique.
@@ -427,59 +530,419 @@ Fort d’une stratégie puissante autant que parseur, ANTLR a plusieurs fonction
 			\item ANTLR   facilite la gestion d’erreurs.
 			\item ...
 \end{itemize}
-\subsubsection{Diagramme de flux}
-
 
 \subsubsection{Eléments de langages}
 Le tableau illustre quelques éléments de langage spécifique à ANTLR qui le distinguent des autres générateurs de parseurs.
 \newline
 
-\begin{tabular}{|E|D|X|}
+\begin{tabular}{|l|l|l|}
 \hline
 Elément de langages & Description & Exemple \\
 \hline
 Token & Commence par majuscule & ID \\
 \hline
-\prec\prec...\succ\succ & Définie une action sémantique & \prec\prec printf\left("\%S",a\right);\succ\succ \\
+<<...>> & Définie une action sémantique & << printf ("\%S",a );>> \\
 \hline	
-\left(...\right) & Régle & \left("int" \left| ID \right| storage\_class\right) \\
+(...) & Régle & ( "int" | ID  | storage\_class ) \\
 \hline
-\left(...\right)* & Closure & ID\left("\," ID\right)* \\
+(...)* & Closure & ID("," ID)* \\
 \hline
-\left(...\right)+ & Positive Closure & slist : \left( stat | SEMICOLON \right) \+ \; \\
+(...)+ & Positive Closure & slist : ( stat | SEMICOLON ) + ; \\
 \hline
-\left\{...\right\} & Optionnel & \left\{ELSE stat\right\} \\
+\{...\} & Optionnel & \{ELSE stat\} \\
 \hline
-\prec\prec...\succ\succ? & Prédicat sémantique & type : \prec\prec is\_Type\left(str\right)\succ\succ ? ID \; \\
+<<...>>? & Prédicat sémantique & type : << is\_Type(str)>> ? ID ; \\
 \hline
-\left(...\right)? & Prédicat syntaxique & \left(\left(list EQ\right)\right)? list EQ list | list \right) \\
+(...)? & Prédicat syntaxique & ((list EQ))? list EQ list | list ) \\
 \hline
 \end{tabular}
 \subsubsection{Langage et description}
 \subsubsubsection{Description de langage et ANTLR}
-Une description ANTLR est un collection de règles et d'actions précéder par une en-tête dans laquelle l'utilisateur définies les types des attributs par exemple.\newline Une règles ANTLR est entre autre une liste d'alternative séparer par"|":\newline
-règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};\newline
-Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées:\newline
-\textit{règles}[\textit{args \textsl{1}},...,\textit{args \textsl{n}}] > [\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}]\newline
-Notons aussi qu'une description ANTLR est diffèrents de celle des autres parseurs générateurs car les expressions régulières sont spécifiées (\#token ID) ou directement référencées (\#segment). Ces spécifications lexical ou grammatical se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
-Autre point important, ANTLR optimise le choix du nombre de lookahead en utilisant le moins possible. En effet, ANTLR génère une décision qui utilise un symbole qui distingue entre la première alternative et les autres. Ainsi, le prgrammeur utilise la puissance d'un parseur LL(k) avec k > 1 sans se soucié de l'efficacité ou non du parseur. Par exemple, si une règle requiert trois symboles pour différencier entre deux alternatives, ANTLR s'en occupe et génère un symbole pour faire la différence.
-ANTLR permet aussi à l'utilisateur de définir des actions et de les appelées là où il veut dans une production ANTLR, ces actions sont utilisées pour améliorer les tests sémantiques, générer une représenation intermédiaire ou directement générer la traduction.
+Une description ANTLR est un collection de règles et d'actions précédé par une en-tête dans laquelle l'utilisateur définis les types des attributs par exemple.
+
+Une règles ANTLR est entre autre une liste d'alternatives séparées par"|":
+
+
+règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};
+
+
+Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées:
+
+
+\textit{règles}[\textit{args \textsl{1}},...,\textit{args \textsl{n}}] > [\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}]
+
+
+Notons aussi qu'une description ANTLR est diffèrentes de celle des autres parseurs générateurs car les expressions régulières sont spécifiées (\#token ID) ou directement référencées (\#segment). Ces spécifications lexicale ou grammaticale se trouvent dans un fichier, ainsi plus besoin de mantenir deux spécifications. ANTLR assigne automatiquement le type des unités lexicales et génère l'analyseur syntaxique.
+
+Autre point important, ANTLR optimise le choix du nombre de lookahead en utilisant le moins possible. En effet, ANTLR génère une décision qui utilise un symbole qui distingue entre la première alternative et les autres. Ainsi, le prgrammeur utilise la puissance d'un parseur LL(k) avec k > 1 sans se soucier de l'efficacité ou non du parseur. Par exemple, si une règle requiert trois symboles pour différencier entre deux alternatives, ANTLR s'en occupe et génère un symbole pour faire la différence.
+ANTLR permet aussi à l'utilisateur de définir des actions et de les appeler là où il veut dans une production ANTLR, ces actions sont utilisées pour améliorer les tests sémantiques, générer une représenation intermédiaire ou directement générer la traduction.
+
 \subsubsubsection{Prédicats}
+
 ANTLR supporte l'utilisation de prédicats sémantique et syntaxique qui permet à l'utilisateur d'indiquer la validté sémantique et syntaxique d'une production, permettant ainsi à ANTLR de gérer naturellement des situations d'analyse difficile.
+
 \subsubsection{Quelques fonctionnalités utile aux programmeurs}
+
 \subsubsubsection{Intégration de l'analyse syntaxique et lexicale}
-Une description ANTLR contient à la fois une spécification pour l'analyse des unités lexicale et la spécification du parseur lui-même, ce qui élimine le besoin d'avoir deux fichiers différents pour chaque spécification, en effet ANTLR extrait automatiquement une description de l'analyseur lexicale à partir de la description intégrée de ANTLR.
+
+Une description ANTLR contient à la fois une spécification pour l'analyse des unités lexicales et la spécification du parseur lui-même, ce qui élimine le besoin d'avoir deux fichiers différents pour chaque spécification, en effet ANTLR extrait automatiquement une description de l'analyseur lexicale à partir de la description intégrée de ANTLR.
 ANTLR permet ainsi l'utilisation de plusieurs analyseurs lexicaux dans la même description ANTLR, cette pratique permet alors l'analyse de plusieurs langages.
 \subsubsubsection{Gestion d'erreurs}
-ANTLR propose deux mécanismes pour la gestion des erreurs.Dans le premier mécanisme, ANTLR génère un message d'erreur en utilisant une simple heuristique qui est suffisante pour plusieurs applications. par contre, quand une gestion d'erreurs plus complexe est requise, ANTLR fourni un second mécanisme appeler Parseur de gestion d'Exception qui offre une construction de rapport plus flexible dans un framework convenant.
-Le premier mécanisme génère automatiquement des rapports d'erreurs, désigne là où l'erreur à été détecter et qu'est ce qui était attendu.
-Le premier mécanisme, qui génère automatiquement des rapports d'erreurs, désigne là l'erreur à été détecter et qu'est ce qui était attendu.
+ANTLR propose deux mécanismes pour la gestion des erreurs.Dans le premier mécanisme, ANTLR génère un message d'erreur en utilisant une simple heuristique qui est suffisante pour plusieurs applications. par contre, quand une gestion d'erreurs plus complexe est requise, ANTLR fourni un second mécanisme appelé Parseur de gestion d'exceptions qui offre une construction de rapport plus flexible dans un framework convenant.
+Le premier mécanisme génère automatiquement des rapports d'erreurs, désigne là où l'erreur a été détecté et qu'est ce qui était attendu.
+Le premier mécanisme, qui génère automatiquement des rapports d'erreurs, désigne là l'erreur à été détecté et qu'est ce qui était attendu.
 Le second mécanisme quant à lui, fournis un framework pour y mettre les rapports d'erreurs sémantiques et syntaxiques, notons que le premier mécanisme ne reconnait pas les erreurs sémantiques.
+
 \subsubsubsection{Construction de l'arbre syntaxique}
+
 Le plus souvent, les parseurs construisent une forme intermédiaire qui sera utilisé plus tard dans des phases de compilation par exemple. En utilisant quelques annotations, ANTLR peut automatiquement construire un arbre syntaxique, évitant ainsi à l'utilisateur d'appeler la construction d'un arbre à chaque fois.
 Pour créer un arbre, l'utilisateur des annotations grammaticales qui indiquent le noeud père, les feuilles et aussi qui doit être exclu de l'abre. Les unités lexicales précédés de "!" par exemple, son à exclure de l'arbre.Toutes les autres unités lexicales sont considérées comme des feuilles.
+Voici un petit exemple de la constrcuction d'un arbre syntaxique : 
+\begin{verbatim}
+	if 3 + 4 * 5 then return 4;
+\end{verbatim}
+
+L'arbre correspondant :
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.80\textwidth]{ast.jpg}
+	\label{fig:ast_process}
+\end{figure}
+
+\subsubsection{Exemple simple avec ANTLR}
+Dans cette partie, nous allons vous montrez comment utiliser ANTLR dans un IDE tel que Eclipse.
+\subsubsubsection{ANTLR}
+\begin{itemize}
+	\item Télécharger et installer ANTLR à partir du site officiel : www.antlr.org
+	\item Ouvrir votre IDE, nous utilisons Eclipse.
+	\item Créer un projet Java et y ajouter le support ANTLR ainsi que la nature ANTLR  comme suit :
+	
+	\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.10\textwidth,height=13cm]{AntlrIdeSupport.JPG}
+	\label{fig:AntlrIdeSupport.JPG}
+	\end{figure}\FloatBarrier
+		
+		\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.10\textwidth,height=13cm]{AntlrNature.JPG}
+	\label{fig:AntlrNature.JPG}
+	\end{figure}\FloatBarrier
+
+\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur syntaxique (PARSER) et les régles lexicales (LEXER), notez que dans options nous pouvons chosir quel langage utiliser, pour notre exemple nous allons travailler en java pour l'utiliser sour l'IDE eclipse, on peux changer et écrire en C\#,C,Phyton...
+
+		\begin{figure}[h]
+	\centering
+		\includegraphics[width=1.10\textwidth,height=13cm]{AntlrFile.JPG}
+	\label{fig:AntlrFile.JPG}
+	\end{figure}\FloatBarrier
+
+\end{itemize}
+\subsubsubsection{Exécuter ANTLR sur un exemple simple}
+Création d'un exemple simple en C et en Java  :
+\begin{itemize}
+	\item Tout d'abord l'exemple écrit en C :
+	
+	\begin{verbatim}
+
+grammar GrammaireSimple;
+
+options {
+  language = Java;
+}
+
+tokens {
+    PLUS    = '+' ;
+    MINUS   = '-' ;
+    MULT    = '*' ;
+    DIV = '/' ;
+}
+ 
+@members {
+    public static void Main(string[] args) {
+        SimpleCalcLexer lex = new SimpleCalcLexer(new ANTLRFileStream(args[0]));
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+ 
+        SimpleCalcParser parser = new SimpleCalcParser(tokens);
+ 
+        try {
+            parser.expr();
+        } catch (RecognitionException e)  {
+            Console.Error.WriteLine(e.StackTrace);
+        }
+    }
+}
+ 
+ % PARSER RULES
+ 
+expr    : term ( ( PLUS | MINUS )  term )* ;
+ 
+term    : factor ( ( MULT | DIV ) factor )* ;
+ 
+factor  : NUMBER ;
+
+ % LEXER RULES
+ 
+NUMBER  : (DIGIT)+ ;
+ 
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = Hidden; } ;
+ 
+fragment DIGIT  : '0'..'9' ;
+
+	\end{verbatim}
+\item Et maintenant le même exemple en Java :
+\begin{verbatim}
+
+grammar GrammaireSimple;
+
+options {
+  language = Java;
+}
+tokens {
+    PLUS    = '+' ;
+    MINUS   = '-' ;
+    MULT    = '*' ;
+    DIV = '/' ;
+}
+ 
+@members {
+    public static void Main(string[] args) {
+        GrammaireSimpleLexer lex = new GrammaireSimpleLexer(new ANTLRFileStream(args[0]));
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+ 
+        GrammaireSimplecParser parser = new GrammaireSimpleParser(tokens);
+ 
+        try {
+            parser.expr();
+        } catch (RecognitionException e)  {
+            Console.Error.WriteLine(e.StackTrace);
+        }
+    }
+}
+ 
+ %PARSER RULES
+ 
+expr    : term ( ( PLUS | MINUS )  term )* ;
+ 
+term    : factor ( ( MULT | DIV ) factor )* ;
+ 
+factor  : NUMBER ;
+ 
+ 
+ %LEXER RULES
+ 
+NUMBER  : (DIGIT)+ ;
+ 
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = Hidden; } ; 
+fragment DIGIT  : '0'..'9' ;
+
+\end{verbatim}
+
+\end{itemize}
+\subsubsubsection{Compiler}
+La commande pour compiler notre exemple : 
+
+\begin{verbatim}
+
+java org.antlr.Tool GrammaireSimple.g
+
+\end{verbatim}
+
+ANTLR génère les fichiers sources pour le lexer et le parser ( GrammaireSimpleLexer.java et GrammaireSimpleParser.java ) copiez ces deux fichiers dans le bonne endroit dans notre IDE, ensuite vous pouvez compilez.
+
+\subsubsection{Définir notre propre grammaire}
+Dans la section précédente nous, avons vu comment installer et compiler avec ANTLR, dans cette partie nous allons vous montrez comment on a créer notre propre grammaire pour calculatrice simple.
+\subsubsubsection{La grammaire}
+Commençons par définir une expression arithmétique simple :
+
+\begin{verbatim}
+
+grammar GrammaireSimple;
+ 
+add : NUMBER PLUS NUMBER;
+ 
+NUMBER  : ('0'..'9')+ ;
+ 
+PLUS    : '+';
+
+\end{verbatim}
+Cette exemple contient deux règles lexicales \textsl{NUMBER} et \textsl{PLUS} puis une règles syntaxiques \textsl{add}
+\begin{itemize}
+
+\item \textsl{PLUS} Unité lexicale qui contient une seule caractère : +
+\item \textsl{NUMBER} Unité lexicale qui contient n'importe quel caractère compris entre 0 et 9
+\item \textsl{add} Règle syntaxique qui attend exactement et dans cette ordre \textsl{NUMBER} \textsl{+} \textsl{NUMBER}, toute autre expression affichere une erreur.
+\end{itemize}
+
+\subsubsubsection{Addition répétée}
+Pour écrire une expression avec plusieurs addition : 
+
+\begin{verbatim}
+add: NUMBER (PLUS NUMBER)*
+\end{verbatim}
+
+\textsl{*} : signifie plusieurs fois
+
+\subsubsubsection{Addition et soustraction}
+
+\begin{verbatim}
+
+add: NUMBER ((PLUS | MINUS) NUMBER)*
+ 
+MINUS : '-';
+
+\end{verbatim}
+
+|: signifie \textsl{ou}
+
+\subsubsubsection{Expression récursive}
+Pour analyser compètement  une expression arithmétique :
+
+\begin{verbatim}
+
+expr    : term ( ( PLUS | MINUS )  term )* ;
+term    : factor ( ( MULT | DIV ) factor )* ;
+factor  : NUMBER ;
+ 
+MULT : '*';
+DIV  : '/';
+
+\end{verbatim} 
+
+\subsubsubsection{Les espaces blancs}
+Notre grammaire ne tolère pas les espaces blancs, elle retournera une erreur dans les cas suivant : 
+\begin{itemize}
+
+\item Espaces
+\item Tabulations
+\item Retoure à la ligne 
+\item etc...
+
+\end{itemize}
+
+Pour cela nous devons définir ces espaces blancs,et dire au LEXER tolèrer ces espaces blancs :
+
+\begin{itemize}
+
+\item Une espace : ' '
+\item Une tabulation : '\t'
+\item Un Retour à la ligne : '\n'
+\item etc...
+
+\end{itemize}
+ Mettons ça enssemble et séparons les par un \textsl{ou} : 
+
+\begin{verbatim}
+
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;
+
+\end{verbatim}
+
+Malgré ce que nous venons de faire, notre grmmaire retrourneras toujours une erreur dans le cas suivant par exemple :
+\begin{verbatim}
+
+3 + 4*5
+
+\end{verbatim}
+En effet, ANTLR sauvegarde deux chaines de communications entre le LEXER et le PARSER, une chaine cachée et une chaine par défaut.Généralement le PARSER fait appel à la chaine par défaut, nous pouvons ainsi récupérer cette chaine et la cachée :
+
+\begin{verbatim}
+
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ { $channel = HIDDEN; };
+
+\end{verbatim}
+
+\subsubsubsection{Résultat final}
+
+Nous pouvons utiliser quelques techniques pour rendre le code plus lisible :
+
+\begin{itemize}
+
+\item Commentaire sur une ligne : //
+\item Commentaire sur plusieurs lignes: /*......*/
+\item Réunir toutes les unités lexicales dans section \textsl{tokens} au début du fichier
+\end{itemize}
+
+\begin{verbatim}
+
+grammar GrammaireSimple;
+ 
+tokens {
+    PLUS    = '+' ;
+    MINUS   = '-' ;
+    MULT    = '*' ;
+    DIV = '/' ;
+}
+ 
+/*------------------------------------------------------------------
+ * PARSER RULES
+ *------------------------------------------------------------------*/
+ 
+expr    : term ( ( PLUS | MINUS )  term )* ;
+ 
+term    : factor ( ( MULT | DIV ) factor )* ;
+ 
+factor  : NUMBER ;
+ 
+/*------------------------------------------------------------------
+ * LEXER RULES
+ *------------------------------------------------------------------*/
+ 
+NUMBER  : (DIGIT)+ ;
+ 
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
+ 
+fragment DIGIT  : '0'..'9' ;
+
+\end{verbatim}
+
+\subsubsubsection{Point d'entrer pour Java}
+
+\begin{verbatim}
+
+@members {
+    public static void Main(string[] args) {
+        GrammaireSimpleLexer lex = new GrammaireSimpleLexer(new ANTLRFileStream(args[0]));
+        CommonTokenStream tokens = new CommonTokenStream(lex);
+ 
+        GrammaireSimplecParser parser = new GrammaireSimpleParser(tokens);
+ 
+        try {
+            parser.expr();
+        } catch (RecognitionException e)  {
+            Console.Error.WriteLine(e.StackTrace);
+        }
+    }
+}
+\end{verbatim}
+
+\subsubsubsection{Générer du code dans un autre langage}
+Si vous n'aimez pas Java vous utiliser :  
+
+\begin{itemize}
+\item Ada
+\item C 
+\item C++
+\item C \#
+\item Ryby
+\item Perl
+\item etc...
+\end{itemize}
+
+\begin{verbatim}
+
+grammar GrammaireSimple;
+ 
+options {
+    language=CSharp2;
+}
+
+\end{verbatim}
+
 \subsection{Xtext}
 \subsubsection{Definition}
+
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
 Le framework Xtext s’appuie sur sur une grammaire générée ANTLR ainsi que le framework de modelisation EMF.
 
@@ -487,7 +950,7 @@ Il fonctionne sur une JVM (Machine Virtuelle Java) et est constitué de plusieur
 
 Xtext peut servir entre autres à proposer des solutions dans les domaines tels que : les systèmes embarqués, l'automobile, les appareils mobiles, l'automatique, les jeux vidéo, etc.
 
-Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre , son utilisation devient indépendante de la JVM. 
+Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C\# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre , son utilisation devient indépendante de la JVM. 
 
 Xtext couvre tous les aspects d’un IDE moderne : parseur, compilateur ,interpreteur et integration complete dans l’environnement de developpement Eclipse.
 
@@ -519,7 +982,7 @@ Parmi les fonctionnalités qu’offre Xtext:
 	\centering
 		\includegraphics[width=0.80\textwidth]{Emftext_process.jpg}
 	\label{fig:Emftext_process}
-\end{figure}
+\end{figure}\FloatBarrier
 
 \subsubsection{Exemple}
 On va prendre l'exemple de la grammaire précedente, et on va voir comment generer un editeur sous forme d'un plugin eclipse avec Xtext.
@@ -530,163 +993,67 @@ On va prendre l'exemple de la grammaire précedente, et on va voir comment gener
 	\centering
 		\includegraphics[width=1.0\textwidth,height=10cm]{1.PNG}
 	\label{fig:1}
-\end{figure}
+\end{figure}\FloatBarrier
 
-
-
-Tout d'abord on va créer un projet Xtext avec comme nom du projet org.xtext.demo,langage du projet org.xtext.example.demo et comme extension .demo.
+Tout d'abord on va créer un projet Xtext avec comme nom et extension demo.
 A la fin de la creation, on remarque que 3 projets ont été crées , le premier correspond plus à la partie runtime dans laquel on a notre grammmaire et certains elements qui sont pour l'instant vierge, un deuxieme qui concerne plus lapartie interafce utilisateur(tout ce qui est propre à l'editeur) et puis le troisieme qui est projets test.
 
 \subsubsubsection{Etape 2:Definition du langage}
 
-\newpage
-
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=0.90\textwidth]{2.PNG}
+		\includegraphics[width=1.0\textwidth,height=10cm]{2.PNG}
 	\label{fig:2}
-\end{figure}
+\end{figure}\FloatBarrier
 
-
-Ici on va definir notre langage  avec une grammaire proche de celle de Antlr.
-
-Pour le faire,on va dans le fichier demo.xtext et on ecrit la grammaire suivante:
-
-\begin{verbatim}
-
-grammar org.xtext.example.Demo with org.eclipse.xtext.common.Terminals
-
-generate demo "http://www.xtext.org/example/Demo"
-
-Model:
-	categories+=Categorie+
-	rule=Rule;
-	
-Categorie:
-	'category' name=ID;
-	
-Rule:
-	first=RuleExpression
-	("else" next=(Rule | RatioExpression))?;
-
-RuleExpression:
-	"if" test=TestExpression "then" ratio=RatioExpression;
-
-
-TestExpression:
-	"category" "is" categorie=[Categorie];
-
-RatioExpression:
-	"ratio" "is" ratio=INT;
-
-\end{verbatim}
-
-
-
+Ici on va definir notre langage dans le fichier .xtetx avec une grammaire proche de celle de Antlr.
 
  \subsubsubsection{Etape 3:Generation des artifacts}
 
-\newpage
-
-
-
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=0.90\textwidth]{3.PNG}
+		\includegraphics[width=1.0\textwidth,height=10cm]{3.PNG}
 	\label{fig:3}
 \end{figure}
-
-
 
 Pour faire la generation, on fait un click droit sur le fichier .xtext,run as >Generate Xtext Artifacts.
 
 Apres la generation,les projets se sont remplis,et j'ai certain services qui sont proposés :formatteur,generateur, validateur...
 
-
- \subsubsubsection{Etape 4:Faire un test}
-
-\newpage
+ \subsubsubsection{Etape 3:Faire un test}
 
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=0.90\textwidth]{4.png}
+		\includegraphics[width=1.0\textwidth,height=10cm]{4.PNG}
 	\label{fig:4}
 \end{figure}
-
 
 Pour faire un test, il suffit de faire un clic droit sur le projet run as >Eclipse Application, un Eclipse va etre lancé qui a maintenant le plugin.
 
 On crée tout d'abord un projet, et dans ce projet on va créer un fichier .demo.
 
-En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le choix ou bien d'ecrire une autre categorie ou commencer une expression.
+En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le hoix ou bien d'ecrire ue autre categorie ou commencer une expression.
 
 
 \subsubsubsection{Etape 5:Ajouter une validation}
 
-\newpage
-
-
-
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=0.90\textwidth]{5.PNG}
+		\includegraphics[width=1.0\textwidth,height=10cm]{5.PNG}
 	\label{fig:5}
 \end{figure}
 
 
-Ajouter une validation ,veut dire pour nous poser une regle sur la grammaire (exp:un nom de categorie commence toujours par une majiscule),si l'utilisateur entre un nom en miniscule, on va le souligner.
-
-Pour faire ceci, on va créer dans le package org.xtext.example.validation géneré par eclipse une classe qu'on va appeler DemoValidator et qui va contenir la methode checkCategory qui fait un test sur la premiere lettre du nom de la categorie et qui surligne le nom si cette lettre est en miniscule.
-
-
-\begin{verbatim}
-
-   /*
- * generated by Xtext
- */
-package org.xtext.example.validation;
-import org.eclipse.xtext.validation.Check;
-import org.xtext.example.demo.Category;
-import org.xtext.example.demo.DemoPackage;
-
-/**
- * Custom validation rules. 
- *
- * see http://www.eclipse.org/Xtext/documentation.html#validation
- */
-class DemoValidator extends AbstractDemoValidator {
-
-
-
-@Check
-	public void checkGreetingStartsWithCapital(Category cat) {
-	if (!Character.isUpperCase(cat.getName().charAt(0))) {
-			error("le nom doit commencer par une majuscule", cat,
-							DemoPackage.eINSTANCE.getCategory_Name(), "CapitalName");
-		}
-	}
-}
-
-\end{verbatim}
-
 
 
 
 
 
 \newpage
-
-
-
-
-
-
-
-
 
 \section{Conclusion}
 \label{hints}
