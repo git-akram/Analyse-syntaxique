@@ -17,8 +17,8 @@ Class=LaTeXView
 Document=Analyse_syntaxique.tex
 
 [Frame0_View0,0]
-TopLine=466
-Cursor=24262
+TopLine=916
+Cursor=39923
 
 [Frame1]
 Flags=0
@@ -35,7 +35,7 @@ Class=BibTeXView
 Document=bibliographie.bib
 
 [Frame1_View0,0]
-TopLine=30
+TopLine=24
 Cursor=857
 
 [SessionInfo]
