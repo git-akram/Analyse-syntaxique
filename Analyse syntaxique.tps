@@ -17,8 +17,8 @@ Class=LaTeXView
 Document=Analyse_syntaxique.tex
 
 [Frame0_View0,0]
-TopLine=916
-Cursor=39923
+TopLine=760
+Cursor=34004
 
 [Frame1]
 Flags=0

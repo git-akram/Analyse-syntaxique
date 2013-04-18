@@ -942,7 +942,6 @@ options {
 
 \subsection{Xtext}
 \subsubsection{Definition}
-
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
 Le framework Xtext s’appuie sur sur une grammaire générée ANTLR ainsi que le framework de modelisation EMF.
 
@@ -966,6 +965,7 @@ La spécificité d'Eclipse IDE vient du fait de son architecture totalement dév
 
 
 \subsubsection{Fonctionnalités Xtext}
+
 Parmi les fonctionnalités qu’offre Xtext:
 \begin{itemize}
 			\item -coloration syntaxique: Suivant les éléments de la grammaire , Xtext propose une coloration syntaxique entièrement     personnalisable.
@@ -976,12 +976,10 @@ Parmi les fonctionnalités qu’offre Xtext:
 
 \subsubsection{Diagramme de flux}
 
-
-
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.0\textwidth]{DiagrammeFluxXtext.png}
-		\caption{Diagramme de flux Xtext}
+		\includegraphics[width=1.10\textwidth]{DiagrammeFluxXtext.png}
+	\caption{Diagramme de flux Xtext}
 	\label{fig:DiagrammeFluxXtext}
 \end{figure}\FloatBarrier
 
@@ -992,69 +990,132 @@ On va prendre l'exemple de la grammaire précedente, et on va voir comment gener
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.0\textwidth,height=10cm]{1.PNG}
+		\includegraphics[width=1.10\textwidth,height=10cm]{1.PNG}
 	\label{fig:1}
 \end{figure}\FloatBarrier
 
-Tout d'abord on va créer un projet Xtext avec comme nom et extension demo.
+
+
+Tout d'abord on va créer un projet Xtext avec comme nom du projet org.xtext.demo,langage du projet org.xtext.example.demo et comme extension .demo.
 A la fin de la creation, on remarque que 3 projets ont été crées , le premier correspond plus à la partie runtime dans laquel on a notre grammmaire et certains elements qui sont pour l'instant vierge, un deuxieme qui concerne plus lapartie interafce utilisateur(tout ce qui est propre à l'editeur) et puis le troisieme qui est projets test.
 
 \subsubsubsection{Etape 2:Definition du langage}
 
-
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.0\textwidth,height=10cm]{2.PNG}
+		\includegraphics[width=1.10\textwidth]{2.PNG}
 	\label{fig:2}
 \end{figure}\FloatBarrier
 
-Ici on va definir notre langage dans le fichier .xtetx avec une grammaire proche de celle de Antlr.
+
+Ici on va definir notre langage  avec une grammaire proche de celle de Antlr.
+
+Pour le faire,on va dans le fichier demo.xtext et on ecrit la grammaire suivante:
+
+\begin{verbatim}
+
+grammar org.xtext.example.Demo with org.eclipse.xtext.common.Terminals
+
+generate demo "http://www.xtext.org/example/Demo"
+
+Model:
+	categories+=Categorie+
+	rule=Rule;
+	
+Categorie:
+	'category' name=ID;
+	
+Rule:
+	first=RuleExpression
+	("else" next=(Rule | RatioExpression))?;
+
+RuleExpression:
+	"if" test=TestExpression "then" ratio=RatioExpression;
+
+
+TestExpression:
+	"category" "is" categorie=[Categorie];
+
+RatioExpression:
+	"ratio" "is" ratio=INT;
+
+\end{verbatim}
 
  \subsubsubsection{Etape 3:Generation des artifacts}
 
-
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.0\textwidth,height=10cm]{3.PNG}
+		\includegraphics[width=1.10\textwidth]{3.PNG}
 	\label{fig:3}
-\end{figure}
+\end{figure}\FloatBarrier
 
 Pour faire la generation, on fait un click droit sur le fichier .xtext,run as >Generate Xtext Artifacts.
 
 Apres la generation,les projets se sont remplis,et j'ai certain services qui sont proposés :formatteur,generateur, validateur...
 
- \subsubsubsection{Etape 3:Faire un test}
 
+ \subsubsubsection{Etape 4:Faire un test}
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.0\textwidth,height=10cm]{4.PNG}
+		\includegraphics[width=1.10\textwidth]{4.png}
 	\label{fig:4}
-\end{figure}
+\end{figure}\FloatBarrier
+
 
 Pour faire un test, il suffit de faire un clic droit sur le projet run as >Eclipse Application, un Eclipse va etre lancé qui a maintenant le plugin.
 
 On crée tout d'abord un projet, et dans ce projet on va créer un fichier .demo.
 
-En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le hoix ou bien d'ecrire ue autre categorie ou commencer une expression.
+En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le choix ou bien d'ecrire une autre categorie ou commencer une expression.
 
 
 \subsubsubsection{Etape 5:Ajouter une validation}
 
-
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.0\textwidth,height=10cm]{5.PNG}
+		\includegraphics[width=1.10\textwidth]{5.PNG}
 	\label{fig:5}
-\end{figure}
+\end{figure}\FloatBarrier
+
+
+Ajouter une validation ,veut dire pour nous poser une regle sur la grammaire (exp:un nom de categorie commence toujours par une majiscule),si l'utilisateur entre un nom en miniscule, on va le souligner.
+
+Pour faire ceci, on va créer dans le package org.xtext.example.validation géneré par eclipse une classe qu'on va appeler DemoValidator et qui va contenir la methode checkCategory qui fait un test sur la premiere lettre du nom de la categorie et qui surligne le nom si cette lettre est en miniscule.
+
+
+\begin{verbatim}
+
+   /*
+ * generated by Xtext
+ */
+package org.xtext.example.validation;
+import org.eclipse.xtext.validation.Check;
+import org.xtext.example.demo.Category;
+import org.xtext.example.demo.DemoPackage;
+
+/**
+ * Custom validation rules. 
+ *
+ * see http://www.eclipse.org/Xtext/documentation.html#validation
+ */
+class DemoValidator extends AbstractDemoValidator {
 
 
 
+@Check
+	public void checkGreetingStartsWithCapital(Category cat) {
+	if (!Character.isUpperCase(cat.getName().charAt(0))) {
+			error("le nom doit commencer par une majuscule", cat,
+							DemoPackage.eINSTANCE.getCategory_Name(), "CapitalName");
+		}
+	}
+}
 
-
-
+\end{verbatim}
 
 \newpage
+
 
 \section{Conclusion}
 \label{hints}
