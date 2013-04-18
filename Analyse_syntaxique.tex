@@ -608,7 +608,7 @@ L'arbre correspondant :
 	\centering
 		\includegraphics[width=0.80\textwidth]{ast.jpg}
 	\label{fig:ast_process}
-\end{figure}
+\end{figure}\FloatBarrier
 
 \subsubsection{Exemple simple avec ANTLR}
 Dans cette partie, nous allons vous montrez comment utiliser ANTLR dans un IDE tel que Eclipse.
@@ -826,8 +826,8 @@ Pour cela nous devons définir ces espaces blancs,et dire au LEXER tolèrer ces 
 \begin{itemize}
 
 \item Une espace : ' '
-\item Une tabulation : '\t'
-\item Un Retour à la ligne : '\n'
+\item Une tabulation : '\\t'
+\item Un Retour à la ligne : '\\n'
 \item etc...
 
 \end{itemize}
@@ -918,7 +918,7 @@ fragment DIGIT  : '0'..'9' ;
 \end{verbatim}
 
 \subsubsubsection{Générer du code dans un autre langage}
-Si vous n'aimez pas Java vous utiliser :  
+Si vous n'aimez pas Java vous pouvez utilisez :  
 
 \begin{itemize}
 \item Ada
@@ -980,8 +980,9 @@ Parmi les fonctionnalités qu’offre Xtext:
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=0.80\textwidth]{Emftext_process.jpg}
-	\label{fig:Emftext_process}
+		\includegraphics[width=1.0\textwidth]{DiagrammeFluxXtext.png}
+		\caption{Diagramme de flux Xtext}
+	\label{fig:DiagrammeFluxXtext}
 \end{figure}\FloatBarrier
 
 \subsubsection{Exemple}
