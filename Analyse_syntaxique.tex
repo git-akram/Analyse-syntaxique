@@ -35,7 +35,7 @@
 
 
 \title{Analyse Syntaxique}
-\author{Mohammed Akram Rhafrane - Ismail Senhaji - Nathanael Bertrand - Mehdi Boutchiche\\}
+\author{Mohammed Akram Rhafrane - Ismail Senhaji - Nathanaël Bertrand - Mehdi Boutchiche\\}
 \date{\today} 
 \begin{document}
 
@@ -442,11 +442,45 @@ Les sections “Bloc des déclarations” et “Programme” sont facultatives.
 
 Une règle de grammaire est notée sous la forme:
 
-A : B { /* action pour cette regle */ };
+A : B \{ /* action pour cette regle */ \};
 
-Ci-dessous un exemple de spécification Yacc qui génère une calculatrice très minimaliste.
+\subsubsection{ Exemples }
 
-Ici, on utilise Yacc sans Lex afin de comprendre le fonctionnement. Cependant, il faut définir à la main la fonction yylex(). Celle-ci renvoie un entier qui indique le type de token qui a été reconnu en entrée.
+\subsubsubsection{ Mini calculatrice }
+Ci-dessous un exemple de spécification Yacc qui génère une calculatrice très minimaliste. Exemple inspiré de http://www.gaudry.be/langages-yacc.html puis modifié pour être fonctionnel.
+L'analyseur syntaxique ainsi généré peut-être utilisé en tant qu'interpreteur de commandes permettant de faire des opérations simples telles que: \newline
+2+5\newline
+(1+2)\newline
+1*2\newline
+2*(2+1)\newline
+À noter que pour plus de simplicité, les nombres à plusieurs chiffres ne sont pas pris en charge.
+La grammaire reconnu par cet analyseur syntaxique est la suivante:
+G(L) = <N,X,P,S>
+Avec :
+\begin{verbatim}
+N : { ligne, commande, expr, terme, facteur }
+X : { [0-9], \n, +, *, (, ) }
+P : {
+    ligne -> 		
+        commande \n ligne
+        | \n
+    commande :	
+        expr
+    expr :		
+        expr + terme
+        | terme
+    terme : 		
+        terme * facteur
+        | facteur
+    facteur : 		
+         ( expr )
+        | [0-9]
+}
+S : ligne
+\end{verbatim}
+
+
+Ici, on utilise Yacc sans Lex afin de comprendre le fonctionnement. Cependant, il faut définir à la main la fonction yylex(). Celle-ci renvoie un entier qui indique le type de token qui a été reconnu en entrée. Si on avait utilisé Lex comme scanner, cette fonction aurait déjà été définie.
 
 \begin{verbatim}
 
@@ -512,6 +546,208 @@ Dans cet exemple, on a défini 5 règles. À quelques unes de ces règles on a a
 
 Ces actions sont des instructions C dans lesquelles on a accès à des variables spéciables.
 Ainsi les variables \$n font référence à la valeur du n-ième élément de droite et \$\$ fait référence à l’élément de gauche.
+
+
+\subsubsubsection{ Langage de manipulation de catégories }
+
+Au autre exemple un peu plus avancé qui permet de parser un langage qui gère des catégories. L'exemple est certe scolaire mais montre bien quelques problèmes et solutions qui peuvent survenir lors de l'écriture d'une spécification.
+
+\begin{verbatim}
+%{
+    #include <ctype.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    
+    typedef struct {
+        char nom[256];
+        int ratio;
+    } Cat_Struct;
+    
+    int previousTestResult;
+    int previousRatioResult;
+    char currentCategorie[256] = "";
+    Cat_Struct listCategorie[100];
+    int listCategorieCount = 0;
+    
+    int categorieIndexOf(char *s){
+        int i;
+        for(i=0;i<listCategorieCount;i++){
+            if(strcmp(listCategorie[i].nom, s) == 0){
+                return i;
+            }    
+        }
+        return -1;
+    }
+    
+    int categorieExists(char *s){
+        return categorieIndexOf(s) >= 0;    
+    }
+    
+    int categorieAdd(char *s){
+        if(categorieExists(s)) return 0;
+        
+        strcpy(listCategorie[listCategorieCount].nom, s);
+        listCategorie[listCategorieCount].ratio = 0;
+        listCategorieCount++;
+        return 1;
+    }
+    
+    int categorieSetRatio(char *s, int ratio){
+        if(!categorieExists(s)) return 0;
+        int i = categorieIndexOf(s);
+        
+        listCategorie[i].ratio = ratio;
+        return 1;
+    }
+    
+    char* categorieToString(char *s){
+        if(!categorieExists(s)) return "";
+        int i = categorieIndexOf(s);
+        
+        char* toString = (char*)malloc(sizeof(char)*300);
+        sprintf(toString, "[nom: %s, ratio: %d]", listCategorie[i].nom, listCategorie[i].ratio);
+        return toString;
+    }
+    
+    void categoriePrintAll(){
+        if(listCategorieCount == 0){
+            printf("Aucune categorie en memoire\n");
+            return;
+        } else {
+            printf("%d categories enregistrees\n", listCategorieCount);
+        }
+
+
+        int i;
+        for(i=0;i<listCategorieCount;i++){
+            if(strcmp(listCategorie[i].nom, currentCategorie) == 0) printf("> ");
+            printf("Categorie : %s\n", categorieToString(listCategorie[i].nom));    
+        }
+    }
+%}
+ 
+%token IDENTIFIANT
+%token RATIOVALUE
+
+%union 
+{
+    int num;
+    char *str;
+}
+ 
+%%
+
+Model : Ligne Model
+    | Ligne
+    ;
+
+Ligne : 
+    Categorie '\n' 
+    | Rule '\n'
+    | Commande '\n'
+    ;
+
+Categorie : 'c''a''t''e''g''o''r''i''e' IDENTIFIANT 
+    { 
+        strcpy(currentCategorie, yylval.str);
+        if(!categorieExists(currentCategorie)){
+            categorieAdd(currentCategorie);
+            printf("[Nouvelle categorie]\n");    
+        }
+        printf("> Categorie : %s\n", categorieToString(currentCategorie));
+    };
+    ;
+
+Rule : RuleExpression
+    | RuleExpression 'e''l''s''e' RuleExpression
+    | RuleExpression 'e''l''s''e' RatioExpression
+    ;
+    
+RuleExpression : 'i''f' TestExpression 't''h''e''n' RatioExpression 
+    { 
+        if(previousTestResult){
+            categorieSetRatio(currentCategorie, previousRatioResult);
+        }
+    }
+    ;
+    
+TestExpression : 'c''a''t''e''g''o''r''i''e' '=' IDENTIFIANT     
+    {
+        if(strcmp(yylval.str, currentCategorie) == 0){
+            // Match
+            previousTestResult = 1;
+        } else {
+            previousTestResult = 0;
+        }
+    }
+    ;
+    
+RatioExpression : 'r''a''t''i''o' '=' RATIOVALUE    
+    {
+        previousRatioResult = yylval.num;
+    }
+    ;
+    
+Commande : 
+    'c''u''r''r''e''n''t' { printf("Categorie courante: %s\n", currentCategorie); }
+    || 'p''r''i''n''t' { categoriePrintAll(); }
+    ;
+//*/
+%%
+int main(){
+    yyparse();    
+}
+
+int yyerror(char *s){
+    printf("%s \n", s);
+}
+
+
+int yylex(){
+    int c;
+    int isDigit = -1;
+    int digitValue = 0;
+    char stringValue[256] = "";
+    int tmpSize;
+    while(c = getchar()){
+        if(c == ' ') continue;
+        
+        if(!(c >= 'a' && c <= 'z') && c != '"' && !isdigit(c) && c != '.') break;
+        if(isDigit == -1){
+            if(isdigit(c)){
+                isDigit = 1;
+                digitValue = c - '0';
+            }
+            else if(c == '"'){
+                isDigit = 0;
+            }
+            else return c;
+        }
+        else if(isDigit == 1){
+            if(isdigit(c)){
+                digitValue = digitValue * 10 + (c - '0');
+            } else if(c == '.'){
+                yylval.num = digitValue;
+                return RATIOVALUE;
+            }
+        }
+        else if(isDigit == 0){ 
+            if(c=='"'){
+                yylval.str = stringValue;
+                return IDENTIFIANT;
+            } else {
+                tmpSize = strlen(stringValue);
+                stringValue[tmpSize] = c;
+                stringValue[tmpSize+1] = '\0';
+            }
+        }
+    }
+    return c;
+}
+\end{verbatim}
+
+
 
 \subsection{ANTLR - ANother Tool for Language Recognition}
 Pour obtenir une certaines flexibilité et une meilleures gestion d’erreurs, les programmeurs préfèrent écrire leurs parseurs de descente récursive à la main, nous allons donc vous présentez dans ce chapitre un outil, qui combine flexibilité, gestion d’erreurs  et présente tout les avantages d’un générateur de parseur, cet outil est ANTLR.
