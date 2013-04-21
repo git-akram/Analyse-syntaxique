@@ -550,7 +550,7 @@ Ainsi les variables \$n font référence à la valeur du n-ième élément de dr
 
 \subsubsubsection{ Langage de manipulation de catégories }
 
-Au autre exemple un peu plus avancé qui permet de parser un langage qui gère des catégories. L'exemple est certe scolaire mais montre bien quelques problèmes et solutions qui peuvent survenir lors de l'écriture d'une spécification.
+Uu autre exemple un peu plus avancé qui permet de parser un langage qui gère des catégories. L'exemple est certe scolaire mais montre bien quelques problèmes et solutions qui peuvent survenir lors de l'écriture d'une spécification.
 
 \begin{verbatim}
 %{
@@ -1347,144 +1347,16 @@ class DemoValidator extends AbstractDemoValidator {
 		}
 	}
 }
-
 \end{verbatim}
 
 \newpage
-
-
 \section{Conclusion}
 \label{hints}
 
+\newpage
 \section{Références}
 \label{hints}
-\section{Some small hints}
-\label{hints}
-\subsection{German Umlauts and other Language Specific Characters}
-\label{umlauts}
-You can type german umlauts like 'ä', 'ö', or 'ü' directly in this file.
-This is also true for other language specific characters like 'é', 'è' etc.
-There are problems with automatic hyphenation when using language
-specific characters and OT1-encoded fonts. In this case, use a
-T1-encoded Type1-font like the Latin Modern font family (\verb#\usepackage{lmodern}#).
-\subsection{References}
-\label{references}
-Using the commands \verb#\label{name}# and \verb#\ref{name}# you are able
-to use references in your document. Advantage: You do not need to think
-about numerations, because \LaTeX\ is doing that for you.
-For example, in section \ref{dividing} on page \pageref{dividing} hints for
-dividing large documents are given.
-Certainly, references do also work for tables, figures, formulas\ldots
-Please notice, that \LaTeX\ usually needs more than one run (mostly 2) to
-resolve those references correctly.
-\subsection{Dividing Large Documents}
-\label{dividing}
-You can divide your \LaTeX-Document into an arbitrary number of \TeX-Files
-to avoid too big and therefore unhandy files (e.g. one file for every chapter).
-For this, you insert in your main file (this one) for every subfile
-the command '\verb#\input{subfile}#'. This leads to the same behavior
-as if the content of the subfile would be at the place of the
-\verb#\input#-Command.
 
-
-\appendix
-%-----------------------------------------------------------
-\section{Introduction}\label{sec:intro}
-
-Prérequis:
-\begin{itemize}
-\item Un fichier \texttt{*.tex}, par exemple \texttt{rapport.tex}, qui
-  contient le texte.
-\item Un fichier \texttt{*.bib}, par exemple \texttt{rapport.bib}, qui
-  contient les références bibliographiques.
-\end{itemize}
-
-Utilisation de Latex:
-\begin{itemize}
-\item Lancer \texttt{pdflatex rapport} pour compilation du fichier
-  \texttt{rapport.tex}
-\item Lancer \texttt{biblatex rapport} pour compilation du fichier
-  \texttt{rapport.bib}
-\item Répéter \texttt{pdflatex rapport} deux fois pour prendre en
-  compte des modifications
-\end{itemize}
-
-Documentation:
-\begin{itemize}
-\item \LaTeX: \url{http://www.latex-project.org/}
-\item \TeX users group: \url{http://www.tug.org/}
-\end{itemize}
-
-
-%-----------------------------------------------------------
-\section{Présentation du projet}
-
-\subsection{But du projet}
-On a utilisé
-\cite{lindholm99_java_virtual_machin_specif,moore89_system_verif} et
-aussi \cite{strecker02_verif_java_compil}.
-
-\subsection{Implantation}
-
-\begin{figure}[htbp]
-  \centering
-% \includegraphics[scale=0.5]{foo}
-  \caption{Une petite image}
-  \label{fig:im}
-\end{figure}
-
-Inclusion d'images en format PDF (création par exemple avec
-XFig\footnote{Page web: \url{http://www.xfig.org/}})
-
-\subsection{Spécialités}
-
-Facile à utiliser: Listes d'éléments numérotés:
-\begin{enumerate}
-\item premier élément
-\item deuxième élément
-\item aussi imbriqués:
-%
-\begin{itemize}
-\item Ici, une liste non numérotée
-\item avec un autre élément
-\end{itemize}
-%
-\end{enumerate}
-
-Mathématiques:
-\begin{itemize}
-\item Sous- et super-scripts: $a_n$ et $b^k$, utiliser des accolades
-  pour des expressions plus complexes: $x^{(y^z)}$
-
-\item Symboles mathématiques, tels que $\sum_{i=0}^{n} f(i)$
-
-\item Caractères de l'alphabet grecque: $\Gamma$ ou calligraphiques: ${\cal D}$
-\end{itemize}
-
-Fontes de caractères spécifiques:
-\begin{itemize}
-\item \emph{Italique}
-\item \textbf{Gras}
-\item \texttt{typewriter}
-\item ou combiné \emph{\textbf{italique-gras}}
-\end{itemize}
-
-%-----------------------------------------------------------
-\section{Gestion du projet}
-
-\begin{tabular}[h]{|l|l|}
-\hline
-Dates & Tâches \\
-\hline
-\hline
-Du 7 mars au 2 mai & 1~ière itération \\
-                   & 2~ième itération \\
-\hline
-\end{tabular}
-
-Je me réfère à la section~\ref{sec:intro} et la figure~\ref{fig:im}.
-
-%-----------------------------------------------------------
 \bibliography{bibliographie}
 \bibliographystyle{abbrv}
 \end{document}
