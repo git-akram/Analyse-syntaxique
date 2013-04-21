@@ -55,15 +55,35 @@
 
 \newpage
 \begin{abstract}
-Résumé du contenu du document.
+Le processus de compilation passe par une série d’étapes afin de de générer un programme cible à partir d’un programme source, il passe par une série d’étapes dont l’une qui nous intéresse qui est l’analyse syntaxique. Son principe est de recevoir une série d’unités lexicales formé à l’aide de l’analyse lexicale puis généré un arbre de syntaxe abstraite à base d’une grammaire qui définit le langage traduit. L’analyse syntaxique se base sur deux principes fondamentaux, l’analyse LL qui suit un cheminement de dérivation de gauche à droite et l’analyse LR qui suit le cheminement contraire, c’est à dire que les symboles les plus à droite sont dérivés en premier.
 \end{abstract}
 
 %-----------------------------------------------------------
-\newpage
 \section{Introduction}
 \label{hints}
+Un compilateur est un programme qui lit en entrée un programme écrit dans un premier langage dit langage source, et le traduit en un programme équivalent écrit dans un autre langage dit langage cible.
+Au cours de ce processus de traduction, le compilateur tentera également de repérer et de signaler les erreurs qui peuvent être commises par le programmeur.
 
-\newpage
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.70\textwidth]{compilateur.png}
+	\caption{Compilateur}
+	\label{fig:compilateur}
+\end{figure}\FloatBarrier
+
+Afin de générer un programme source a partir du programme source, le compilateur passe par plusieurs étapes en commençant par l'analyse lexicale jusqu'à la génération du code. Voici un schéma montrant le processus de compilation en détails:
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.90\textwidth]{compilation.png}
+	\caption{Processus de compilation}
+	\label{fig:compilation}
+\end{figure}\FloatBarrier
+
+Cette étude de la théorie de compilation s'intéresse de plus près à la phase de l'analyse syntaxique qui permet de générer des arbres de syntaxe abstraite à partir d'une suite d'unité lexicales.
+Une deuxième étude sera faite afin de comparer entre l'analyse LL \ref{sec:LL} et l'analyse LR \ref{sec:LR} qui sont deux approches principales de l'analyse syntaxique.
+A la fin, un partie sera consacré à la démonstration de l’outil Xtext qui permet de définir différents aspects du langage traduit.  
+
 \section{Fondamenteux}
 \label{hints}
 \subsection{Langages et grammaires}
@@ -121,7 +141,7 @@ Une unité lexicale ou un lexème est une chaîne de caractère qui correspond �
 
 \subsubsection{Analyseur Lexicale}
 
-On appelle analyseur lexical \cite{refAnalyseurLexicale}, lexeur, ou encore scanneur, tout programme effectuant une analyse lexicale. Il s'agit le plus souvent d'une unique fonction qui sera appelée par l'analyseur syntaxique (voir Analyse syntaxique) ou par une autre fonction.
+On appelle analyseur lexical \cite{refAnalyseurLexicale}, lexeur, ou encore scanneur, tout programme effectuant une analyse lexicale. Il s'agit le plus souvent d'une unique fonction qui sera appelée par l'analyseur syntaxique \ref{sec:analyseurSyntaxique} ou par une autre fonction.
 
 Le scanneur contient toutes les informations sur les séquences de caractères qui peuvent être contenues dans les entités lexicales qu'il génère. Par exemple, une entité lexicale de type « INTEGER » peut contenir n'importe quelle séquence de caractères numériques (chiffres).
 
@@ -143,7 +163,7 @@ Un analyseur lexical peut être écrit :
 \subsubsection{Segmentation}
 La segmentation est le fait de séparer les différentes sections d’une chaînes de caractères, par exemple pour une phrase l’ordinateur la considère comme une chaîne de caractère et non pas une suite de mot, le rôle de la segmentation est donc de faire une séparation entre ces mots selon le caractère de séparation dans ce cas le caractère espace.
 
-\subsection{Analyse syntaxique}
+\subsection{Analyse syntaxique}\label{sec:analyseurSyntaxique}
 Le rôle de l’analyse syntaxique \cite{refAnalyseSyntaxique} est de savoir si une phrase appartient à la syntaxe d’un langage.
 A partir du flot de lexèmes construits par l’analyse lexicale dans un premier temps, l’analyse syntaxique permet de générer un arbre de syntaxe abstraite.
 Cet arbre est construit à base d’un ensembles de règles définissant une grammaire formelle sur laquelle est basé le langage en question.
@@ -339,7 +359,7 @@ L'utilisation de productions erreurs \cite{refProductionErreurs} est une méthod
 
 La correction locale \cite{refCorrectionLocale} est une technique de récupération sur erreur. Lorsqu'un analyseur constate une erreur lors de la lecture d'un symbole, il remplace le symbole lu par un autre qui lui semble plus juste.
 
-\subsection{LL - Left to right Leftmost derivation}
+\subsection{LL - Left to right Leftmost derivation}\label{sec:LL}
 
 L'analyse LL est une analyse descendante pour un sous-ensemble de grammaire non contextuelle. Son principe est  d'analyser l'entrée de gauche à droite (Left to right) et de construire une dérivation à gauche (Leftmost derivation). Les grammaires analysables de cette façon sont nommées grammaires LL.
 Une analyse LL est appelée analyse LL(k) lorsqu'elle utilise k lexèmes d'avance.\newline
@@ -363,7 +383,7 @@ id := num ; id := id + (id := num + num, id)\newline
 
 Le principe de l'analsye LL est simple, le symbole nom terminal le plsu à gauche est toujours celui à être développé en premier et ainsi de suite jusqu'a ce que la phrase soit reconnu. 
 
-\subsection{LR - Left to right Rightmost derivation}
+\subsection{LR - Left to right Rightmost derivation}\label{sec:LR}
 
 un analyseur LR (pour Left to right, Rightmost derivation) \cite{LR} est un analyseur pour les grammaires non contextuelles qui lit l'entrée de gauche à droite et produit une dérivation droite. On parle aussi d'analyseur LR(k) où k représente le nombre de symboles « anticipés » et non consommés qui sont utilisés pour prendre des décisions d'analyse syntaxique. D'habitude, k vaut 1 et est souvent omis. Une grammaire non contextuelle est appelée LR(k) s'il existe un analyseur syntaxique LR(k) pour elle.
 On dit qu'un analyseur syntaxique LR réalise une analyse ascendante car il essaye de déduire les productions du niveau du haut de la grammaire en les construisant à partir des feuilles.
