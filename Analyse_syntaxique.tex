@@ -1056,14 +1056,12 @@ MINUS : '-';
 Pour analyser compètement  une expression arithmétique :
 
 \begin{verbatim}
-
 expr    : term ( ( PLUS | MINUS )  term )* ;
 term    : factor ( ( MULT | DIV ) factor )* ;
 factor  : NUMBER ;
  
 MULT : '*';
 DIV  : '/';
-
 \end{verbatim} 
 
 \subsubsubsection{Les espaces blancs}
@@ -1196,8 +1194,22 @@ options {
 
 \end{verbatim}
 
-\subsection{Xtext}
-\subsubsection{Definition}
+\subsection{Comparaison entre YACC et ANTLR}
+
+La différence majeure entre Yacc et Antler est que Yacc est une analyseur syntaxique de type LALR, alors que Antlr est de type LL. C’est une différence pour plusieurs application, par exempele :
+
+expr ::= expr '+' expr
+      | expr '-' expr
+      | '(' expr ')'
+      | NUM ;
+
+Antlr ne peut en aucun cas gérer cette grammaire telle qu’elle est. Pour ce faire, Antlr comme  tout autre analyseur syntaxique a besoin d’éliminer le récursivité à gauche avant de la traiter.
+
+d’un autre côté Yacc n’a aucun problèmes avec des grammaires de cette forme, bien qu’elle soit récursive à gauche, il peut parfaitement la traiter.
+De ce fait, On peut dire que Yacc est plus facile à utiliser du principe que les grammaire LR n’ont pas de problèmes de récursivité qui peut être complexe dans certains cas, c’est la raison pour laquelle la plupart des grammaires de nos jours sont orientées LR, mais même devant toute cette facilité, on ne peut en aucun cas négliger Antlr car aucun autre outils ne l’atteint encore en termes de performance et de flexibilité.
+
+\section{Xtext}
+\subsection{Definition}
 Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
 Le framework Xtext s’appuie sur sur une grammaire générée ANTLR ainsi que le framework de modelisation EMF.
 
@@ -1211,16 +1223,16 @@ Xtext couvre tous les aspects d’un IDE moderne : parseur, compilateur ,interpr
 
 Xtext fournit un environnement convivial aux utilisateurs d’un DSL.
 
-\subsubsection{Definition DSL}
+\subsection{Definition DSL}
 DSL:est un langage de programmation dont les spécifications sont à un domaine d’applications précis , la construction des langages dédiés diffère fondamentalement de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique(exp :SQL:destiné à interroger ou manipuler une base de données relationnelle)
 
-\subsubsection{Definition Eclipse}
+\subsection{Definition Eclipse}
 Eclipse IDE est un environnement de développement intégré libre (le terme Eclipse désigne également le projet correspondant, lancé par IBM) extensible, universel et polyvalent, permettant potentiellement de créer des projets de développement mettant en œuvre n'importe quel langage de programmation. Eclipse IDE est principalement écrit en Java (à l'aide de la bibliothèque graphique SWT, d'IBM), et ce langage, grâce à des bibliothèques spécifiques, est également utilisé pour écrire des extensions.
 
 La spécificité d'Eclipse IDE vient du fait de son architecture totalement développée autour de la notion de plug-in.
 
 
-\subsubsection{Fonctionnalités Xtext}
+\subsection{Fonctionnalités Xtext}
 
 Parmi les fonctionnalités qu’offre Xtext:
 \begin{itemize}
@@ -1230,7 +1242,7 @@ Parmi les fonctionnalités qu’offre Xtext:
 			\item -intégration avec d’autres composants Eclipse 
 \end{itemize}
 
-\subsubsection{Diagramme de flux}
+\subsection{Diagramme de flux}
 
 \begin{figure}[h]
 	\centering
@@ -1241,7 +1253,7 @@ Parmi les fonctionnalités qu’offre Xtext:
 
 \subsubsection{Exemple}
 On va prendre l'exemple de la grammaire précedente, et on va voir comment generer un editeur sous forme d'un plugin eclipse avec Xtext.
-\subsubsubsection{Etape 1:Création d'un projet Xtext}
+\subsubsection{Etape 1:Création d'un projet Xtext}
 
 
 \begin{figure}[h]
@@ -1255,7 +1267,7 @@ On va prendre l'exemple de la grammaire précedente, et on va voir comment gener
 Tout d'abord on va créer un projet Xtext avec comme nom du projet org.xtext.demo,langage du projet org.xtext.example.demo et comme extension .demo.
 A la fin de la creation, on remarque que 3 projets ont été crées , le premier correspond plus à la partie runtime dans laquel on a notre grammmaire et certains elements qui sont pour l'instant vierge, un deuxieme qui concerne plus lapartie interafce utilisateur(tout ce qui est propre à l'editeur) et puis le troisieme qui est projets test.
 
-\subsubsubsection{Etape 2:Definition du langage}
+\subsubsection{Etape 2:Definition du langage}
 
 \begin{figure}[h]
 	\centering
@@ -1297,7 +1309,7 @@ RatioExpression:
 
 \end{verbatim}
 
- \subsubsubsection{Etape 3:Generation des artifacts}
+ \subsubsection{Etape 3:Generation des artifacts}
 
 \begin{figure}[h]
 	\centering
@@ -1310,7 +1322,7 @@ Pour faire la generation, on fait un click droit sur le fichier .xtext,run as >G
 Apres la generation,les projets se sont remplis,et j'ai certain services qui sont proposés :formatteur,generateur, validateur...
 
 
- \subsubsubsection{Etape 4:Faire un test}
+ \subsubsection{Etape 4:Faire un test}
 
 \begin{figure}[h]
 	\centering
@@ -1326,7 +1338,7 @@ On crée tout d'abord un projet, et dans ce projet on va créer un fichier .demo
 En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le choix ou bien d'ecrire une autre categorie ou commencer une expression.
 
 
-\subsubsubsection{Etape 5:Ajouter une validation}
+\subsubsection{Etape 5:Ajouter une validation}
 
 \begin{figure}[h]
 	\centering
@@ -1339,9 +1351,7 @@ Ajouter une validation ,veut dire pour nous poser une regle sur la grammaire (ex
 
 Pour faire ceci, on va créer dans le package org.xtext.example.validation géneré par eclipse une classe qu'on va appeler DemoValidator et qui va contenir la methode checkCategory qui fait un test sur la premiere lettre du nom de la categorie et qui surligne le nom si cette lettre est en miniscule.
 
-
 \begin{verbatim}
-
    /*
  * generated by Xtext
  */
@@ -1357,8 +1367,6 @@ import org.xtext.example.demo.DemoPackage;
  */
 class DemoValidator extends AbstractDemoValidator {
 
-
-
 @Check
 	public void checkGreetingStartsWithCapital(Category cat) {
 	if (!Character.isUpperCase(cat.getName().charAt(0))) {
@@ -1372,6 +1380,12 @@ class DemoValidator extends AbstractDemoValidator {
 \newpage
 \section{Conclusion}
 \label{hints}
+
+En analyse syntaxique, quelque soit la méthode ou l’approche utilisée, le résultat est le même. Il suffit juste de savoir choisir le mieux approprié selon les cas. De ce fait, on ne peut pas dire qu’un outil ou une approche est meilleure qu’une autre, cas a toute méthode ces qualités et ces défauts.
+
+L’étape qui suit l’analyse syntaxique est l’analyse sémantique, elle est responsable des vérifications par rapport au sens des mots dans un langage:
+La résolution des noms qui permet par exemple d’éviter deux variables avec le même nom.
+La vérification des types en termes de compatibilité des instructions, et enfin l’affectation définitive qui nécessitant que les variables locales soit initialisé avant d’être utilisées.
 
 \newpage
 \section{Références}
