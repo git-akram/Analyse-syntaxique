@@ -1,0 +1,148 @@
+\documentclass{beamer} 
+
+
+%======================================================================
+% Packages / Options
+%======================================================================
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\lstset{language=caml,basicstyle=\ttfamily}
+\usepackage{alltt}
+
+% Beamer-specific settings
+\mode<presentation>
+{
+  \usetheme{Darmstadt}
+  \useoutertheme{infolines}
+}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Plan}
+    \tableofcontents[sectionstyle=show/shaded,subsectionstyle=hide]
+  \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Plan}
+    \tableofcontents[sectionstyle=show/hide,subsectionstyle=show/shaded/hide]
+  \end{frame}
+}
+
+\setbeamertemplate{footline}
+{%
+\insertpagenumber
+\insertshorttitle[width={3cm},center]
+\insertshortinstitute[width={3cm},center]
+\insertshortdate[width={3cm},center]
+}
+
+
+%======================================================================
+% Titlepage
+%======================================================================
+
+\title[Progr. Fonction.]{L1 PCP Programmation Fonctionnelle}
+
+\author{Martin Strecker}
+\institute{Université de Toulouse/IRIT}
+\date{Année 2012/2013} 
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%======================================================================
+\section{Introduction}\label{sec:intro}
+
+%-------------------------------------------------------------
+\subsection{Survol: votre premier programme}
+%-------------------------------------------------------------
+
+%-------------------------------------------------------------
+\begin{frame}[fragile]\frametitle{Premier transparent}
+
+Les transparents ont été faits avec \LaTeX Beamer:
+
+\href{https://bitbucket.org/rivanvx/beamer/wiki/Home}{https://bitbucket.org/rivanvx/beamer/wiki/Home}
+
+\end{frame}
+
+%-------------------------------------------------------------
+\subsection{Une autre section}
+%-------------------------------------------------------------
+
+%-------------------------------------------------------------
+\begin{frame}[fragile]\frametitle{Deuxième transparent}
+
+Les autres commandes \LaTeX peuvent être utilisées comme d'habitude. 
+
+Détails sur 
+\href{http://en.wikibooks.org/wiki/LaTeX}{http://en.wikibooks.org/wiki/LaTeX}
+
+\end{frame}
+
+
+
+%======================================================================
+\section{Fondamenteux}
+
+
+%-------------------------------------------------------------
+\begin{frame}[fragile]\frametitle{}
+
+		\includegraphics[width=0.60\textwidth]{logo-ups.jpg}
+\end{frame}
+
+
+%======================================================================
+\section{Comparaison entre les outils}
+
+
+%-------------------------------------------------------------
+\begin{frame}[fragile]\frametitle{}
+
+\begin{alltt}
+expr ::= expr '+' expr
+      | expr '-' expr
+      | '(' expr ')'
+      | NUM ;
+\end{alltt}
+
+\end{frame}
+
+
+%======================================================================
+\section{Xtext}
+
+
+%-------------------------------------------------------------
+\begin{frame}[fragile]\frametitle{}
+
+\end{frame}
+
+
+%======================================================================
+\section{Conclusion}
+
+
+%-------------------------------------------------------------
+\begin{frame}[fragile]\frametitle{}
+
+\end{frame}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% coding: utf-8
+%%% End: 
