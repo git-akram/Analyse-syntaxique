@@ -1196,16 +1196,18 @@ options {
 
 \subsection{Comparaison entre YACC et ANTLR}
 
-La différence majeure entre Yacc et Antler est que Yacc est une analyseur syntaxique de type LALR, alors que Antlr est de type LL. C’est une différence pour plusieurs application, par exempele :
+La différence majeure entre Yacc et Antler est que Yacc est une analyseur syntaxique de type LALR, alors que Antlr est de type LL. C’est une différence pour plusieurs application, par exemple :
 
+\begin{alltt}
 expr ::= expr '+' expr
       | expr '-' expr
       | '(' expr ')'
       | NUM ;
-
+\end{alltt}
+    
 Antlr ne peut en aucun cas gérer cette grammaire telle qu’elle est. Pour ce faire, Antlr comme  tout autre analyseur syntaxique a besoin d’éliminer le récursivité à gauche avant de la traiter.
 
-d’un autre côté Yacc n’a aucun problèmes avec des grammaires de cette forme, bien qu’elle soit récursive à gauche, il peut parfaitement la traiter.
+D’un autre côté Yacc n’a aucun problèmes avec des grammaires de cette forme, bien qu’elle soit récursive à gauche, il peut parfaitement la traiter.
 De ce fait, On peut dire que Yacc est plus facile à utiliser du principe que les grammaire LR n’ont pas de problèmes de récursivité qui peut être complexe dans certains cas, c’est la raison pour laquelle la plupart des grammaires de nos jours sont orientées LR, mais même devant toute cette facilité, on ne peut en aucun cas négliger Antlr car aucun autre outils ne l’atteint encore en termes de performance et de flexibilité.
 
 \section{Xtext}
@@ -1253,7 +1255,7 @@ Parmi les fonctionnalités qu’offre Xtext:
 
 \subsubsection{Exemple}
 On va prendre l'exemple de la grammaire précedente, et on va voir comment generer un editeur sous forme d'un plugin eclipse avec Xtext.
-\subsubsection{Etape 1:Création d'un projet Xtext}
+\subsubsection{Etape 1: Création d'un projet Xtext}
 
 
 \begin{figure}[h]
@@ -1267,7 +1269,7 @@ On va prendre l'exemple de la grammaire précedente, et on va voir comment gener
 Tout d'abord on va créer un projet Xtext avec comme nom du projet org.xtext.demo,langage du projet org.xtext.example.demo et comme extension .demo.
 A la fin de la creation, on remarque que 3 projets ont été crées , le premier correspond plus à la partie runtime dans laquel on a notre grammmaire et certains elements qui sont pour l'instant vierge, un deuxieme qui concerne plus lapartie interafce utilisateur(tout ce qui est propre à l'editeur) et puis le troisieme qui est projets test.
 
-\subsubsection{Etape 2:Definition du langage}
+\subsubsection{Etape 2: Definition du langage}
 
 \begin{figure}[h]
 	\centering
@@ -1309,11 +1311,11 @@ RatioExpression:
 
 \end{verbatim}
 
- \subsubsection{Etape 3:Generation des artifacts}
+ \subsubsection{Etape 3: Generation des artifacts}
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=1.10\textwidth]{3.PNG}
+		\includegraphics[width=1.10\textwidth]{3.png}
 	\label{fig:3}
 \end{figure}\FloatBarrier
 
@@ -1322,7 +1324,7 @@ Pour faire la generation, on fait un click droit sur le fichier .xtext,run as >G
 Apres la generation,les projets se sont remplis,et j'ai certain services qui sont proposés :formatteur,generateur, validateur...
 
 
- \subsubsection{Etape 4:Faire un test}
+ \subsubsection{Etape 4: Faire un test}
 
 \begin{figure}[h]
 	\centering
@@ -1338,7 +1340,7 @@ On crée tout d'abord un projet, et dans ce projet on va créer un fichier .demo
 En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le choix ou bien d'ecrire une autre categorie ou commencer une expression.
 
 
-\subsubsection{Etape 5:Ajouter une validation}
+\subsubsection{Etape 5: Ajouter une validation}
 
 \begin{figure}[h]
 	\centering
@@ -1399,4 +1401,5 @@ La vérification des types en termes de compatibilité des instructions, et enfi
 %%% mode: latex
 %%% TeX-master: t
 %%% coding: utf-8
+%%% LaTeX-command: "latex -file-line-error"
 %%% End:
