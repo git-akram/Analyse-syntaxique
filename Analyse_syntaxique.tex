@@ -1212,7 +1212,7 @@ De ce fait, On peut dire que Yacc est plus facile à utiliser du principe que le
 
 \section{Xtext}
 \subsection{Definition}
-Xtext est un framework pour le développement de langages de programmation et de DSL (Domain Specific programming language).
+Xtext\cite{refXtext} est un framework pour le développement de langages de programmation et de DSL (Domain Specific programming language).
 Le framework Xtext s’appuie sur une grammaire générée ANTLR ainsi que le framework de modélisation EMF.
 
 Il fonctionne sur une JVM (Machine Virtuelle Java) et est constitué de plusieurs API qui vous permettent de décrire les différents aspects du langage que vous voulez créer et propose une implémentation complète de ce langage. Notons que le langage développé sera alors un langage qui s'appuie et qui surcouche le langage Java. C'est-à-dire que les objets offerts par ce framework sont complètement des objets Java et le développement du compilateur de votre langage sera alors écrit en Java.
@@ -1229,7 +1229,7 @@ Xtext fournit un environnement convivial aux utilisateurs d’un DSL.
 DSL:est un langage de programmation dont les spécifications sont à un domaine d’applications précis, la construction des langages dédiés diffère fondamentalement de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique (exp: SQL destiné à interroger ou manipuler une base de données relationnelle)
 
 \subsection{Definition Eclipse}
-Eclipse IDE est un environnement de développement intégré libre (le terme Eclipse désigne également le projet correspondant, lancé par IBM) extensible, universel et polyvalent, permettant potentiellement de créer des projets de développement mettant en œuvre n'importe quel langage de programmation. Eclipse IDE est principalement écrit en Java (à l'aide de la bibliothèque graphique SWT, d'IBM), et ce langage, grâce à des bibliothèques spécifiques, est également utilisé pour écrire des extensions.
+Eclipse\cite{refEclipse} IDE est un environnement de développement intégré libre (le terme Eclipse désigne également le projet correspondant, lancé par IBM) extensible, universel et polyvalent, permettant potentiellement de créer des projets de développement mettant en œuvre n'importe quel langage de programmation. Eclipse IDE est principalement écrit en Java (à l'aide de la bibliothèque graphique SWT, d'IBM), et ce langage, grâce à des bibliothèques spécifiques, est également utilisé pour écrire des extensions.
 
 La spécificité d'Eclipse IDE vient du fait de son architecture totalement développée autour de la notion de plug-in.
 
@@ -1254,7 +1254,7 @@ Parmi les fonctionnalités qu’offre Xtext:
 \end{figure}\FloatBarrier
 
 \subsubsection{Exemple}
-On va prendre l'exemple de la grammaire précédente, et on va voir comment générer un éditeur sous forme d'un plugin eclipse avec Xtext.
+On va prendre l'exemple de la grammaire précédente, et on va voir comment générer un éditeur sous forme d'un plugin eclipse avec Xtext\cite{refDocXtext}.
 \subsubsection{Etape 1: Création d'un projet Xtext}
 
 
@@ -1380,8 +1380,7 @@ class DemoValidator extends AbstractDemoValidator {
 			error("le nom doit commencer par une majuscule", cat,
 							DemoPackage.eINSTANCE.getCategory_Name(), "CapitalName");
 		}
-	}
-}
+	}}
 \end{verbatim}
 
 \newpage
