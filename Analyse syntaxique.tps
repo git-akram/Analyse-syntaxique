@@ -2,6 +2,7 @@
 Type=TeXnicCenterProjectSessionInformation
 Version=2
 
+<<<<<<< HEAD
 [Frame0]
 Flags=0
 ShowCmd=1
@@ -38,7 +39,9 @@ Document=bibliographie.bib
 TopLine=24
 Cursor=576
 
+=======
+>>>>>>> d7f8b729b1de581cb8fc0ba2b3b5114fa351cdc6
 [SessionInfo]
-FrameCount=2
-ActiveFrame=0
+FrameCount=0
+ActiveFrame=-1
 
