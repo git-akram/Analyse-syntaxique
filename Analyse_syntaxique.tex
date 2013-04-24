@@ -1212,8 +1212,8 @@ De ce fait, On peut dire que Yacc est plus facile à utiliser du principe que le
 
 \section{Xtext}
 \subsection{Definition}
-Xtext est un framework pour le développement de langages de programmation et de DSL(Domain Specific programming language).
-Le framework Xtext s’appuie sur sur une grammaire générée ANTLR ainsi que le framework de modelisation EMF.
+Xtext est un framework pour le développement de langages de programmation et de DSL (Domain Specific programming language).
+Le framework Xtext s’appuie sur une grammaire générée ANTLR ainsi que le framework de modélisation EMF.
 
 Il fonctionne sur une JVM (Machine Virtuelle Java) et est constitué de plusieurs API qui vous permettent de décrire les différents aspects du langage que vous voulez créer et propose une implémentation complète de ce langage. Notons que le langage développé sera alors un langage qui s'appuie et qui surcouche le langage Java. C'est-à-dire que les objets offerts par ce framework sont complètement des objets Java et le développement du compilateur de votre langage sera alors écrit en Java.
 
@@ -1221,12 +1221,12 @@ Xtext peut servir entre autres à proposer des solutions dans les domaines tels 
 
 Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C\# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre , son utilisation devient indépendante de la JVM. 
 
-Xtext couvre tous les aspects d’un IDE moderne : parseur, compilateur ,interpreteur et integration complete dans l’environnement de developpement Eclipse.
+Xtext couvre tous les aspects d’un IDE moderne : parseur, compilateur, interpréteur et intégration complète dans l’environnement de développement Eclipse.
 
 Xtext fournit un environnement convivial aux utilisateurs d’un DSL.
 
 \subsection{Definition DSL}
-DSL:est un langage de programmation dont les spécifications sont à un domaine d’applications précis , la construction des langages dédiés diffère fondamentalement de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique(exp :SQL:destiné à interroger ou manipuler une base de données relationnelle)
+DSL:est un langage de programmation dont les spécifications sont à un domaine d’applications précis, la construction des langages dédiés diffère fondamentalement de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique (exp: SQL destiné à interroger ou manipuler une base de données relationnelle)
 
 \subsection{Definition Eclipse}
 Eclipse IDE est un environnement de développement intégré libre (le terme Eclipse désigne également le projet correspondant, lancé par IBM) extensible, universel et polyvalent, permettant potentiellement de créer des projets de développement mettant en œuvre n'importe quel langage de programmation. Eclipse IDE est principalement écrit en Java (à l'aide de la bibliothèque graphique SWT, d'IBM), et ce langage, grâce à des bibliothèques spécifiques, est également utilisé pour écrire des extensions.
@@ -1254,33 +1254,35 @@ Parmi les fonctionnalités qu’offre Xtext:
 \end{figure}\FloatBarrier
 
 \subsubsection{Exemple}
-On va prendre l'exemple de la grammaire précedente, et on va voir comment generer un editeur sous forme d'un plugin eclipse avec Xtext.
+On va prendre l'exemple de la grammaire précédente, et on va voir comment générer un éditeur sous forme d'un plugin eclipse avec Xtext.
 \subsubsection{Etape 1: Création d'un projet Xtext}
 
 
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=1.10\textwidth,height=10cm]{1.PNG}
+		\caption{Création d'un projet Xtext}
 	\label{fig:1}
 \end{figure}\FloatBarrier
 
 
 
 Tout d'abord on va créer un projet Xtext avec comme nom du projet org.xtext.demo,langage du projet org.xtext.example.demo et comme extension .demo.
-A la fin de la creation, on remarque que 3 projets ont été crées , le premier correspond plus à la partie runtime dans laquel on a notre grammmaire et certains elements qui sont pour l'instant vierge, un deuxieme qui concerne plus lapartie interafce utilisateur(tout ce qui est propre à l'editeur) et puis le troisieme qui est projets test.
+A la fin de la création, on remarque que 3 projets ont été crées, le premier correspond plus à la partie runtime dans laquelle on a notre grammaire et certains éléments qui sont pour l'instant vierge, un deuxième qui concerne plus la partie interface utilisateur(tout ce qui est propre à l'éditeur) et puis le troisième qui est un projet test.
 
 \subsubsection{Etape 2: Definition du langage}
 
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=1.10\textwidth]{2.PNG}
+		\caption{Definition du langage}
 	\label{fig:2}
 \end{figure}\FloatBarrier
 
 
-Ici on va definir notre langage  avec une grammaire proche de celle de Antlr.
+Ici on va définir notre langage  avec une grammaire proche de celle de Antlr.
 
-Pour le faire,on va dans le fichier demo.xtext et on ecrit la grammaire suivante:
+Pour le faire, on va dans le fichier demo.xtext et on écrit la grammaire suivante:
 
 \begin{verbatim}
 
@@ -1316,12 +1318,13 @@ RatioExpression:
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=1.10\textwidth]{3.png}
+		\caption{Generation des artifacts}
 	\label{fig:3}
 \end{figure}\FloatBarrier
 
-Pour faire la generation, on fait un click droit sur le fichier .xtext,run as >Generate Xtext Artifacts.
+Pour faire la génération, on fait un click droit sur le fichier .xtext,run as >Generate Xtext Artifacts.
 
-Apres la generation,les projets se sont remplis,et j'ai certain services qui sont proposés :formatteur,generateur, validateur...
+Apres la génération, les projets se sont remplis, et j'ai certain services qui sont proposés :formatteur, generateur, validateur...
 
 
  \subsubsection{Etape 4: Faire un test}
@@ -1329,6 +1332,7 @@ Apres la generation,les projets se sont remplis,et j'ai certain services qui son
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=1.10\textwidth]{4.png}
+		\caption{Faire un test}
 	\label{fig:4}
 \end{figure}\FloatBarrier
 
@@ -1337,7 +1341,7 @@ Pour faire un test, il suffit de faire un clic droit sur le projet run as >Eclip
 
 On crée tout d'abord un projet, et dans ce projet on va créer un fichier .demo.
 
-En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category est généré,vu qu'il connait la grammaire et il sait que par default ça commence par une categorie,apres on aura le choix ou bien d'ecrire une autre categorie ou commencer une expression.
+En utilisant le content assist(ctrl+espace) pour la première fois, le mot category est généré, vu qu'il connait la grammaire et il sait que par default ça commence par une catégorie, après on aura le choix ou bien d'écrire une autre catégorie ou commencer une expression.
 
 
 \subsubsection{Etape 5: Ajouter une validation}
@@ -1345,13 +1349,14 @@ En utilisant le contet assist(ctrl+espace) pour la premiere fois,le mot category
 \begin{figure}[h]
 	\centering
 		\includegraphics[width=1.10\textwidth]{5.PNG}
+		\caption{Ajouter une validation}
 	\label{fig:5}
 \end{figure}\FloatBarrier
 
 
-Ajouter une validation ,veut dire pour nous poser une regle sur la grammaire (exp:un nom de categorie commence toujours par une majiscule),si l'utilisateur entre un nom en miniscule, on va le souligner.
+Ajouter une validation, veut dire pour nous poser une régle sur la grammaire (exp:un nom de categorie commence toujours par une majuscule), si l'utilisateur entre un nom en minuscule, on va le souligner.
 
-Pour faire ceci, on va créer dans le package org.xtext.example.validation géneré par eclipse une classe qu'on va appeler DemoValidator et qui va contenir la methode checkCategory qui fait un test sur la premiere lettre du nom de la categorie et qui surligne le nom si cette lettre est en miniscule.
+Pour faire ceci, on va créer dans le package org.xtext.example.validation géneré par Eclipse une classe qu'on va appeler DemoValidator et qui va contenir la méthode checkCategory qui fait un test sur la première lettre du nom de la categorie et qui surligne le nom si cette lettre est en minuscule.
 
 \begin{verbatim}
    /*
