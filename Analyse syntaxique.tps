@@ -2,7 +2,6 @@
 Type=TeXnicCenterProjectSessionInformation
 Version=2
 
-<<<<<<< HEAD
 [Frame0]
 Flags=0
 ShowCmd=1
@@ -18,8 +17,8 @@ Class=LaTeXView
 Document=Analyse_syntaxique.tex
 
 [Frame0_View0,0]
-TopLine=1527
-Cursor=60368
+TopLine=1315
+Cursor=51563
 
 [Frame1]
 Flags=0
@@ -36,12 +35,10 @@ Class=BibTeXView
 Document=bibliographie.bib
 
 [Frame1_View0,0]
-TopLine=24
-Cursor=576
+TopLine=0
+Cursor=0
 
-=======
->>>>>>> d7f8b729b1de581cb8fc0ba2b3b5114fa351cdc6
 [SessionInfo]
-FrameCount=0
-ActiveFrame=-1
+FrameCount=2
+ActiveFrame=0
 
