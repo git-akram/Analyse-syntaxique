@@ -55,7 +55,7 @@
 
 \newpage
 \begin{abstract}
-Le processus de compilation passe par une série d’étapes afin de de générer un programme cible à partir d’un programme source, il passe par une série d’étapes dont l’une qui nous intéresse qui est l’analyse syntaxique. Son principe est de recevoir une série d’unités lexicales formé à l’aide de l’analyse lexicale puis généré un arbre de syntaxe abstraite à base d’une grammaire qui définit le langage traduit. L’analyse syntaxique se base sur deux principes fondamentaux, l’analyse LL qui suit un cheminement de dérivation de gauche à droite et l’analyse LR qui suit le cheminement contraire, c’est à dire que les symboles les plus à droite sont dérivés en premier.
+Le processus de compilation passe par une série d’étapes afin de générer un programme cible à partir d’un programme source. Il passe par une série d’étapes dont l’une qui nous intéresse est l’analyse syntaxique. Son principe est de recevoir une série d’unités lexicales formé à l’aide de l’analyse lexicale puis générer un arbre de syntaxe abstraite à base d’une grammaire qui définit le langage traduit. L’analyse syntaxique se base sur deux principes fondamentaux, l’analyse LL qui suit un cheminement de dérivation de gauche à droite et l’analyse LR qui suit le cheminement contraire, c’est à dire que les symboles les plus à droite sont dérivés en premier.
 \end{abstract}
 
 %-----------------------------------------------------------
@@ -71,7 +71,7 @@ Au cours de ce processus de traduction, le compilateur tentera également de rep
 	\label{fig:compilateur}
 \end{figure}\FloatBarrier
 
-Afin de générer un programme source a partir du programme source, le compilateur passe par plusieurs étapes en commençant par l'analyse lexicale jusqu'à la génération du code. Voici un schéma montrant le processus de compilation en détails:
+Afin de générer un programme cible a partir du programme source, le compilateur passe par plusieurs étapes en commençant par l'analyse lexicale jusqu'à la génération du code. Voici un schéma montrant le processus de compilation en détails:
 
 \begin{figure}[h]
 	\centering
@@ -81,8 +81,8 @@ Afin de générer un programme source a partir du programme source, le compilate
 \end{figure}\FloatBarrier
 
 Cette étude de la théorie de compilation s'intéresse de plus près à la phase de l'analyse syntaxique qui permet de générer des arbres de syntaxe abstraite à partir d'une suite d'unité lexicales.
-Une deuxième étude sera faite afin de comparer entre l'analyse LL \ref{sec:LL} et l'analyse LR \ref{sec:LR} qui sont deux approches principales de l'analyse syntaxique.
-A la fin, un partie sera consacré à la démonstration de l’outil Xtext qui permet de définir différents aspects du langage traduit.  
+Une deuxième étude sera faite afin de comparer entre l'analyse LL \S~\ref{sec:LL} et l'analyse LR \S~\ref{sec:LR} qui sont deux approches principales de l'analyse syntaxique.
+A la fin, une partie sera consacrée à la démonstration de l’outil Xtext qui permet de définir différents aspects du langage traduit.  
 
 \section{Fondamenteux}
 \label{hints}
@@ -92,7 +92,7 @@ Un langage formel est un ensemble de mots constitués de symboles qui appartienn
 Un langage formel est décrit par une grammaire.
 De manière générale, une grammaire est définie par un quadruplet:
 
-    N : l’ensemble des non-terminaux utilisés pour décrire les règles de productions
+    N : l’ensemble des non-terminaux utilisés pour décrire les règles de production
 
     X : l’ensemble des terminaux, c’est à dire les symboles ou encore l’alphabet
 
@@ -102,16 +102,17 @@ De manière générale, une grammaire est définie par un quadruplet:
 \newline
 
 Ainsi, la notation: G(L) = <N, X, P, S> décrit la grammaire G associée au langage L.
-Les grammaires sont analysées par des automates. Il existe plusieurs types d’analyses de grammaires qui font appels à plusieurs types d’automates.
+Les grammaires sont analysées par des automates. Il existe plusieurs types d’analyses de grammaires qui font appel à plusieurs types d’automates.
 Dans le monde de la compilation l’analyseur syntaxique fait référence à l’algorithme qui met en oeuvre l’automate d’analyse d’une grammaire.
 Dans cet écrit, nous nous attarderons sur deux types d’analyseurs: les analyseurs de type LL et ceux de type L(AL)R.
 
-\subsubsection{Grammaires ambiguë}
+\subsubsection{Grammaires ambiguës}
 On dit qu’une grammaire est ambiguë  lorsqu’on peut trouver deux arbres de dérivation différents pour le même mot.
-Les grammaires ambiguë pose un problème lors de la compilation, c’est pour ça qu’il est préférable de les transformer en grammaire non ambiguë si c’est possible.\newline
+Les grammaires ambiguës posent un problème lors de la compilation, c’est pour ça qu’il est préférable de les transformer en grammaire non ambiguë si c’est possible.\newline
 \textit{Exemple : }\newline\newline
-Prenons la grammaire suivante G=( \textit{\{E\} , \{a,+,}x\textit{\} , R , E} ) \newline
-Avec \textit{R} donné par : \textit{E := E} x \textit{E | E + E | a}
+Prenons la grammaire suivante:  G = ( \{E\} , \{a,+,$\times$\} , R , E )
+
+Avec R donnée par: E := E $\times$ E | E + E | a
 
 
 \begin{figure}[h]
@@ -124,8 +125,9 @@ Donc nous remarquons qu'on peut construire deux arbres de dérivation à partir 
 \textit{"a + a} x \textit{a"} 
 
 \subsection{Analyse lexicale}
-l’analyse lexicale consiste à découper une chaîne de caractère en unités lexicales ou lexèmes à la demande de l’analyseur lexicale.
-Il est définit par un ensembles d’expressions relationnelles qui exigent certaines séquences de caractère pour former les lexèmes.
+L’analyse lexicale consiste à découper une chaîne de caractères en unités lexicales ou lexèmes à la demande de l’analyseur lexical.
+Il est défini par un ensembles d’expressions relationnelles qui exigent certaines séquences de caractère pour former les lexèmes.
+
 \textit{Exemple :}
 
 \begin{figure}[h]
@@ -137,7 +139,7 @@ Il est définit par un ensembles d’expressions relationnelles qui exigent cert
 
 
 \subsubsection{Unités lexicales}
-Une unité lexicale ou un lexème est une chaîne de caractère qui correspond à un symbole. à l’aide du processus de segmentation, on peut extraire à partir d’un flux de caractères entrant une suite d’unités lexicales, ensuite c’est l’analyseur lexicale qui traitent ces lexème et les rangent dans des catégories d’entités lexicales.
+Une unité lexicale ou un lexème est une chaîne de caractère qui correspond à un symbole. A l’aide du processus de segmentation, on peut extraire à partir d’un flux de caractères entrant une suite d’unités lexicales. Ensuite c’est l’analyseur lexicale qui traite ces lexèmes et les rangent dans des catégories d’entités lexicales.
 
 \subsubsection{Analyseur Lexicale}
 
@@ -161,15 +163,15 @@ Un analyseur lexical peut être écrit :
 \end{itemize}    
 
 \subsubsection{Segmentation}
-La segmentation est le fait de séparer les différentes sections d’une chaînes de caractères, par exemple pour une phrase l’ordinateur la considère comme une chaîne de caractère et non pas une suite de mot, le rôle de la segmentation est donc de faire une séparation entre ces mots selon le caractère de séparation dans ce cas le caractère espace.
+La segmentation est le fait de séparer les différentes sections d’une chaîne de caractères, par exemple pour une phrase l’ordinateur la considère comme une chaîne de caractère et non pas une suite de mot, le rôle de la segmentation est donc de faire une séparation entre ces mots selon le caractère de séparation dans ce cas le caractère espace.
 
 \subsection{Analyse syntaxique}\label{sec:analyseurSyntaxique}
 Le rôle de l’analyse syntaxique \cite{refAnalyseSyntaxique} est de savoir si une phrase appartient à la syntaxe d’un langage.
 A partir du flot de lexèmes construits par l’analyse lexicale dans un premier temps, l’analyse syntaxique permet de générer un arbre de syntaxe abstraite.
 Cet arbre est construit à base d’un ensembles de règles définissant une grammaire formelle sur laquelle est basé le langage en question.
-l’analyse syntaxique permet plus particulièrement de détecter les erreurs de syntaxe en continuant tout de même l’analyse pour éviter les cycles de compilation/correction pour les développeurs.\newline
+L’analyse syntaxique permet plus particulièrement de détecter les erreurs de syntaxe en continuant tout de même l’analyse pour éviter les cycles de compilation/correction pour les développeurs.\newline
 \textit{Exemple :}\newline
-Reprenant l'exemple de d'analyse lexicale \ref{fig:AnalyseLexicale}. L'analyse lexicale a construit une suites d'unités lexicales a partir d'une chaîne de caractères en entrée.\newline
+Reprenant l'exemple d'analyse lexicale \ref{fig:AnalyseLexicale}. L'analyse lexicale a construit une suites d'unités lexicales a partir d'une chaîne de caractères en entrée.\newline
 Maintenant le rôle de l'analyse syntaxique est de reprendre ce résultat et essayer de construire un arbre de syntaxe suivant la grammaire qui définit le langage afin de s'assurer que la chaîne de caractères appartient au langage.
 
 \begin{figure}[h]
@@ -209,7 +211,7 @@ id := num ; id := id + (id := num + num , id )\newline
 
 \subsubsection{Analyseur syntaxique}
 
-L'analyseur syntaxique est une programme qui reçoit une suite d'unités lexicales de la part de l'analyseur lexicale et doit vérifier que cette suite est engendrée par la grammaire du langage décrit.
+L'analyseur syntaxique est un programme qui reçoit une suite d'unités lexicales de la part de l'analyseur lexicale et doit vérifier que cette suite est engendrée par la grammaire du langage décrit.
 
 Voici un schema montrant les intéractions entre l'analyseur lexicale et l'analyseur syntaxique:
 
@@ -230,7 +232,7 @@ Elle consiste en :
     \item Une table des actions qui donne la règle de grammaire à appliquer en fonction de l'état courant et du terminal courant du flot d'entrée.
 \end{itemize}
 
-un analyseur syntaxique doit retracer le cheminement d’application des règles qui ont menées à l’axiome. Pour ça, il existe deux types d’analyse:
+Un analyseur syntaxique doit retracer le cheminement d’application des règles qui ont menées à l’axiome. Pour ça, il existe deux types d’analyse:
 
 \subsubsection{Analyse descendante}\label{sec:analyseDes}
 Le principe de l’analyse descendante est de partir de l’axiome en suivant les règles de production afin de retrouver le texte analysé. Ce type d’analyse procède en découpant le texte petit à petit jusqu'à retrouver les unité lexicale. L’analyse LL est un exemple d’analyse descendante.\newline
@@ -264,7 +266,7 @@ et ainsi de suite jusqu'a la fin du mot.
 	\label{fig:AnalyseDescendante3}
 \end{figure}\FloatBarrier
 
-Donc le mot appartient au langage. Sur cet exemple c'est simple car chaque règle commence par un terminal différent ce qui facilite le choix de la règle à appliquer. Mais c'est pas toujours le cas, dans la plus part des cas on se trouve devant le choix entre plusieur règles par exemple si on considère :\newline
+Donc le mot appartient au langage. Sur cet exemple c'est simple car chaque règle commence par un terminal différent ce qui facilite le choix de la règle à appliquer. Mais ce n'est pas toujours le cas, dans la plupart des cas on se trouve devant le choix entre plusieurs règles par exemple si on considère :\newline
 S => aAb\newline
 A => cd | c \newline
 et on veut lire le mot W=acb\newline
@@ -277,14 +279,14 @@ On se retrouve avec
 \end{figure}\FloatBarrier
 
 En lisant le caractère "c", on ne sait pas si il faut choisir la règle A => cd ou bien A => c.
-Pour le savoir il faut lire le caractère suivant "b", ou alors, il faut se donner la possibilité de de faire des retours en arrière :
-On essaye la première règle, on aboutit à un echec, alors on retourneen arrière pour essayer la deuxième règle.
+Pour le savoir il faut lire le caractère suivant "b", ou alors, il faut se donner la possibilité de faire des retours en arrière :
+On essaye la première règle, on aboutit à un echec, alors on retourne en arrière pour essayer la deuxième règle.
 
 \subsubsection{Analyse ascendante}
 L’analyse ascendante d’une autre part, procède contrairement à l’analyse descendante en retrouvant le cheminement à partir du texte analysé. Ce type d’analyse essaye de regrouper les unité lexicale entre elles pour retrouver l’axiome. L’analyse LR est un exemple d’analyse ascendante.
 Reprenons l'exemple dernier \ref{sec:analyseDes} :
 Cette fois en utilisant une analyse ascendante, on va partir de la chaîne de caractères pour retrouver l'axiome S.
-La chaîne analysé est la même du dernier exemple \newline W=accbbadbc\newline\newline\newline
+La chaîne analysée est la même du dernier exemple \newline W=accbbadbc\newline\newline\newline
 \begin{tabular}{|l|l|}
 \hline
 \textbf{a}ccbbadbc & Aucune règle à appliquer\\
@@ -335,10 +337,7 @@ Une méthode d’analyse descendante et déterministe est dite prédictive \cite
 
 La taille et la complexité des langues naturelles, sans oublier leur inévitable ambiguïté, rend leur analyse déterministe totalement impossible. Une analyse non déterministe s'apparente à une résolution dans un système contraint, et s'exprime assez aisément en Prolog.
 
-L'emploi de méthodes tabulaires, mémorisant les calculs intermédiaires, sera plus efficace qu'un simple backtracking. L'analyse CYK est un exemple d'analyse tabulée, à laquelle on préférera des méthodes plus sophistiquées
-
-    d'analyse à chartes comme l'analyse Earley
-    ou d'analyse LR généralisée (GLR).
+L'emploi de méthodes tabulaires, mémorisant les calculs intermédiaires, sera plus efficace qu'un simple backtracking. L'analyse CYK est un exemple d'analyse tabulée, à laquelle on préférera des méthodes plus sophistiquées d'analyse à chartes comme l'analyse Earley ou d'analyse LR généralisée (GLR).
 
 Ces deux dernières méthodes d'analyse sont aussi appréciées pour l'analyse de langages de programmation dont la syntaxe est ambiguë, comme par exemple C++.
 
@@ -348,7 +347,7 @@ En analyse syntaxique des langages de programmation, il faut être capable de co
 
 \subsubsubsection{Mode panique}
 
-le mode panique \cite{refModePanique} est un cas particulier de mode dégradé, c’est-à-dire une méthode de récupération sur erreur.
+Le mode panique \cite{refModePanique} est un cas particulier de mode dégradé, c’est-à-dire une méthode de récupération sur erreur.
 Par exemple, lorsqu'une erreur survient lors d'une analyse syntaxique, l'analyseur supprime un à un chaque prochain symbole jusqu'à ce qu'il atteigne un symbole permettant de se resynchroniser.
 
 \subsubsubsection{Production erreurs}
@@ -381,11 +380,11 @@ id := num ; id := id + (id := num + \underline{E}, E)\newline
 id := num ; id := id + (id := num + num, \underline{E})\newline
 id := num ; id := id + (id := num + num, id)\newline
 
-Le principe de l'analsye LL est simple, le symbole nom terminal le plsu à gauche est toujours celui à être développé en premier et ainsi de suite jusqu'a ce que la phrase soit reconnu. 
+Le principe de l'analsye LL est simple, le symbole nom terminal le plus à gauche est toujours celui à être développé en premier et ainsi de suite jusqu'a ce que la phrase soit reconnue. 
 
 \subsection{LR - Left to right Rightmost derivation}\label{sec:LR}
 
-un analyseur LR (pour Left to right, Rightmost derivation) \cite{LR} est un analyseur pour les grammaires non contextuelles qui lit l'entrée de gauche à droite et produit une dérivation droite. On parle aussi d'analyseur LR(k) où k représente le nombre de symboles « anticipés » et non consommés qui sont utilisés pour prendre des décisions d'analyse syntaxique. D'habitude, k vaut 1 et est souvent omis. Une grammaire non contextuelle est appelée LR(k) s'il existe un analyseur syntaxique LR(k) pour elle.
+Un analyseur LR (pour Left to right, Rightmost derivation) \cite{LR} est un analyseur pour les grammaires non contextuelles qui lit l'entrée de gauche à droite et produit une dérivation droite. On parle aussi d'analyseur LR(k) où k représente le nombre de symboles « anticipés » et non consommés qui sont utilisés pour prendre des décisions d'analyse syntaxique. D'habitude, $k$ vaut 1 et est souvent omis. Une grammaire non contextuelle est appelée LR(k) s'il existe un analyseur syntaxique LR(k) pour elle.
 On dit qu'un analyseur syntaxique LR réalise une analyse ascendante car il essaye de déduire les productions du niveau du haut de la grammaire en les construisant à partir des feuilles.
 De nombreux langages de programmation sont décrits par des grammaires LR(1), ou du même genre, et, pour cette raison, les analyseurs syntaxiques LR sont souvent utilisés par les compilateurs pour faire l'analyse syntaxique de code source.
 Typiquement, quand on se réfère à un analyseur syntaxique LR, on parle d'un analyseur syntaxique capable de reconnaître un langage particulier spécifié par une grammaire non contextuelle. Cependant, dans l'usage courant, on utilise le terme pour parler d'un programme pilote qui peut être appelé avec une certaine table et qui produit un large éventail d'analyseurs syntaxiques LR différents.
@@ -500,7 +499,7 @@ S : ligne
 \end{verbatim}
 
 
-Ici, on utilise Yacc sans Lex afin de comprendre le fonctionnement. Cependant, il faut définir à la main la fonction yylex(). Celle-ci renvoie un entier qui indique le type de token qui a été reconnu en entrée. Si on avait utilisé Lex comme scanner, cette fonction aurait déjà été définie.
+Ici, on utilise Yacc sans Lex afin de comprendre le fonctionnement. Cependant, il faut définir à la main la fonction \texttt{yylex()}. Celle-ci renvoie un entier qui indique le type de token qui a été reconnu en entrée. Si on avait utilisé Lex comme scanner, cette fonction aurait déjà été définie.
 
 \begin{verbatim}
 
@@ -556,11 +555,13 @@ int yylex(){
 
 Pour faire fonctionner cet exemple, il faudra entrer les lignes de commande suivantes:
 
+\begin{alltt}
 > bison exemple1.y
 
 > gcc exemple1.tab.c -o exemple1
 
 > ./exemple1
+\end{alltt}
 
 Dans cet exemple, on a défini 5 règles. À quelques unes de ces règles on a associé des actions afin d’effectuer les calculs sur les chiffres lus.
 
@@ -570,7 +571,7 @@ Ainsi les variables \$n font référence à la valeur du n-ième élément de dr
 
 \subsubsubsection{ Langage de manipulation de catégories }
 
-Uu autre exemple un peu plus avancé qui permet de parser un langage qui gère des catégories. L'exemple est certe scolaire mais montre bien quelques problèmes et solutions qui peuvent survenir lors de l'écriture d'une spécification.
+Un autre exemple un peu plus avancé qui permet de parser un langage qui gère des catégories. L'exemple est certe scolaire mais montre bien quelques problèmes et solutions qui peuvent survenir lors de l'écriture d'une spécification.
 
 \begin{verbatim}
 %{
