@@ -573,6 +573,31 @@ Ainsi les variables \$n font référence à la valeur du n-ième élément de dr
 
 Un autre exemple un peu plus avancé qui permet de parser un langage qui gère des catégories. L'exemple est certe scolaire mais montre bien quelques problèmes et solutions qui peuvent survenir lors de l'écriture d'une spécification.
 
+Plus précisément, cette spécification permet de générer un interpréteur de commande qui permet de déclarer des catégories, de naviguer entre les catégories déjà déclarées et de leurs affecter un ratio.
+
+Voici un cas d'utilisation de cet interpréteur. On y voit la déclaration de deux catégories, l'affichage des catégories existantes à l'aide de la commande \texttt{print}, la navigation d'une catégorie à une autre, et enfin l'affection d'un ratio à une catégorie.
+\begin{alltt}
+categorie "macat"
+[Nouvelle categorie]
+> Categorie : [nom: macat, ratio: 0]
+categorie "autrecategorie"
+[Nouvelle categorie]
+> Categorie : [nom: autrecategorie, ratio: 0]
+print
+2 categories enregistrees
+Categorie : [nom: macat, ratio: 0]
+> Categorie : [nom: autrecategorie, ratio: 0]
+categorie "macat"    
+> Categorie : [nom: macat, ratio: 0]
+if categorie = "macat" then ratio = 9. 
+print
+2 categories enregistrees
+> Categorie : [nom: macat, ratio: 9]
+Categorie : [nom: autrecategorie, ratio: 0]
+\end{alltt}
+
+Ci-dessous, la spécification founie à Yacc pour générer cet interpréteur:
+
 \begin{verbatim}
 %{
     #include <ctype.h>
@@ -714,7 +739,7 @@ Commande :
     'c''u''r''r''e''n''t' { printf("Categorie courante: %s\n", currentCategorie); }
     || 'p''r''i''n''t' { categoriePrintAll(); }
     ;
-//*/
+
 %%
 int main(){
     yyparse();    
