@@ -1245,14 +1245,14 @@ Il fonctionne sur une JVM (Machine Virtuelle Java) et est constitué de plusieur
 
 Xtext peut servir entre autres à proposer des solutions dans les domaines tels que : les systèmes embarqués, l'automobile, les appareils mobiles, l'automatique, les jeux vidéo, etc.
 
-Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C\# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre , son utilisation devient indépendante de la JVM. 
+Notons aussi que les langages développés via Xtext peuvent selon son tutoriel être définis non seulement avec le langage Java, mais aussi d'autres langages tels que C, C++, C\# objective C, Python et Ruby. De plus, une fois que le DSL est mis en œuvre, son utilisation devient indépendante de la JVM. 
 
 Xtext couvre tous les aspects d’un IDE moderne : parseur, compilateur, interpréteur et intégration complète dans l’environnement de développement Eclipse.
 
 Xtext fournit un environnement convivial aux utilisateurs d’un DSL.
 
 \subsection{Definition DSL}
-DSL:est un langage de programmation dont les spécifications sont à un domaine d’applications précis, la construction des langages dédiés diffère de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique (exp: SQL destiné à interroger ou manipuler une base de données relationnelle)
+DSL: est un langage de programmation dont les spécifications sont à un domaine d’applications précis,la construction des langages dédiés diffère de celle d’un langage classique, le processus de développement  peut s'avérer très complexe, sa conception nécessite une double compétence sur le domaine à traiter et en développement informatique (exp: SQL destiné à interroger ou manipuler une base de données relationnelle).
 
 \subsection{Definition Eclipse}
 Eclipse\cite{refEclipse} IDE est un environnement de développement intégré libre (le terme Eclipse désigne également le projet correspondant, lancé par IBM) extensible, universel et polyvalent, permettant potentiellement de créer des projets de développement mettant en œuvre n'importe quel langage de programmation. Eclipse IDE est principalement écrit en Java (à l'aide de la bibliothèque graphique SWT, d'IBM), et ce langage, grâce à des bibliothèques spécifiques, est également utilisé pour écrire des extensions.
@@ -1265,10 +1265,10 @@ La spécificité d'Eclipse IDE vient du fait de son architecture totalement dév
 Parmi les fonctionnalités qu’offre Xtext:
 \begin{itemize}
 	
-			\item -coloration syntaxique: Suivant les éléments de la grammaire , Xtext propose une coloration syntaxique entièrement     personnalisable.
-			\item -auto complétion: auto complétion sur les éléments du langage 
-			\item -validation: Xtext valide le contenu de l'éditeur à la volée, produisant ainsi un retour direct à l’utilisateur en cas d’erreur de syntaxe.
-			\item -intégration avec d’autres composants Eclipse 
+			\item Coloration syntaxique: Suivant les éléments de la grammaire, Xtext propose une coloration syntaxique entièrement     personnalisable.
+			\item Auto complétion: auto complétion sur les éléments du langage 
+			\item Validation: Xtext valide le contenu de l'éditeur à la volée, produisant ainsi un retour direct à l’utilisateur en cas d’erreur de syntaxe.
+			\item Intégration avec d’autres composants Eclipse 
 \end{itemize}
 
 \subsection{Diagramme Xtext}
@@ -1294,7 +1294,7 @@ On va prendre l'exemple de la grammaire précédente, et on va voir comment gén
 
 
 
-Tout d'abord on va créer un projet Xtext avec comme nom du projet org.xtext.demo,langage du projet org.xtext.example.demo et comme extension .demo.
+Tout d'abord on va créer un projet Xtext avec comme nom du projet \texttt{org.xtext.demo},langage du projet \texttt{org.xtext.example.demo} et comme extension .demo.
 A la fin de la création, on remarque que 3 projets ont été crées, le premier correspond plus à la partie runtime dans laquelle on a notre grammaire et certains éléments qui sont pour l'instant vierge, un deuxième qui concerne plus la partie interface utilisateur(tout ce qui est propre à l'éditeur) et puis le troisième qui est un projet test.
 
 \subsubsection{Etape 2: Definition du langage}
@@ -1309,7 +1309,7 @@ A la fin de la création, on remarque que 3 projets ont été crées, le premier
 
 Ici on va définir notre langage  avec une grammaire proche de celle de Antlr.
 
-Pour le faire, on va dans le fichier demo.xtext et on écrit la grammaire suivante:
+Pour le faire, on va dans le fichier \texttt{demo.xtext} et on écrit la grammaire suivante:
 
 \begin{verbatim}
 
@@ -1364,7 +1364,7 @@ Apres la génération, les projets se sont remplis, et j'ai certain services qui
 \end{figure}\FloatBarrier
 
 
-Pour faire un test, il suffit de faire un clic droit sur le projet run as >Eclipse Application, un Eclipse va etre lancé qui a maintenant le plugin.
+Pour faire un test, il suffit de faire un clic droit sur le projet run as >Eclipse Application, un Eclipse va etre lancer qui a maintenant le plugin.
 
 On crée tout d'abord un projet, et dans ce projet on va créer un fichier .demo.
 
@@ -1381,9 +1381,9 @@ En utilisant le content assist(ctrl+espace) pour la première fois, le mot categ
 \end{figure}\FloatBarrier
 
 
-Ajouter une validation, veut dire pour nous poser une régle sur la grammaire (exp:un nom de categorie commence toujours par une majuscule), si l'utilisateur entre un nom en minuscule, on va le souligner.
+Une validation est une régle sur la grammaire (exp:un nom de categorie commence toujours par une majuscule), si l'utilisateur entre un nom en minuscule, on va le souligner.
 
-Pour faire ceci, on va créer dans le package org.xtext.example.validation géneré par Eclipse une classe qu'on va appeler DemoValidator et qui va contenir la méthode checkCategory qui fait un test sur la première lettre du nom de la categorie et qui surligne le nom si cette lettre est en minuscule.
+Pour faire ceci, on va créer dans le package \texttt{org.xtext.example.validation} géneré par Eclipse une classe qu'on va appeler DemoValidator et qui va contenir la méthode checkCategory qui va faire un test sur la première lettre du nom de la categorie et qui surligne le nom si cette lettre est en minuscule.
 
 \begin{verbatim}
    /*
