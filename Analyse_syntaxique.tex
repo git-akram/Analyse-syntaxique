@@ -796,9 +796,9 @@ int yylex(){
 
 
 \subsection{ANTLR - ANother Tool for Language Recognition}
-Pour obtenir une certaines flexibilité et une meilleures gestion d’erreurs, les programmeurs préfèrent écrire leurs parseurs de descente récursive à la main, nous allons donc vous présentez dans ce chapitre un outil, qui combine flexibilité, gestion d’erreurs  et présente tout les avantages d’un générateur de parseur, cet outil est ANTLR.
-\subsubsection{Défintions}
-ANTLR \cite{refANTLR} est un générateur de parseur public, il propose plusieurs fonctionnalités qui rendent son utilisation simple, il propose  des prédicats qui permettent aux programmeurs de diriger et de contrôler le parseur grâce à des expressions syntaxiques et sémantique.
+Pour obtenir une certaines flexibilité et une meilleures gestion d’erreurs, les programmeurs préfèrent écrire leurs parseurs de descente récursive à la main, nous allons donc vous présenter dans ce chapitre un outil, qui combine flexibilité, gestion d’erreurs  et présente tous les avantages d’un générateur de parseur,cet outil est ANTLR.
+\subsubsection{Définitions}
+ANTLR \cite{refANTLR} est un générateur de parseur public(OPEN SOURCE), il propose plusieurs fonctionnalités qui rendent son utilisation simple, il propose des prédicats qui permettent aux programmeurs de diriger et de contrôler le parseur grâce à des expressions syntaxiques et sémantique.\newline
 ANTLR permet aussi d’intégrer des  descriptions lexicales et syntaxiques et peut générer automatiquement l’arbre syntaxique.
 \subsubsection{Fonctionnement}
 Comme ce qui a été dit précédemment dans l’introduction, les prédicats permettent de diriger le parseur, ainsi ANTLR peut générer des parseurs pour plusieurs et différents langages.
@@ -840,7 +840,7 @@ Token & Commence par majuscule & ID \\
 \end{tabular}
 \subsubsection{Langage et description}
 \subsubsubsection{Description de langage et ANTLR}
-Une description ANTLR est un collection de règles et d'actions précédé par une en-tête dans laquelle l'utilisateur définis les types des attributs par exemple.
+Une description ANTLR est un collection de règles et d'actions précédé par une en-tête dans laquelle l'utilisateur définit les types des attributs par exemple.
 
 Une règles ANTLR est entre autre une liste d'alternatives séparées par"|":
 
@@ -848,7 +848,8 @@ Une règles ANTLR est entre autre une liste d'alternatives séparées par"|":
 règle : \textit{alternative \textsl{1}} | \textit{alternative \textsl{2}} |... |\textit{alternative \textsl{n}};
 
 
-Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs, dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées:
+Chaque alternative est composée d'une liste d'éléments.Les règles définissent aussi des arguments et retournent des valeurs.\newline
+Dans l'exemple suivant, il y a \textsl{n} arguments et \textsl{m} valeurs retournées:
 
 
 \textit{règles}[\textit{args \textsl{1}},...,\textit{args \textsl{n}}] > [\textit{returnVal \textsl{1}},...,\textit{returnVal \textsl{m}}]
@@ -861,25 +862,25 @@ ANTLR permet aussi à l'utilisateur de définir des actions et de les appeler l�
 
 \subsubsubsection{Prédicats}
 
-ANTLR supporte l'utilisation de prédicats sémantique et syntaxique qui permet à l'utilisateur d'indiquer la validté sémantique et syntaxique d'une production, permettant ainsi à ANTLR de gérer naturellement des situations d'analyse difficile.
+ANTLR supporte l'utilisation de prédicats sémantique et syntaxique qui permet à l'utilisateur d'indiquer la validité sémantique et syntaxique d'une production, permettant ainsi à ANTLR de gérer naturellement des situations d'analyse difficile.
 
-\subsubsection{Quelques fonctionnalités utile aux programmeurs}
+\subsubsection{Quelques fonctionnalités utiles aux programmeurs}
 
 \subsubsubsection{Intégration de l'analyse syntaxique et lexicale}
 
-Une description ANTLR contient à la fois une spécification pour l'analyse des unités lexicales et la spécification du parseur lui-même, ce qui élimine le besoin d'avoir deux fichiers différents pour chaque spécification, en effet ANTLR extrait automatiquement une description de l'analyseur lexicale à partir de la description intégrée de ANTLR.
+Une description ANTLR contient à la fois une spécification pour l'analyse des unités lexicales et la spécification du parseur lui-même, ce qui élimine le besoin d'avoir deux fichiers différents pour chaque spécification.\newline 
+En effet ANTLR extrait automatiquement une description de l'analyseur lexicale à partir de la description intégrée de ANTLR.
 ANTLR permet ainsi l'utilisation de plusieurs analyseurs lexicaux dans la même description ANTLR, cette pratique permet alors l'analyse de plusieurs langages.
 \subsubsubsection{Gestion d'erreurs}
-ANTLR propose deux mécanismes pour la gestion des erreurs.Dans le premier mécanisme, ANTLR génère un message d'erreur en utilisant une simple heuristique qui est suffisante pour plusieurs applications. par contre, quand une gestion d'erreurs plus complexe est requise, ANTLR fourni un second mécanisme appelé Parseur de gestion d'exceptions qui offre une construction de rapport plus flexible dans un framework convenant.
-Le premier mécanisme génère automatiquement des rapports d'erreurs, désigne là où l'erreur a été détecté et qu'est ce qui était attendu.
-Le premier mécanisme, qui génère automatiquement des rapports d'erreurs, désigne là l'erreur à été détecté et qu'est ce qui était attendu.
-Le second mécanisme quant à lui, fournis un framework pour y mettre les rapports d'erreurs sémantiques et syntaxiques, notons que le premier mécanisme ne reconnait pas les erreurs sémantiques.
+ANTLR propose deux mécanismes pour la gestion des erreurs. Dans le premier mécanisme, ANTLR génère un message d'erreur en utilisant une simple heuristique qui est suffisante pour plusieurs applications. Par contre, quand une gestion d'erreurs plus complexe est requise, ANTLR fourni un second mécanisme appelé Parseur de gestion d'exceptions qui offre une construction de rapport plus flexible dans un framework convenant.
+Le premier mécanisme génère automatiquement des rapports d'erreurs, désigne là où l'erreur a été détectée et qu'est ce qui était attendu.
+Le second mécanisme quant à lui, fournit un framework pour y mettre les rapports d'erreurs sémantiques et syntaxiques. Notons que le premier mécanisme ne reconnait pas les erreurs sémantiques.
 
 \subsubsubsection{Construction de l'arbre syntaxique}
 
-Le plus souvent, les parseurs construisent une forme intermédiaire qui sera utilisé plus tard dans des phases de compilation par exemple. En utilisant quelques annotations, ANTLR peut automatiquement construire un arbre syntaxique, évitant ainsi à l'utilisateur d'appeler la construction d'un arbre à chaque fois.
-Pour créer un arbre, l'utilisateur des annotations grammaticales qui indiquent le noeud père, les feuilles et aussi qui doit être exclu de l'abre. Les unités lexicales précédés de "!" par exemple, son à exclure de l'arbre.Toutes les autres unités lexicales sont considérées comme des feuilles.
-Voici un petit exemple de la constrcuction d'un arbre syntaxique : 
+Le plus souvent, les parseurs construisent une forme intermédiaire qui sera utilisées plus tard dans des phases de compilation par exemple. En utilisant quelques annotations, ANTLR peut automatiquement construire un arbre syntaxique, évitant ainsi à l'utilisateur d'appeler la construction d'un arbre à chaque fois.
+Pour créer un arbre, l'utilisateur des annotations grammaticales qui indiquent le noeud père, les feuilles et aussi qui doivent être exclus de l'arbre. Les unités lexicales précédés de "!" par exemple, sont à exclure de l'arbre.Toutes les autres unités lexicales sont considérées comme des feuilles.
+Voici un petit exemple de la construction d'un arbre syntaxique : 
 \begin{verbatim}
 	if 3 + 4 * 5 then return 4;
 \end{verbatim}
@@ -893,7 +894,7 @@ L'arbre correspondant :
 \end{figure}\FloatBarrier
 
 \subsubsection{Exemple simple avec ANTLR}
-Dans cette partie, nous allons vous montrez comment utiliser ANTLR dans un IDE tel que Eclipse.
+Dans cette partie, nous allons vous montrer comment utiliser ANTLR dans un IDE tel que Eclipse.
 \subsubsubsection{ANTLR}
 \begin{itemize}
 	\item Télécharger et installer ANTLR à partir du site officiel : www.antlr.org
@@ -912,7 +913,7 @@ Dans cette partie, nous allons vous montrez comment utiliser ANTLR dans un IDE t
 	\label{fig:AntlrNature.JPG}
 	\end{figure}\FloatBarrier
 
-\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur syntaxique (PARSER) et les régles lexicales (LEXER), notez que dans options nous pouvons chosir quel langage utiliser, pour notre exemple nous allons travailler en java pour l'utiliser sour l'IDE eclipse, on peux changer et écrire en C\#,C,Phyton...
+\item Ensuite créer un nouveau fichier ANTLR, nous choisissons Combined Grammar pour écrire à la fois et dans un même fichier les régles de l'analyseur syntaxique (PARSER) et les régles lexicales (LEXER). Notez que dans options nous pouvons chosir quel langage utiliser. Pour notre exemple nous allons travailler en Java pour l'utiliser sour l'IDE Eclipse, on peux changer et écrire en C\#, C, Phyton...
 
 		\begin{figure}[h]
 	\centering
@@ -931,7 +932,7 @@ Création d'un exemple simple en C et en Java  :
 grammar GrammaireSimple;
 
 options {
-  language = Java;
+  language = C;
 }
 
 tokens {
@@ -1031,10 +1032,10 @@ java org.antlr.Tool GrammaireSimple.g
 
 \end{verbatim}
 
-ANTLR génère les fichiers sources pour le lexer et le parser ( GrammaireSimpleLexer.java et GrammaireSimpleParser.java ) copiez ces deux fichiers dans le bonne endroit dans notre IDE, ensuite vous pouvez compilez.
+ANTLR génère les fichiers sources pour le lexer et le parser ( GrammaireSimpleLexer.java et GrammaireSimpleParser.java ), copiez ces deux fichiers dans le bonne endroit dans notre IDE, ensuite vous pouvez compiler.
 
 \subsubsection{Définir notre propre grammaire}
-Dans la section précédente nous, avons vu comment installer et compiler avec ANTLR, dans cette partie nous allons vous montrez comment on a créer notre propre grammaire pour calculatrice simple.
+Dans la section précédente nous, avons vu comment installer et compiler avec ANTLR, dans cette partie nous allons vous montrer comment on a créer notre propre grammaire pour calculatrice simple.
 \subsubsubsection{La grammaire}
 Commençons par définir une expression arithmétique simple :
 
@@ -1052,13 +1053,13 @@ PLUS    : '+';
 Cette exemple contient deux règles lexicales \textsl{NUMBER} et \textsl{PLUS} puis une règles syntaxiques \textsl{add}
 \begin{itemize}
 
-\item \textsl{PLUS} Unité lexicale qui contient une seule caractère : +
+\item \textsl{PLUS} Unité lexicale qui contient un seule caractère : +
 \item \textsl{NUMBER} Unité lexicale qui contient n'importe quel caractère compris entre 0 et 9
-\item \textsl{add} Règle syntaxique qui attend exactement et dans cette ordre \textsl{NUMBER} \textsl{+} \textsl{NUMBER}, toute autre expression affichere une erreur.
+\item \textsl{add} Règle syntaxique qui attend exactement et dans cette ordre \textsl{NUMBER} \textsl{+} \textsl{NUMBER}, toute autre expression affichera une erreur.
 \end{itemize}
 
 \subsubsubsection{Addition répétée}
-Pour écrire une expression avec plusieurs addition : 
+Pour écrire une expression avec plusieurs additions: 
 
 \begin{verbatim}
 add: NUMBER (PLUS NUMBER)*
@@ -1101,13 +1102,13 @@ Notre grammaire ne tolère pas les espaces blancs, elle retournera une erreur da
 
 \end{itemize}
 
-Pour cela nous devons définir ces espaces blancs,et dire au LEXER tolèrer ces espaces blancs :
+Pour cela nous devons définir ces espaces blancs, et dire au LEXER de tolèrer ces espaces blancs :
 
 \begin{itemize}
 
 \item Une espace : ' '
-\item Une tabulation : '\\t'
-\item Un Retour à la ligne : '\\n'
+\item Une tabulation : \verb|\t|
+\item Un Retour à la ligne : \verb|\n|
 \item etc...
 
 \end{itemize}
@@ -1125,7 +1126,7 @@ Malgré ce que nous venons de faire, notre grmmaire retrourneras toujours une er
 3 + 4*5
 
 \end{verbatim}
-En effet, ANTLR sauvegarde deux chaines de communications entre le LEXER et le PARSER, une chaine cachée et une chaine par défaut.Généralement le PARSER fait appel à la chaine par défaut, nous pouvons ainsi récupérer cette chaine et la cachée :
+En effet, ANTLR sauvegarde deux chaînes de communications entre le LEXER et le PARSER, une chaîne cachée et une chaine par défaut. Généralement le PARSER fait appel à la chaine par défaut, nous pouvons ainsi récupérer cette chaine et la cachée :
 
 \begin{verbatim}
 
@@ -1177,7 +1178,7 @@ fragment DIGIT  : '0'..'9' ;
 
 \end{verbatim}
 
-\subsubsubsection{Point d'entrer pour Java}
+\subsubsubsection{Point d'entré pour Java}
 
 \begin{verbatim}
 
@@ -1198,7 +1199,7 @@ fragment DIGIT  : '0'..'9' ;
 \end{verbatim}
 
 \subsubsubsection{Générer du code dans un autre langage}
-Si vous n'aimez pas Java vous pouvez utilisez :  
+Si vous n'aimez pas Java vous pouvez utiliser :  
 
 \begin{itemize}
 \item Ada
@@ -1222,7 +1223,7 @@ options {
 
 \subsection{Comparaison entre YACC et ANTLR}
 
-La différence majeure entre Yacc et Antler est que Yacc génére des analyseurs syntaxiques de type LALR, alors que ceux générés par ANTLR sont de type LL. C’est une différence pour plusieurs application, par exemple :
+La différence majeure entre Yacc et ANTLR est que Yacc génére des analyseurs syntaxiques de type LALR, alors que ceux générés par ANTLR sont de type LL. C’est une différence pour plusieurs application. Par exemple :
 
 \begin{alltt}
 expr ::= expr '+' expr
@@ -1231,10 +1232,10 @@ expr ::= expr '+' expr
       | NUM ;
 \end{alltt}
     
-Antlr ne peut en aucun cas gérer cette grammaire telle qu’elle est. Pour ce faire, Antlr comme tout autre analyseur syntaxique de type LL a besoin d’éliminer le récursivité à gauche avant de la traiter.
+ANTLR ne peut en aucun cas gérer cette grammaire telle qu’elle est. Pour ce faire, ANTLR comme tout autre analyseur syntaxique de type LL a besoin d’éliminer le récursivité à gauche avant de la traiter.
 
 D’un autre côté Yacc n’a aucun problèmes avec des grammaires de cette forme, bien qu’elle soit récursive à gauche, il peut parfaitement la traiter.
-De ce fait, On peut dire que Yacc est plus facile à utiliser du principe que les grammaire LR n’ont pas de problèmes de récursivité qui peut être complexe dans certains cas, c’est la raison pour laquelle la plupart des grammaires de nos jours sont orientées LR, mais même devant toute cette facilité, on ne peut en aucun cas négliger Antlr car aucun autre outils ne l’atteint encore en termes de performance et de flexibilité.
+De ce fait, on peut dire que Yacc est plus facile à utiliser du principe que les grammaire LR n’ont pas de problèmes de récursivité qui peut être complexe dans certains cas, c’est la raison pour laquelle la plupart des grammaires de nos jours sont orientées LR, mais même devant toute cette facilité, on ne peut en aucun cas négliger Antlr car aucun autre outils ne l’atteint encore en termes de performance et de flexibilité.
 
 \section{Xtext}
 \subsection{Definition}
